@@ -96,9 +96,41 @@ h1 {
   color: #888;
 }
 
-/* ── Blinking cursor ── */
+/* ── Blinking cursor / Dino easter egg ── */
 .cursor {
+  display: inline-block;
+  position: relative;
+  cursor: default;
+}
+
+.dot {
   animation: blink 1s ease-in-out infinite;
+  transition: opacity 0.2s;
+}
+
+.dino-dot {
+  display: none;
+  width: 44px;
+  height: 47px;
+  object-fit: none;
+  object-position: -848px -2px;
+  vertical-align: -16px;
+  margin-left: -4px;
+  image-rendering: pixelated;
+  opacity: 0;
+  transition: opacity 0.2s;
+  transform: scale(0.55);
+  transform-origin: bottom left;
+}
+
+.cursor:hover .dot {
+  display: none;
+}
+
+.cursor:hover .dino-dot {
+  display: inline-block;
+  opacity: 1;
+  animation: none;
 }
 
 @keyframes blink {
