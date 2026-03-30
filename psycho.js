@@ -1,8 +1,7 @@
 (function () {
-  if (localStorage.getItem('zavod_psycho')) return;
-
-  // 50% chance
-  if (Math.random() > 0.5) return;
+  // DEBUG: always trigger after 5s (revert later)
+  // if (localStorage.getItem('zavod_psycho')) return;
+  // if (Math.random() > 0.5) return;
 
   var general = [
     "You like to browse... alone, don't you?",
@@ -45,14 +44,14 @@
   }
 
   var msg = pool[Math.floor(Math.random() * pool.length)];
-  var delay = (Math.random() * 37 + 3) * 1000; // 3-40s
+  var delay = 5000; // DEBUG: fixed 5s (original: (Math.random() * 37 + 3) * 1000)
 
   setTimeout(function () {
     var el = document.getElementById('psycho');
     if (!el) return;
     el.textContent = msg;
     el.classList.add('visible');
-    localStorage.setItem('zavod_psycho', '1');
+    // localStorage.setItem('zavod_psycho', '1'); // DEBUG: disabled
 
     setTimeout(function () {
       el.classList.remove('visible');
