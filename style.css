@@ -49,36 +49,11 @@
   margin-bottom: 2rem;
 }
 
-#dino-canvas {
-  display: block;
-  margin: 0 auto;
-  max-width: 100%;
-  cursor: pointer;
-}
-
-.gate-instructions {
-  margin-top: 1rem;
-  font-size: 0.75rem;
-  color: #333;
-  font-weight: 300;
-}
-
-.key {
-  display: inline-block;
-  border: 1px solid #333;
-  border-radius: 3px;
-  padding: 1px 6px;
-  font-size: 0.7rem;
-  color: #555;
-}
-
-.gate-score {
-  margin-top: 0.5rem;
-  font-size: 0.85rem;
-  font-weight: 400;
-  color: #555;
-  letter-spacing: 0.05em;
-  min-height: 1.2em;
+.dino-wrapper {
+  margin: 1.5rem auto 0;
+  max-width: 600px;
+  width: 100%;
+  filter: invert(1);
 }
 
 /* ── Site hidden state ── */

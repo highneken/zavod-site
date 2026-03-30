@@ -9,11 +9,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="trex-runner.css">
   <link rel="icon" href="data:,">
 </head>
 <body>
 
-  <!-- ===== GATE: Fake 404 + Dino Game ===== -->
+  <!-- ===== GATE: Fake 404 + Original Chrome Dino ===== -->
   <div id="gate">
     <div class="gate-content">
       <h1 class="gate-title">This site can't be reached</h1>
@@ -21,9 +22,19 @@
       <p class="gate-hint">Or maybe it does. Keep going.</p>
       <p class="gate-code">ERR_OUTPUT_ONGOING</p>
 
-      <canvas id="dino-canvas" width="600" height="160"></canvas>
-      <p class="gate-instructions">Press <span class="key">Space</span> or tap to play</p>
-      <p id="score-display" class="gate-score"></p>
+      <div class="dino-wrapper">
+        <div class="interstitial-wrapper"></div>
+      </div>
+
+      <div id="offline-resources">
+        <img id="offline-resources-1x" src="dino-images/100-percent/100-offline-sprite.png">
+        <img id="offline-resources-2x" src="dino-images/200-percent/200-offline-sprite.png">
+        <div id="audio-resources">
+          <audio id="offline-sound-press" src="sounds/button-press.mp3"></audio>
+          <audio id="offline-sound-hit" src="sounds/hit.mp3"></audio>
+          <audio id="offline-sound-reached" src="sounds/score-reached.mp3"></audio>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -56,7 +67,43 @@
     <div id="psycho" aria-hidden="true"></div>
   </div>
 
-  <script src="dino.js"></script>
+  <script src="trex-runner.js"></script>
+  <script>
+    (function () {
+      var STORAGE_KEY = 'zavod_unlocked';
+
+      // Already unlocked? Skip gate
+      if (localStorage.getItem(STORAGE_KEY)) {
+        document.getElementById('gate').style.display = 'none';
+        document.getElementById('site').classList.remove('site-hidden');
+        return;
+      }
+
+      // Start T-Rex Runner
+      new Runner('.interstitial-wrapper');
+
+      // Listen for unlock
+      document.addEventListener('zavod-unlock', function () {
+        localStorage.setItem(STORAGE_KEY, '1');
+
+        var gate = document.getElementById('gate');
+        var site = document.getElementById('site');
+
+        gate.style.transition = 'opacity 1.5s ease';
+        gate.style.opacity = '0';
+
+        setTimeout(function () {
+          gate.style.display = 'none';
+          site.classList.remove('site-hidden');
+          site.style.opacity = '0';
+          site.style.transition = 'opacity 1.5s ease';
+          requestAnimationFrame(function () {
+            site.style.opacity = '1';
+          });
+        }, 1500);
+      });
+    })();
+  </script>
   <script src="psycho.js"></script>
 </body>
 </html>
