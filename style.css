@@ -90,7 +90,8 @@ main {
   cursor: pointer;
 }
 
-.work img {
+.work img,
+.work video {
   width: 100%;
   height: auto;
   display: block;
