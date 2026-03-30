@@ -1,0 +1,111 @@
+/* ── Reset ── */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ── Base ── */
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: #fff;
+  color: #000;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Header ── */
+header {
+  padding: 20vh 1.5rem 8vh;
+  text-align: center;
+}
+
+h1 {
+  font-size: clamp(2rem, 6vw, 4.5rem);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  line-height: 1;
+}
+
+.tagline {
+  margin-top: 1rem;
+  font-size: clamp(0.85rem, 2vw, 1.1rem);
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  color: #888;
+}
+
+/* ── Grid ── */
+main {
+  flex: 1;
+  padding: 0 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 3rem;
+  }
+}
+
+/* ── Work items ── */
+.work {
+  display: block;
+}
+
+.work img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.placeholder {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #f5f5f5;
+  border: 1px solid #eee;
+}
+
+/* ── Footer ── */
+footer {
+  padding: 10vh 1.5rem 4vh;
+  text-align: center;
+}
+
+footer a {
+  color: #000;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 2px;
+  transition: border-color 0.2s;
+}
+
+footer a:hover {
+  border-color: #000;
+}
