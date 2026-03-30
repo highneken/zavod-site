@@ -8,6 +8,7 @@
   -webkit-user-select: none;
   user-select: none;
   touch-action: none;
+  filter: invert(1);
 }
 
 /* Touch controller overlay for mobile */

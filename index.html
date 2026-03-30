@@ -40,16 +40,26 @@
 </head>
 <body>
 
-  <!-- ===== GATE: Chrome offline page ===== -->
+  <!-- ===== GATE: Chrome offline page (dark) ===== -->
   <div id="gate">
     <div class="gate-content">
+      <div class="gate-dino-static">
+        <img src="dino-images/100-percent/100-offline-sprite.png" class="gate-dino-img" alt="">
+      </div>
+
+      <h1 class="gate-title">Press space to start the game</h1>
+
+      <p class="gate-sub">Try the following:</p>
+      <ul class="gate-list">
+        <li>Check network cables, modem, and router</li>
+        <li>Reconnect to Wi-Fi</li>
+      </ul>
+
+      <p class="gate-code">ERR_OUTPUT_ONGOING</p>
+
       <div class="dino-wrapper">
         <div class="interstitial-wrapper"></div>
       </div>
-
-      <h1 class="gate-title">Unable to connect to the Internet</h1>
-      <p class="gate-sub">Check your connection and try again.</p>
-      <p class="gate-code">ERR_OUTPUT_ONGOING</p>
 
       <div id="offline-resources">
         <img id="offline-resources-1x" src="dino-images/100-percent/100-offline-sprite.png">
@@ -101,7 +111,33 @@
         return;
       }
 
-      new Runner('.interstitial-wrapper');
+      // Show game canvas, hide static text
+      function startGame() {
+        document.querySelector('.interstitial-wrapper').style.display = 'block';
+        document.querySelector('.gate-dino-static').style.display = 'none';
+        document.querySelector('.gate-title').style.display = 'none';
+        document.querySelector('.gate-sub').style.display = 'none';
+        document.querySelector('.gate-list').style.display = 'none';
+        document.querySelector('.gate-code').style.display = 'none';
+        document.querySelector('.gate-content').style.padding = '15vh 0 0';
+        document.querySelector('.gate-content').style.maxWidth = '100%';
+        document.querySelector('.dino-wrapper').style.maxWidth = '100%';
+        document.getElementById('gate').style.alignItems = 'flex-start';
+        document.getElementById('gate').style.justifyContent = 'center';
+      }
+
+      var runner = new Runner('.interstitial-wrapper');
+      document.querySelector('.interstitial-wrapper').style.display = 'none';
+
+      function onFirstInput(e) {
+        if (e.type === 'keydown' && e.code !== 'Space') return;
+        e.preventDefault();
+        startGame();
+        document.removeEventListener('keydown', onFirstInput);
+        document.removeEventListener('touchstart', onFirstInput);
+      }
+      document.addEventListener('keydown', onFirstInput);
+      document.addEventListener('touchstart', onFirstInput);
 
       document.addEventListener('zavod-unlock', function () {
         localStorage.setItem(STORAGE_KEY, '1');
