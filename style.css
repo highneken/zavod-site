@@ -1,46 +1,52 @@
-/* ── Gate (Fake Chrome 404) ── */
+/* ── Gate (Fake Chrome offline) ── */
 #gate {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   background: #fff;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 .gate-content {
   text-align: center;
   padding: 2rem;
-  max-width: 640px;
+  max-width: 600px;
+  width: 100%;
+}
+
+.dino-wrapper {
+  margin: 0 auto 1.5rem;
+  max-width: 600px;
   width: 100%;
 }
 
 .gate-title {
-  font-size: 1.6rem;
-  font-weight: 400;
-  color: #3C4043;
-  margin-bottom: 0.4rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #202124;
+  margin-bottom: 0.5rem;
 }
 
 .gate-sub {
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-weight: 400;
   color: #5F6368;
-  margin-bottom: 0.3rem;
+  line-height: 1.5;
+  margin-bottom: 0.6rem;
 }
 
 .gate-code {
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   font-family: monospace;
-  color: #9AA0A6;
-  letter-spacing: 0.05em;
-  margin-bottom: 1.5rem;
+  color: #5F6368;
+  margin-bottom: 0.8rem;
 }
 
-.dino-wrapper {
-  margin: 0 auto;
-  max-width: 600px;
-  width: 100%;
+.gate-details {
+  font-size: 0.8125rem;
+  color: #1A73E8;
+  cursor: pointer;
 }
 
 /* ── Site hidden state ── */
