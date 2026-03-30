@@ -13,9 +13,9 @@ html {
 }
 
 body {
-  background: #fff;
-  color: #000;
-  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background: #000;
+  color: #fff;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -28,25 +28,35 @@ header {
 }
 
 h1 {
-  font-size: clamp(2rem, 6vw, 4.5rem);
-  font-weight: 500;
-  letter-spacing: 0.12em;
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  font-weight: 700;
+  letter-spacing: 0.14em;
   line-height: 1;
 }
 
 .tagline {
-  margin-top: 1rem;
-  font-size: clamp(0.85rem, 2vw, 1.1rem);
+  margin-top: 1.2rem;
+  font-size: clamp(0.9rem, 2vw, 1.15rem);
   font-weight: 300;
   letter-spacing: 0.04em;
   color: #888;
+}
+
+/* ── Blinking cursor ── */
+.cursor {
+  animation: blink 1s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }
 
 /* ── Grid ── */
 main {
   flex: 1;
   padding: 0 1.5rem;
-  max-width: 1200px;
+  max-width: 960px;
   margin: 0 auto;
   width: 100%;
 }
@@ -54,19 +64,12 @@ main {
 .grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 2rem;
+  gap: 2.5rem;
 }
 
 @media (min-width: 640px) {
   .grid {
     grid-template-columns: 1fr 1fr;
-    gap: 2.5rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .grid {
-    grid-template-columns: 1fr 1fr 1fr;
     gap: 3rem;
   }
 }
@@ -85,8 +88,8 @@ main {
 .placeholder {
   width: 100%;
   aspect-ratio: 1 / 1;
-  background: #f5f5f5;
-  border: 1px solid #eee;
+  background: #0a0a0a;
+  border: 1px solid #1a1a1a;
 }
 
 /* ── Footer ── */
@@ -96,16 +99,76 @@ footer {
 }
 
 footer a {
-  color: #000;
+  color: #fff;
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: 400;
   letter-spacing: 0.03em;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid #333;
   padding-bottom: 2px;
-  transition: border-color 0.2s;
+  transition: border-color 0.3s;
 }
 
 footer a:hover {
-  border-color: #000;
+  border-color: #fff;
+}
+
+/* ── Psycho Mantis ── */
+#psycho {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  font-size: 0.75rem;
+  font-weight: 300;
+  color: #333;
+  letter-spacing: 0.02em;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  max-width: 280px;
+  z-index: 9999;
+}
+
+#psycho.visible {
+  animation: glitchIn 0.15s ease-out forwards, glitchOut 0.3s ease-in 1.7s forwards;
+}
+
+@keyframes glitchIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-4px) skewX(-2deg);
+    filter: blur(2px);
+  }
+  30% {
+    opacity: 0.7;
+    transform: translateX(2px) skewX(1deg);
+    filter: blur(0);
+  }
+  60% {
+    opacity: 0.4;
+    transform: translateX(-1px) skewX(-0.5deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) skewX(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes glitchOut {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+    filter: blur(0);
+  }
+  40% {
+    opacity: 0.6;
+    transform: translateX(3px) skewX(1.5deg);
+    filter: blur(1px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-6px) skewX(-3deg);
+    filter: blur(3px);
+  }
 }
