@@ -3,7 +3,7 @@
   min-height: 100vh;
   display: flex;
   align-items: flex-start;
-  justify-content: flex-start;
+  justify-content: center;
   background: #202124;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
@@ -11,7 +11,7 @@
 .gate-content {
   text-align: left;
   padding: 15vh 40px 40px;
-  max-width: 700px;
+  max-width: 600px;
   width: 100%;
 }
 
