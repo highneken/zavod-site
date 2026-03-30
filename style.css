@@ -1,10 +1,11 @@
-/* ── Gate (Fake 404) ── */
+/* ── Gate (Fake 404 – looks like real Chrome error) ── */
 #gate {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #000;
+  background: #fff;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .gate-content {
@@ -15,45 +16,44 @@
 }
 
 .gate-title {
-  font-size: clamp(1.3rem, 4vw, 2rem);
+  font-size: clamp(1.3rem, 4vw, 1.6rem);
   font-weight: 400;
-  color: #555;
-  letter-spacing: 0.02em;
-  margin-bottom: 0.8rem;
+  color: #646464;
+  letter-spacing: 0;
+  margin-bottom: 0.6rem;
 }
 
 .gate-sub {
   font-size: 0.95rem;
   font-weight: 300;
-  color: #444;
+  color: #969696;
   margin-bottom: 0.3rem;
 }
 
 .gate-sub em {
-  color: #666;
+  color: #646464;
   font-style: normal;
 }
 
 .gate-hint {
   font-size: 0.8rem;
   font-weight: 300;
-  color: #2a2a2a;
-  margin-bottom: 1rem;
+  color: #bbb;
+  margin-bottom: 0.8rem;
 }
 
 .gate-code {
   font-size: 0.7rem;
   font-family: monospace;
-  color: #222;
+  color: #ccc;
   letter-spacing: 0.1em;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .dino-wrapper {
-  margin: 1.5rem auto 0;
+  margin: 0 auto;
   max-width: 600px;
   width: 100%;
-  filter: invert(1);
 }
 
 /* ── Site hidden state ── */
@@ -192,14 +192,9 @@ main {
   opacity: 1;
 }
 
-/* Touch devices: show on tap */
 @media (hover: none) {
-  .overlay {
-    opacity: 0;
-  }
-  .work:active .overlay {
-    opacity: 1;
-  }
+  .overlay { opacity: 0; }
+  .work:active .overlay { opacity: 1; }
 }
 
 /* ── Footer ── */
@@ -252,41 +247,14 @@ footer a:hover {
 }
 
 @keyframes glitchIn {
-  0% {
-    opacity: 0;
-    transform: translateX(-4px) skewX(-2deg);
-    filter: blur(2px);
-  }
-  30% {
-    opacity: 0.7;
-    transform: translateX(2px) skewX(1deg);
-    filter: blur(0);
-  }
-  60% {
-    opacity: 0.4;
-    transform: translateX(-1px) skewX(-0.5deg);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0) skewX(0);
-    filter: blur(0);
-  }
+  0% { opacity: 0; transform: translateX(-4px) skewX(-2deg); filter: blur(2px); }
+  30% { opacity: 0.7; transform: translateX(2px) skewX(1deg); filter: blur(0); }
+  60% { opacity: 0.4; transform: translateX(-1px) skewX(-0.5deg); }
+  100% { opacity: 1; transform: translateX(0) skewX(0); filter: blur(0); }
 }
 
 @keyframes glitchOut {
-  0% {
-    opacity: 1;
-    transform: translateX(0);
-    filter: blur(0);
-  }
-  40% {
-    opacity: 0.6;
-    transform: translateX(3px) skewX(1.5deg);
-    filter: blur(1px);
-  }
-  100% {
-    opacity: 0;
-    transform: translateX(-6px) skewX(-3deg);
-    filter: blur(3px);
-  }
+  0% { opacity: 1; transform: translateX(0); filter: blur(0); }
+  40% { opacity: 0.6; transform: translateX(3px) skewX(1.5deg); filter: blur(1px); }
+  100% { opacity: 0; transform: translateX(-6px) skewX(-3deg); filter: blur(3px); }
 }
