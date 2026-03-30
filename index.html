@@ -40,7 +40,7 @@
 </head>
 <body>
 
-  <!-- ===== GATE: Fake Chrome offline page ===== -->
+  <!-- ===== GATE: Chrome offline page ===== -->
   <div id="gate">
     <div class="gate-content">
       <div class="dino-wrapper">
@@ -48,14 +48,13 @@
       </div>
 
       <h1 class="gate-title">Unable to connect to the Internet</h1>
-      <p class="gate-sub">Google Chrome can't display the webpage because your<br>computer isn't connected to the Internet.</p>
+      <p class="gate-sub">Check your connection and try again.</p>
       <p class="gate-code">ERR_OUTPUT_ONGOING</p>
 
       <div id="offline-resources">
         <img id="offline-resources-1x" src="dino-images/100-percent/100-offline-sprite.png">
         <img id="offline-resources-2x" src="dino-images/200-percent/200-offline-sprite.png">
-        <div id="audio-resources">
-        </div>
+        <div id="audio-resources"></div>
       </div>
     </div>
   </div>
@@ -96,17 +95,14 @@
     (function () {
       var STORAGE_KEY = 'zavod_unlocked';
 
-      // Already unlocked? Skip gate
       if (localStorage.getItem(STORAGE_KEY)) {
         document.getElementById('gate').style.display = 'none';
         document.getElementById('site').classList.remove('site-hidden');
         return;
       }
 
-      // Start T-Rex Runner
       new Runner('.interstitial-wrapper');
 
-      // Listen for unlock – cinematic transition
       document.addEventListener('zavod-unlock', function () {
         localStorage.setItem(STORAGE_KEY, '1');
 
@@ -114,34 +110,23 @@
         var site = document.getElementById('site');
         var tagline = site.querySelector('.tagline');
 
-        // 1) Game already frozen (stop() called). Wait 1 second.
         setTimeout(function () {
-
-          // 2) Fade gate to black (2s)
           gate.style.transition = 'background 2s ease, color 2s ease';
           gate.style.background = '#000';
           gate.querySelector('.gate-content').style.transition = 'opacity 1.5s ease';
           gate.querySelector('.gate-content').style.opacity = '0';
 
           setTimeout(function () {
-
-            // 3) Pause in black (0.5s), then show site
             setTimeout(function () {
               gate.style.display = 'none';
-
-              // Hide tagline initially
               if (tagline) tagline.style.opacity = '0';
-
               site.classList.remove('site-hidden');
               site.style.opacity = '0';
               site.style.transition = 'opacity 2s ease';
 
               requestAnimationFrame(function () {
                 requestAnimationFrame(function () {
-                  // 4) ZAVOD site fades in (2s)
                   site.style.opacity = '1';
-
-                  // 5) Tagline appears 0.5s after site
                   if (tagline) {
                     tagline.style.transition = 'opacity 1.5s ease';
                     setTimeout(function () {
@@ -151,9 +136,7 @@
                 });
               });
             }, 500);
-
           }, 2000);
-
         }, 1000);
       });
     })();
