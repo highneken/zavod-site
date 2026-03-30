@@ -423,7 +423,27 @@ Runner.prototype = {
             'from { width:' + Trex.config.WIDTH + 'px }' +
             'to { width: ' + this.dimensions.WIDTH + 'px }' +
           '}';
-      document.styleSheets[0].insertRule(keyframes, 0);
+      try {
+        // Find a writable stylesheet (same-origin)
+        var sheets = document.styleSheets;
+        var inserted = false;
+        for (var si = 0; si < sheets.length; si++) {
+          try {
+            sheets[si].insertRule(keyframes, 0);
+            inserted = true;
+            break;
+          } catch(e) { /* skip cross-origin sheets */ }
+        }
+        if (!inserted) {
+          var s = document.createElement('style');
+          document.head.appendChild(s);
+          s.sheet.insertRule(keyframes, 0);
+        }
+      } catch(e) {
+        var s = document.createElement('style');
+        s.textContent = keyframes;
+        document.head.appendChild(s);
+      }
 
       this.containerEl.addEventListener(Runner.events.ANIM_END,
           this.startGame.bind(this));
