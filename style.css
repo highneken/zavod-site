@@ -16,7 +16,7 @@
 }
 
 .dino-wrapper {
-  margin: 0 auto 1.5rem;
+  margin: 0 auto 2.5rem;
   max-width: 600px;
   width: 100%;
   -webkit-touch-callout: none;
@@ -26,31 +26,24 @@
 }
 
 .gate-title {
-  font-size: 1.2rem;
-  font-weight: 700;
+  font-size: 1.1rem;
+  font-weight: 500;
   color: #202124;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.8rem;
 }
 
 .gate-sub {
   font-size: 0.8125rem;
   font-weight: 400;
   color: #5F6368;
-  line-height: 1.5;
-  margin-bottom: 0.6rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
 }
 
 .gate-code {
   font-size: 0.6875rem;
-  font-family: monospace;
-  color: #5F6368;
-  margin-bottom: 0.8rem;
-}
-
-.gate-details {
-  font-size: 0.8125rem;
-  color: #1A73E8;
-  cursor: pointer;
+  font-family: 'Roboto Mono', monospace;
+  color: #80868B;
 }
 
 /* ── Site hidden state ── */
