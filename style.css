@@ -1,11 +1,11 @@
-/* ── Gate (Fake 404 – looks like real Chrome error) ── */
+/* ── Gate (Fake Chrome 404) ── */
 #gate {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   background: #fff;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
 }
 
 .gate-content {
@@ -16,37 +16,24 @@
 }
 
 .gate-title {
-  font-size: clamp(1.3rem, 4vw, 1.6rem);
+  font-size: 1.6rem;
   font-weight: 400;
-  color: #646464;
-  letter-spacing: 0;
-  margin-bottom: 0.6rem;
+  color: #3C4043;
+  margin-bottom: 0.4rem;
 }
 
 .gate-sub {
-  font-size: 0.95rem;
-  font-weight: 300;
-  color: #969696;
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: #5F6368;
   margin-bottom: 0.3rem;
 }
 
-.gate-sub em {
-  color: #646464;
-  font-style: normal;
-}
-
-.gate-hint {
-  font-size: 0.8rem;
-  font-weight: 300;
-  color: #bbb;
-  margin-bottom: 0.8rem;
-}
-
 .gate-code {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-family: monospace;
-  color: #ccc;
-  letter-spacing: 0.1em;
+  color: #9AA0A6;
+  letter-spacing: 0.05em;
   margin-bottom: 1.5rem;
 }
 
@@ -91,9 +78,10 @@ header {
 }
 
 h1 {
-  font-size: clamp(2.5rem, 8vw, 5rem);
-  font-weight: 700;
-  letter-spacing: 0.14em;
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
+  font-size: clamp(3rem, 10vw, 6rem);
+  font-weight: 400;
+  letter-spacing: 0.18em;
   line-height: 1;
 }
 
@@ -103,14 +91,6 @@ h1 {
   font-weight: 300;
   letter-spacing: 0.04em;
   color: #888;
-}
-
-.subline {
-  margin-top: 0.5rem;
-  font-size: clamp(0.75rem, 1.5vw, 0.9rem);
-  font-weight: 300;
-  letter-spacing: 0.03em;
-  color: #666;
 }
 
 /* ── Blinking cursor ── */
@@ -135,13 +115,13 @@ main {
 .grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.5rem;
+  gap: 80px;
 }
 
 @media (min-width: 640px) {
   .grid {
     grid-template-columns: 1fr 1fr;
-    gap: 2rem;
+    gap: 80px;
   }
 }
 
@@ -152,6 +132,12 @@ main {
   overflow: hidden;
   cursor: pointer;
   aspect-ratio: 2 / 3;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.work:hover {
+  transform: scale(1.02);
+  box-shadow: 0 20px 60px rgba(255, 255, 255, 0.06);
 }
 
 .work img,
@@ -162,28 +148,22 @@ main {
   display: block;
 }
 
-.placeholder {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  background: #0a0a0a;
-  border: 1px solid #1a1a1a;
-}
-
-/* ── Hover overlay ── */
+/* ── Hover overlay → title below style ── */
 .overlay {
   position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.55);
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.2rem 1rem;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.4s ease;
 }
 
 .overlay span {
   color: #fff;
-  font-size: clamp(1rem, 2.5vw, 1.4rem);
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(0.85rem, 2vw, 1.1rem);
   font-weight: 300;
   letter-spacing: 0.05em;
 }
@@ -199,31 +179,41 @@ main {
 
 /* ── Footer ── */
 footer {
-  padding: 2vh 1.5rem 2vh;
+  padding: 4vh 1.5rem 3vh;
   text-align: center;
 }
 
 .location {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 300;
-  color: #444;
-  letter-spacing: 0.04em;
-  margin-bottom: 0.8rem;
+  color: #333;
+  letter-spacing: 0.06em;
+  margin-bottom: 1rem;
+  font-family: monospace;
 }
 
-footer a {
+.x-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   color: #fff;
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: 400;
   letter-spacing: 0.03em;
-  border-bottom: 1px solid #333;
   padding-bottom: 2px;
+  border-bottom: 1px solid transparent;
   transition: border-color 0.3s;
 }
 
-footer a:hover {
+.x-link:hover {
   border-color: #fff;
+}
+
+.x-icon {
+  width: 14px;
+  height: 14px;
+  fill: #fff;
 }
 
 /* ── Psycho Mantis ── */
