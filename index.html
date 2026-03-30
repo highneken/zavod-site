@@ -13,32 +13,50 @@
 </head>
 <body>
 
-  <header>
-    <h1>ZAVOD</h1>
-    <p class="tagline">Output: ongoing<span class="cursor">.</span></p>
-    <p class="subline">The rules were always in the game.</p>
-  </header>
+  <!-- ===== GATE: Fake 404 + Dino Game ===== -->
+  <div id="gate">
+    <div class="gate-content">
+      <h1 class="gate-title">This site can't be reached</h1>
+      <p class="gate-sub">The page you were looking for <em>doesn't exist yet</em>.</p>
+      <p class="gate-hint">Or maybe it does. Keep going.</p>
+      <p class="gate-code">ERR_OUTPUT_ONGOING</p>
 
-  <main>
-    <div class="grid">
-      <figure class="work">
-        <video src="images/skilltree.mp4" autoplay loop muted playsinline poster="images/skilltree.png"></video>
-        <figcaption class="overlay"><span>Skilltree.</span></figcaption>
-      </figure>
-      <figure class="work">
-        <video src="images/savanna.mp4" autoplay loop muted playsinline poster="images/savanna.png"></video>
-        <figcaption class="overlay"><span>It Was All A Dream.</span></figcaption>
-      </figure>
+      <canvas id="dino-canvas" width="600" height="160"></canvas>
+      <p class="gate-instructions">Press <span class="key">Space</span> or tap to play</p>
+      <p id="score-display" class="gate-score"></p>
     </div>
-  </main>
+  </div>
 
-  <footer>
-    <p class="location">Berlin. 2026.</p>
-    <a href="https://x.com/byZavod" target="_blank" rel="noopener">@byZavod</a>
-  </footer>
+  <!-- ===== MAIN SITE (hidden until unlocked) ===== -->
+  <div id="site" class="site-hidden">
+    <header>
+      <h1>ZAVOD</h1>
+      <p class="tagline">Output: ongoing<span class="cursor">.</span></p>
+      <p class="subline">The rules were always in the game.</p>
+    </header>
 
-  <div id="psycho" aria-hidden="true"></div>
+    <main>
+      <div class="grid">
+        <figure class="work">
+          <video src="images/skilltree.mp4" autoplay loop muted playsinline poster="images/skilltree.png"></video>
+          <figcaption class="overlay"><span>Skilltree.</span></figcaption>
+        </figure>
+        <figure class="work">
+          <video src="images/savanna.mp4" autoplay loop muted playsinline poster="images/savanna.png"></video>
+          <figcaption class="overlay"><span>It Was All A Dream.</span></figcaption>
+        </figure>
+      </div>
+    </main>
 
+    <footer>
+      <p class="location">Berlin. 2026.</p>
+      <a href="https://x.com/byZavod" target="_blank" rel="noopener">@byZavod</a>
+    </footer>
+
+    <div id="psycho" aria-hidden="true"></div>
+  </div>
+
+  <script src="dino.js"></script>
   <script src="psycho.js"></script>
 </body>
 </html>
