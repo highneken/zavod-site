@@ -666,8 +666,7 @@ Runner.prototype = {
       }
     }
 
-    if (this.crashed && e.type == Runner.events.TOUCHSTART &&
-        e.currentTarget == this.containerEl) {
+    if (this.crashed && e.type == Runner.events.TOUCHSTART) {
       this.restart();
     }
 
