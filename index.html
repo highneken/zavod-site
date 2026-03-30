@@ -111,23 +111,13 @@
         return;
       }
 
-      // Show game, hide text
+      // Show game canvas, hide only the static dino
       var gameStarted = false;
       function showGame() {
         if (gameStarted) return;
         gameStarted = true;
         document.querySelector('.interstitial-wrapper').style.display = 'block';
         document.querySelector('.gate-dino-static').style.display = 'none';
-        document.querySelector('.gate-title').style.display = 'none';
-        document.querySelector('.gate-sub').style.display = 'none';
-        document.querySelector('.gate-list').style.display = 'none';
-        document.querySelector('.gate-code').style.display = 'none';
-        document.querySelector('.gate-content').style.padding = '10vh 0 0';
-        document.querySelector('.gate-content').style.maxWidth = '100%';
-        document.querySelector('.gate-content').style.textAlign = 'center';
-        document.querySelector('.dino-wrapper').style.maxWidth = '100%';
-        document.getElementById('gate').style.alignItems = 'flex-start';
-        document.getElementById('gate').style.justifyContent = 'center';
       }
 
       // Init runner but hide canvas
