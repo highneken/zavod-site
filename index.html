@@ -138,9 +138,13 @@
         showGame();
         document.removeEventListener('keydown', onFirstInput);
         document.removeEventListener('touchstart', onFirstInput);
-        // Give DOM a frame to layout the canvas, then trigger Runner's playIntro
+        // Let DOM layout the canvas, then resize + trigger Runner
         requestAnimationFrame(function() {
-          runner.playIntro();
+          requestAnimationFrame(function() {
+            runner.adjustDimensions();
+            // Simulate a space keydown so Runner starts via its own logic
+            runner.onKeyDown({ keyCode: 32, type: 'keydown', preventDefault: function(){}, target: runner.containerEl });
+          });
         });
       }
       document.addEventListener('keydown', onFirstInput);
