@@ -35,16 +35,16 @@ var initPsychoMantis = (function () {
 
   var fromTelegram = [
     "You came from Telegram.",
-    "Someone forwarded you here. I know.",
-    "Your chat history is showing.",
-    "I read the message before you did."
+    "Someone sent you here. I know who.",
+    "A link in a chat. You couldn't resist.",
+    "You tapped. Now you're here."
   ];
 
   var fromWhatsApp = [
     "You came from WhatsApp.",
-    "Two blue checkmarks. You opened it.",
-    "I was in the group chat.",
-    "I read it before you screenshotted."
+    "Someone sent you here. I know who.",
+    "A link in a chat. You couldn't resist.",
+    "You tapped. Now you're here."
   ];
 
   var currentTimeout = null;
