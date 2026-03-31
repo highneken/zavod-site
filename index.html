@@ -152,91 +152,6 @@
         el.classList.remove('hidden');
       }
 
-      // ── Skip gate via ?skip or already unlocked ──
-      if (window.location.search.indexOf('skip') > -1) {
-        localStorage.setItem(STORAGE_KEY, '1');
-      }
-      if (localStorage.getItem(STORAGE_KEY)) {
-        showSection(menuEl);
-        initMenu();
-        return;
-      }
-
-      // ── Dino Game Init ──
-      var gameStarted = false;
-      var runner = null;
-      var dinoStatic = document.querySelector('.gate-dino-static');
-      var wrapper = document.querySelector('.interstitial-wrapper');
-      var dinoArea = document.querySelector('.gate-dino-area');
-
-      wrapper.style.position = 'absolute';
-      wrapper.style.opacity = '0';
-      wrapper.style.pointerEvents = 'none';
-      wrapper.style.display = 'block';
-
-      runner = new Runner('.interstitial-wrapper');
-
-      function showGame() {
-        if (gameStarted) return;
-        gameStarted = true;
-        dinoStatic.style.display = 'none';
-        wrapper.style.position = '';
-        wrapper.style.opacity = '1';
-        wrapper.style.pointerEvents = '';
-      }
-
-      function onFirstInput(e) {
-        if (e.type === 'keydown' && e.code !== 'Space') return;
-        e.preventDefault();
-        showGame();
-        document.removeEventListener('keydown', onFirstInput);
-        document.removeEventListener('touchstart', onFirstInput);
-        // Recalculate dimensions now that wrapper is visible with correct width
-        runner.adjustDimensions();
-        runner.handleEvent({ type: Runner.events.TOUCHSTART, keyCode: 32, preventDefault: function(){}, target: runner.containerEl });
-      }
-      document.addEventListener('keydown', onFirstInput);
-      document.addEventListener('touchstart', onFirstInput);
-
-      // ── Unlock transition ──
-      document.addEventListener('zavod-unlock', function () {
-        localStorage.setItem(STORAGE_KEY, '1');
-
-        // 1s pause
-        setTimeout(function () {
-          // Fade gate to black
-          gateEl.style.transition = 'opacity 2s ease';
-          gateEl.style.opacity = '0';
-
-          setTimeout(function () {
-            gateEl.classList.add('hidden');
-            // Show transition text
-            showSection(transitionEl);
-            transitionEl.style.opacity = '0';
-            requestAnimationFrame(function () {
-              transitionEl.style.transition = 'opacity 1s ease';
-              transitionEl.style.opacity = '1';
-            });
-
-            // Hold for 2s, then fade out
-            setTimeout(function () {
-              transitionEl.style.transition = 'opacity 1s ease';
-              transitionEl.style.opacity = '0';
-
-              setTimeout(function () {
-                showSection(menuEl);
-                menuEl.style.opacity = '0';
-                requestAnimationFrame(function () {
-                  menuEl.style.transition = 'opacity 1s ease';
-                  menuEl.style.opacity = '1';
-                });
-                initMenu();
-              }, 1000);
-            }, 2000);
-          }, 2000);
-        }, 1000);
-      });
-
       // ── Menu Logic ──
       function initMenu() {
         var items = document.querySelectorAll('.menu-item');
@@ -451,6 +366,85 @@
           }
         }, 800);
       }
+
+      // ── Skip gate via ?skip or already unlocked ──
+      if (window.location.search.indexOf('skip') > -1) {
+        localStorage.setItem(STORAGE_KEY, '1');
+      }
+      if (localStorage.getItem(STORAGE_KEY)) {
+        showSection(menuEl);
+        initMenu();
+        return;
+      }
+
+      // ── Dino Game Init ──
+      var gameStarted = false;
+      var runner = null;
+      var dinoStatic = document.querySelector('.gate-dino-static');
+      var wrapper = document.querySelector('.interstitial-wrapper');
+
+      wrapper.style.position = 'absolute';
+      wrapper.style.opacity = '0';
+      wrapper.style.pointerEvents = 'none';
+      wrapper.style.display = 'block';
+
+      runner = new Runner('.interstitial-wrapper');
+
+      function showGame() {
+        if (gameStarted) return;
+        gameStarted = true;
+        dinoStatic.style.display = 'none';
+        wrapper.style.position = '';
+        wrapper.style.opacity = '1';
+        wrapper.style.pointerEvents = '';
+      }
+
+      function onFirstInput(e) {
+        if (e.type === 'keydown' && e.code !== 'Space') return;
+        e.preventDefault();
+        showGame();
+        document.removeEventListener('keydown', onFirstInput);
+        document.removeEventListener('touchstart', onFirstInput);
+        runner.adjustDimensions();
+        runner.handleEvent({ type: Runner.events.TOUCHSTART, keyCode: 32, preventDefault: function(){}, target: runner.containerEl });
+      }
+      document.addEventListener('keydown', onFirstInput);
+      document.addEventListener('touchstart', onFirstInput);
+
+      // ── Unlock transition ──
+      document.addEventListener('zavod-unlock', function () {
+        localStorage.setItem(STORAGE_KEY, '1');
+
+        setTimeout(function () {
+          gateEl.style.transition = 'opacity 2s ease';
+          gateEl.style.opacity = '0';
+
+          setTimeout(function () {
+            gateEl.classList.add('hidden');
+            showSection(transitionEl);
+            transitionEl.style.opacity = '0';
+            requestAnimationFrame(function () {
+              transitionEl.style.transition = 'opacity 1s ease';
+              transitionEl.style.opacity = '1';
+            });
+
+            setTimeout(function () {
+              transitionEl.style.transition = 'opacity 1s ease';
+              transitionEl.style.opacity = '0';
+
+              setTimeout(function () {
+                showSection(menuEl);
+                menuEl.style.opacity = '0';
+                requestAnimationFrame(function () {
+                  menuEl.style.transition = 'opacity 1s ease';
+                  menuEl.style.opacity = '1';
+                });
+                initMenu();
+              }, 1000);
+            }, 2000);
+          }, 2000);
+        }, 1000);
+      });
 
     })();
   </script>
