@@ -152,7 +152,10 @@
         el.classList.remove('hidden');
       }
 
-      // ── Already unlocked? Skip to menu ──
+      // ── Skip gate via ?skip or already unlocked ──
+      if (window.location.search.indexOf('skip') > -1) {
+        localStorage.setItem(STORAGE_KEY, '1');
+      }
       if (localStorage.getItem(STORAGE_KEY)) {
         showSection(menuEl);
         initMenu();
