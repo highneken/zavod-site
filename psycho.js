@@ -1,7 +1,7 @@
-(function () {
-  if (localStorage.getItem('zavod_psycho')) return;
-  if (Math.random() > 0.5) return;
+// Psycho Mantis — typewriter + backspace on menu
+// Called every time menu is shown
 
+var initPsychoMantis = (function () {
   var general = [
     "You like to browse... alone, don't you?",
     "I know what you're looking for.",
@@ -33,27 +33,53 @@
     "You found it. Or did it find you?"
   ];
 
-  var ref = document.referrer || '';
-  var pool = general;
+  var currentTimeout = null;
+  var currentInterval = null;
 
-  if (/x\.com|twitter\.com/i.test(ref) && Math.random() < 0.3) {
-    pool = fromX;
-  } else if (/google\./i.test(ref) && Math.random() < 0.3) {
-    pool = fromGoogle;
-  }
-
-  var msg = pool[Math.floor(Math.random() * pool.length)];
-  var delay = (Math.random() * 37 + 3) * 1000; // 3-40s
-
-  setTimeout(function () {
-    var el = document.getElementById('psycho');
+  return function initPsychoMantis() {
+    var el = document.getElementById('menu-psycho');
     if (!el) return;
-    el.textContent = msg;
-    el.classList.add('visible');
-    localStorage.setItem('zavod_psycho', '1');
 
-    setTimeout(function () {
-      el.classList.remove('visible');
-    }, 2200);
-  }, delay);
+    // Clear any previous run
+    if (currentTimeout) clearTimeout(currentTimeout);
+    if (currentInterval) clearInterval(currentInterval);
+    el.textContent = '';
+
+    var ref = document.referrer || '';
+    var pool = general;
+
+    if (/x\.com|twitter\.com/i.test(ref)) {
+      pool = fromX;
+    } else if (/google\./i.test(ref)) {
+      pool = fromGoogle;
+    }
+
+    var msg = pool[Math.floor(Math.random() * pool.length)];
+    var delay = (Math.random() * 2 + 1) * 1000; // 1-3s
+
+    currentTimeout = setTimeout(function () {
+      // Typewriter: add chars
+      var idx = 0;
+      currentInterval = setInterval(function () {
+        if (idx < msg.length) {
+          el.textContent += msg[idx];
+          idx++;
+        } else {
+          clearInterval(currentInterval);
+          // Hold 1.5s then backspace
+          currentTimeout = setTimeout(function () {
+            currentInterval = setInterval(function () {
+              var txt = el.textContent;
+              if (txt.length > 0) {
+                el.textContent = txt.slice(0, -1);
+              } else {
+                clearInterval(currentInterval);
+                currentInterval = null;
+              }
+            }, 40);
+          }, 1500);
+        }
+      }, 80);
+    }, delay);
+  };
 })();
