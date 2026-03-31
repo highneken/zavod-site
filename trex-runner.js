@@ -791,7 +791,11 @@ Runner.prototype = {
   },
 
   restart: function() {
-    if (!this.raqId) {
+    if (this.raqId) {
+      cancelAnimationFrame(this.raqId);
+      this.raqId = 0;
+    }
+    {
       this.playCount++;
       this.runningTime = 0;
       this.playing = true;

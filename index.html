@@ -112,54 +112,44 @@
         return;
       }
 
-      // Show game canvas, hide only the static dino, keep text
+      // Game state
       var gameStarted = false;
       var runner = null;
       var dinoStatic = document.querySelector('.gate-dino-static');
       var wrapper = document.querySelector('.interstitial-wrapper');
+      var dinoArea = document.querySelector('.gate-dino-area');
+
+      // Hide wrapper visually but keep in layout so Runner initializes with correct dimensions
+      wrapper.style.position = 'absolute';
+      wrapper.style.opacity = '0';
+      wrapper.style.pointerEvents = 'none';
+      wrapper.style.display = 'block';
+
+      // Init runner — it gets correct dimensions because wrapper is in the DOM
+      runner = new Runner('.interstitial-wrapper');
 
       function showGame() {
         if (gameStarted) return;
         gameStarted = true;
-        // Hide static dino, show game canvas in same spot
+        // Hide static dino, show game canvas
         dinoStatic.style.display = 'none';
-        wrapper.style.display = 'block';
+        wrapper.style.position = '';
+        wrapper.style.opacity = '1';
+        wrapper.style.pointerEvents = '';
       }
 
-      // Init runner but hide canvas
-      wrapper.style.display = 'none';
-      runner = new Runner('.interstitial-wrapper');
-
-      // First input shows the game and triggers Runner
+      // First input: show canvas, let Runner handle the rest naturally
       function onFirstInput(e) {
         if (e.type === 'keydown' && e.code !== 'Space') return;
         e.preventDefault();
         showGame();
         document.removeEventListener('keydown', onFirstInput);
         document.removeEventListener('touchstart', onFirstInput);
-        // Let DOM layout the canvas, then resize + trigger Runner
-        requestAnimationFrame(function() {
-          requestAnimationFrame(function() {
-            runner.adjustDimensions();
-            runner.onKeyDown({ keyCode: 32, type: 'keydown', preventDefault: function(){}, target: runner.containerEl });
-          });
-        });
+        // Let Runner handle it through its normal flow
+        runner.handleEvent({ type: Runner.events.TOUCHSTART, keyCode: 32, preventDefault: function(){}, target: runner.containerEl });
       }
       document.addEventListener('keydown', onFirstInput);
       document.addEventListener('touchstart', onFirstInput);
-
-      // Global touch handler: jump while playing, restart when crashed
-      document.addEventListener('touchstart', function(e) {
-        if (!gameStarted || !runner) return;
-        e.preventDefault();
-        if (runner.crashed) {
-          runner.restart();
-        } else if (runner.playing) {
-          if (!runner.tRex.jumping && !runner.tRex.ducking) {
-            runner.tRex.startJump(runner.currentSpeed);
-          }
-        }
-      }, { passive: false });
 
 
 
