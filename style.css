@@ -300,84 +300,28 @@ body {
   overflow: hidden;
 }
 
-/* Layer stack: pixel (z3) > png (z2) > video (z1) */
-.work-pixel {
+/* All stages stacked, only .active is visible */
+.work-stage {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  opacity: 0;
   image-rendering: pixelated;
   image-rendering: -moz-crisp-edges;
   image-rendering: crisp-edges;
-  z-index: 3;
 }
 
-.work-png {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 2;
-  opacity: 0;
+/* HD and video don't need pixelated rendering */
+.work-stage[data-stage="4"],
+.work-stage[data-stage="5"] {
+  image-rendering: auto;
 }
 
-.work-hd {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 1;
-  opacity: 0;
-}
-
-/* Stage 1→2: PNG fades in OVER the pixel (pixel stays until PNG fully visible) */
-.work-item.stage-png .work-pixel {
+.work-stage.active {
   opacity: 1;
-}
-
-.work-item.stage-png .work-png {
-  transition: opacity 1.2s ease-in-out;
-  opacity: 1;
-}
-
-/* After PNG is fully in, hide pixel */
-.work-item.stage-png-done .work-pixel {
-  opacity: 0;
-}
-
-/* Stage 2→3: Glitch flash then video */
-.work-item.stage-video .work-pixel {
-  opacity: 0;
-}
-
-.work-item.stage-video .work-png {
-  transition: opacity 0.8s ease-out;
-  opacity: 0;
-}
-
-.work-item.stage-video .work-hd {
-  transition: opacity 0.8s ease-in;
-  opacity: 1;
-}
-
-/* Glitch flash */
-.work-item.glitch .work-pixel-wrap {
-  animation: glitchFlash 0.05s steps(1) 3;
-}
-
-
-
-@keyframes glitchFlash {
-  0% { filter: brightness(2) contrast(1.5); }
-  33% { filter: brightness(0.5) contrast(2); }
-  66% { filter: brightness(3) contrast(0.8); }
-  100% { filter: none; }
 }
 
 .work-title {

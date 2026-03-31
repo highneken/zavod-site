@@ -109,18 +109,24 @@
     <div class="works-grid">
       <figure class="work-item" data-title="Skilltree.">
         <div class="work-pixel-wrap">
-          <img src="images/skilltree-pixel.png" class="work-pixel" alt="Skilltree">
-          <img src="images/skilltree.png" class="work-png" alt="Skilltree HD">
-          <video src="images/skilltree.mp4" loop muted playsinline poster="images/skilltree.png" class="work-hd"></video>
+          <img src="images/skilltree-30px.png" class="work-stage active" data-stage="0" alt="Skilltree">
+          <img src="images/skilltree-60px.png" class="work-stage" data-stage="1" alt="Skilltree">
+          <img src="images/skilltree-120px.png" class="work-stage" data-stage="2" alt="Skilltree">
+          <img src="images/skilltree-240px.png" class="work-stage" data-stage="3" alt="Skilltree">
+          <img src="images/skilltree.png" class="work-stage" data-stage="4" alt="Skilltree HD">
+          <video src="images/skilltree.mp4" loop muted playsinline poster="images/skilltree.png" class="work-stage work-video" data-stage="5"></video>
         </div>
         <figcaption class="work-title">Skilltree.</figcaption>
       </figure>
 
       <figure class="work-item" data-title="It Was All A Dream.">
         <div class="work-pixel-wrap">
-          <img src="images/savanna-pixel.png" class="work-pixel" alt="It Was All A Dream">
-          <img src="images/savanna.png" class="work-png" alt="It Was All A Dream HD">
-          <video src="images/savanna.mp4" loop muted playsinline poster="images/savanna.png" class="work-hd"></video>
+          <img src="images/savanna-30px.png" class="work-stage active" data-stage="0" alt="It Was All A Dream">
+          <img src="images/savanna-60px.png" class="work-stage" data-stage="1" alt="It Was All A Dream">
+          <img src="images/savanna-120px.png" class="work-stage" data-stage="2" alt="It Was All A Dream">
+          <img src="images/savanna-240px.png" class="work-stage" data-stage="3" alt="It Was All A Dream">
+          <img src="images/savanna.png" class="work-stage" data-stage="4" alt="It Was All A Dream HD">
+          <video src="images/savanna.mp4" loop muted playsinline poster="images/savanna.png" class="work-stage work-video" data-stage="5"></video>
         </div>
         <figcaption class="work-title">It Was All A Dream.</figcaption>
       </figure>
@@ -347,39 +353,32 @@
           }
         });
 
-        // 3-stage reveal: Pixel → PNG (scanline) → Glitch → Video
+        // Stepped pixel reveal: 30px → 60px → 120px → 240px → HD → Video
         var workItems = document.querySelectorAll('.work-item');
         workItems.forEach(function(item) {
-          var stage = 0; // 0=pixel, 1=png, 2=video
+          var started = false;
           item.addEventListener('click', function() {
-            if (stage === 0) {
-              // Stage 1→2: PNG fades in over pixel
-              stage = 1;
-              item.classList.add('stage-png');
+            if (started) return;
+            started = true;
 
-              // After PNG fully visible, hide pixel underneath
+            var stages = item.querySelectorAll('.work-stage');
+            var timings = [0, 300, 600, 900, 1200, 2500]; // ms for each stage
+            
+            timings.forEach(function(ms, i) {
               setTimeout(function() {
-                item.classList.add('stage-png-done');
-              }, 1300);
-
-              // After fade (1.2s) + pause (0.5s) → glitch → video
-              setTimeout(function() {
-                // Glitch flash
-                item.classList.add('glitch');
-                setTimeout(function() {
-                  item.classList.remove('glitch');
-                  // Show video
-                  stage = 2;
-                  item.classList.add('stage-video');
+                // Hide all, show current
+                stages.forEach(function(s) { s.classList.remove('active'); });
+                stages[i].classList.add('active');
+                
+                // Start video on last stage
+                if (i === 5) {
+                  var video = stages[i];
+                  video.currentTime = 0;
+                  video.play();
                   item.classList.add('revealed');
-                  var video = item.querySelector('video');
-                  if (video) {
-                    video.currentTime = 0;
-                    video.play();
-                  }
-                }, 50);
-              }, 1700);
-            }
+                }
+              }, ms);
+            });
           });
         });
       }
