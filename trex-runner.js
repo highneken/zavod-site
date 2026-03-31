@@ -611,10 +611,9 @@ Runner.prototype = {
     document.addEventListener(Runner.events.KEYUP, this);
 
     if (IS_MOBILE) {
-      // Mobile only touch devices.
-      this.touchController.addEventListener(Runner.events.TOUCHSTART, this);
-      this.touchController.addEventListener(Runner.events.TOUCHEND, this);
-      this.containerEl.addEventListener(Runner.events.TOUCHSTART, this);
+      // Mobile only touch devices – listen on document for full-screen tap.
+      document.addEventListener(Runner.events.TOUCHSTART, this);
+      document.addEventListener(Runner.events.TOUCHEND, this);
     } else {
       // Mouse.
       document.addEventListener(Runner.events.MOUSEDOWN, this);
@@ -630,9 +629,8 @@ Runner.prototype = {
     document.removeEventListener(Runner.events.KEYUP, this);
 
     if (IS_MOBILE) {
-      this.touchController.removeEventListener(Runner.events.TOUCHSTART, this);
-      this.touchController.removeEventListener(Runner.events.TOUCHEND, this);
-      this.containerEl.removeEventListener(Runner.events.TOUCHSTART, this);
+      document.removeEventListener(Runner.events.TOUCHSTART, this);
+      document.removeEventListener(Runner.events.TOUCHEND, this);
     } else {
       document.removeEventListener(Runner.events.MOUSEDOWN, this);
       document.removeEventListener(Runner.events.MOUSEUP, this);

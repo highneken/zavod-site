@@ -148,13 +148,7 @@
       document.addEventListener('keydown', onFirstInput);
       document.addEventListener('touchstart', onFirstInput);
 
-      // Restart on tap anywhere when crashed
-      document.addEventListener('touchstart', function(e) {
-        if (gameStarted && runner && runner.crashed) {
-          e.preventDefault();
-          runner.restart();
-        }
-      });
+
 
       document.addEventListener('zavod-unlock', function () {
         localStorage.setItem(STORAGE_KEY, '1');
