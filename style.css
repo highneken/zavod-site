@@ -336,15 +336,19 @@ body {
   opacity: 0;
 }
 
-/* Stage 1→2: Pixel fades out, PNG revealed */
+/* Stage 1→2: PNG fades in OVER the pixel (pixel stays until PNG fully visible) */
 .work-item.stage-png .work-pixel {
-  transition: opacity 1.2s ease-out;
-  opacity: 0;
+  opacity: 1;
 }
 
 .work-item.stage-png .work-png {
-  transition: opacity 1s ease-in;
+  transition: opacity 1.2s ease-in-out;
   opacity: 1;
+}
+
+/* After PNG is fully in, hide pixel */
+.work-item.stage-png-done .work-pixel {
+  opacity: 0;
 }
 
 /* Stage 2→3: Glitch flash then video */

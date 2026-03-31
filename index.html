@@ -353,11 +353,16 @@
           var stage = 0; // 0=pixel, 1=png, 2=video
           item.addEventListener('click', function() {
             if (stage === 0) {
-              // Stage 1→2: Pixel dissolves, PNG appears
+              // Stage 1→2: PNG fades in over pixel
               stage = 1;
               item.classList.add('stage-png');
 
-              // After scanline dissolve (0.3s) + pause (0.2s) → glitch → video
+              // After PNG fully visible, hide pixel underneath
+              setTimeout(function() {
+                item.classList.add('stage-png-done');
+              }, 1300);
+
+              // After fade (1.2s) + pause (0.5s) → glitch → video
               setTimeout(function() {
                 // Glitch flash
                 item.classList.add('glitch');
