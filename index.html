@@ -78,8 +78,8 @@
       <div class="menu-psycho" id="menu-psycho"></div>
 
       <nav class="menu-nav">
-        <div class="menu-item active" data-action="newgame"><span class="menu-cursor">&gt;</span> NEW GAME</div>
-        <div class="menu-item" data-action="continue"><span class="menu-cursor">&gt;</span> CONTINUE</div>
+        <div class="menu-item active" data-action="start"><span class="menu-cursor">&gt;</span> START</div>
+        <div class="menu-item" data-action="output"><span class="menu-cursor">&gt;</span> OUTPUT</div>
       </nav>
     </div>
 
@@ -166,9 +166,9 @@
 
         function selectItem() {
           var action = items[activeIndex].getAttribute('data-action');
-          if (action === 'newgame') {
+          if (action === 'start') {
             showManifest();
-          } else if (action === 'continue') {
+          } else if (action === 'output') {
             showWorks();
           }
         }
