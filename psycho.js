@@ -34,14 +34,14 @@ var initPsychoMantis = (function () {
   ];
 
   var fromTelegram = [
-    "I see your Telegram.",
+    "You came from Telegram.",
     "Someone forwarded you here. I know.",
     "Your chat history is showing.",
     "I read the message before you did."
   ];
 
   var fromWhatsApp = [
-    "I see your WhatsApp.",
+    "You came from WhatsApp.",
     "Two blue checkmarks. You opened it.",
     "I was in the group chat.",
     "I read it before you screenshotted."
