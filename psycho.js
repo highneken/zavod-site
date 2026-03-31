@@ -33,6 +33,20 @@ var initPsychoMantis = (function () {
     "You found it. Or did it find you?"
   ];
 
+  var fromTelegram = [
+    "Someone sent you here...",
+    "A message brought you. But was it meant for you?",
+    "Forwarded. Tapped. Now you're here.",
+    "The chat led you here. The chat doesn't know what's next."
+  ];
+
+  var fromWhatsApp = [
+    "Someone shared this with you...",
+    "A link in a chat. You couldn't resist.",
+    "Delivered. Read. Clicked.",
+    "The blue checkmarks led you here."
+  ];
+
   var currentTimeout = null;
   var currentInterval = null;
 
@@ -46,9 +60,15 @@ var initPsychoMantis = (function () {
     el.textContent = '';
 
     var ref = document.referrer || '';
+    var params = new URLSearchParams(window.location.search);
+    var from = (params.get('from') || '').toLowerCase();
     var pool = general;
 
-    if (/x\.com|twitter\.com/i.test(ref)) {
+    if (from === 'tg' || /t\.me/i.test(ref)) {
+      pool = fromTelegram;
+    } else if (from === 'wa' || /whatsapp/i.test(ref)) {
+      pool = fromWhatsApp;
+    } else if (/x\.com|twitter\.com/i.test(ref)) {
       pool = fromX;
     } else if (/google\./i.test(ref)) {
       pool = fromGoogle;
