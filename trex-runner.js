@@ -545,7 +545,7 @@ Runner.prototype = {
 
       // ZAVOD: Check unlock score
       var displayScore = this.distanceMeter.getActualDistance(Math.ceil(this.distanceRan));
-      if (displayScore >= 1000 && !this._zavodUnlocked) {
+      if (displayScore >= 100 && !this._zavodUnlocked) {
         this._zavodUnlocked = true;
         this.stop();
         document.dispatchEvent(new CustomEvent('zavod-unlock'));
