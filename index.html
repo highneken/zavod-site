@@ -110,6 +110,7 @@
       <figure class="work-item" data-title="Skilltree.">
         <div class="work-pixel-wrap">
           <img src="images/skilltree-pixel.png" class="work-pixel" alt="Skilltree">
+          <img src="images/skilltree.png" class="work-png" alt="Skilltree HD">
           <video src="images/skilltree.mp4" loop muted playsinline poster="images/skilltree.png" class="work-hd"></video>
         </div>
         <figcaption class="work-title">Skilltree.</figcaption>
@@ -118,6 +119,7 @@
       <figure class="work-item" data-title="It Was All A Dream.">
         <div class="work-pixel-wrap">
           <img src="images/savanna-pixel.png" class="work-pixel" alt="It Was All A Dream">
+          <img src="images/savanna.png" class="work-png" alt="It Was All A Dream HD">
           <video src="images/savanna.mp4" loop muted playsinline poster="images/savanna.png" class="work-hd"></video>
         </div>
         <figcaption class="work-title">It Was All A Dream.</figcaption>
@@ -345,14 +347,33 @@
           }
         });
 
-        // Pixel → HD on click/tap: reveal + start video
+        // 3-stage reveal: Pixel → PNG (scanline) → Glitch → Video
         var workItems = document.querySelectorAll('.work-item');
         workItems.forEach(function(item) {
+          var stage = 0; // 0=pixel, 1=png, 2=video
           item.addEventListener('click', function() {
-            if (!item.classList.contains('revealed')) {
-              item.classList.add('revealed');
-              var video = item.querySelector('video');
-              if (video) video.play();
+            if (stage === 0) {
+              // Stage 1→2: Pixel dissolves, PNG appears
+              stage = 1;
+              item.classList.add('stage-png');
+
+              // After scanline dissolve (0.3s) + pause (0.2s) → glitch → video
+              setTimeout(function() {
+                // Glitch flash
+                item.classList.add('glitch');
+                setTimeout(function() {
+                  item.classList.remove('glitch');
+                  // Show video
+                  stage = 2;
+                  item.classList.add('stage-video');
+                  item.classList.add('revealed');
+                  var video = item.querySelector('video');
+                  if (video) {
+                    video.currentTime = 0;
+                    video.play();
+                  }
+                }, 50);
+              }, 500);
             }
           });
         });
