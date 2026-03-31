@@ -43,8 +43,13 @@
   <!-- ===== GATE: Chrome offline page (dark) ===== -->
   <div id="gate">
     <div class="gate-content">
-      <div class="gate-dino-static">
-        <img src="dino-images/100-percent/100-offline-sprite.png" class="gate-dino-img" alt="">
+      <div class="gate-dino-area">
+        <div class="gate-dino-static">
+          <img src="dino-images/100-percent/100-offline-sprite.png" class="gate-dino-img" alt="">
+        </div>
+        <div class="dino-wrapper">
+          <div class="interstitial-wrapper"></div>
+        </div>
       </div>
 
       <h1 class="gate-title">Press space to start the game</h1>
@@ -56,10 +61,6 @@
       </ul>
 
       <p class="gate-code">ERR_OUTPUT_ONGOING</p>
-
-      <div class="dino-wrapper">
-        <div class="interstitial-wrapper"></div>
-      </div>
 
       <div id="offline-resources">
         <img id="offline-resources-1x" src="dino-images/100-percent/100-offline-sprite.png">
@@ -120,10 +121,8 @@
       function showGame() {
         if (gameStarted) return;
         gameStarted = true;
-        // Reserve the space so text doesn't shift
-        dinoStatic.style.visibility = 'hidden';
-        dinoStatic.style.height = dinoStatic.offsetHeight + 'px';
-        // Show game canvas
+        // Hide static dino, show game canvas in same spot
+        dinoStatic.style.display = 'none';
         wrapper.style.display = 'block';
       }
 
@@ -142,13 +141,20 @@
         requestAnimationFrame(function() {
           requestAnimationFrame(function() {
             runner.adjustDimensions();
-            // Simulate a space keydown so Runner starts via its own logic
             runner.onKeyDown({ keyCode: 32, type: 'keydown', preventDefault: function(){}, target: runner.containerEl });
           });
         });
       }
       document.addEventListener('keydown', onFirstInput);
       document.addEventListener('touchstart', onFirstInput);
+
+      // Restart on tap anywhere when crashed
+      document.addEventListener('touchstart', function(e) {
+        if (gameStarted && runner && runner.crashed) {
+          e.preventDefault();
+          runner.restart();
+        }
+      });
 
       document.addEventListener('zavod-unlock', function () {
         localStorage.setItem(STORAGE_KEY, '1');
