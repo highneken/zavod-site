@@ -188,6 +188,8 @@
         showGame();
         document.removeEventListener('keydown', onFirstInput);
         document.removeEventListener('touchstart', onFirstInput);
+        // Recalculate dimensions now that wrapper is visible with correct width
+        runner.adjustDimensions();
         runner.handleEvent({ type: Runner.events.TOUCHSTART, keyCode: 32, preventDefault: function(){}, target: runner.containerEl });
       }
       document.addEventListener('keydown', onFirstInput);
