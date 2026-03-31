@@ -110,7 +110,7 @@
       <figure class="work-item" data-title="Skilltree.">
         <div class="work-pixel-wrap">
           <img src="images/skilltree.png" class="work-pixel" alt="Skilltree">
-          <video src="images/skilltree.mp4" autoplay loop muted playsinline poster="images/skilltree.png" class="work-hd"></video>
+          <video src="images/skilltree.mp4" loop muted playsinline poster="images/skilltree.png" class="work-hd"></video>
         </div>
         <figcaption class="work-title">Skilltree.</figcaption>
       </figure>
@@ -118,7 +118,7 @@
       <figure class="work-item" data-title="It Was All A Dream.">
         <div class="work-pixel-wrap">
           <img src="images/savanna-pixel.png" class="work-pixel" alt="It Was All A Dream">
-          <video src="images/savanna.mp4" autoplay loop muted playsinline poster="images/savanna.png" class="work-hd"></video>
+          <video src="images/savanna.mp4" loop muted playsinline poster="images/savanna.png" class="work-hd"></video>
         </div>
         <figcaption class="work-title">It Was All A Dream.</figcaption>
       </figure>
@@ -339,14 +339,15 @@
           }
         });
 
-        // Pixel → HD on hover/tap
+        // Pixel → HD on click/tap: reveal + start video
         var workItems = document.querySelectorAll('.work-item');
         workItems.forEach(function(item) {
-          item.addEventListener('mouseenter', function() {
-            item.classList.add('revealed');
-          });
           item.addEventListener('click', function() {
-            item.classList.add('revealed');
+            if (!item.classList.contains('revealed')) {
+              item.classList.add('revealed');
+              var video = item.querySelector('video');
+              if (video) video.play();
+            }
           });
         });
       }
