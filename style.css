@@ -344,7 +344,8 @@ body {
   transition: opacity 0.4s ease;
 }
 
-.work-item.revealed .work-title {
+.work-item.revealed .work-title,
+.work-item.work-static .work-title {
   opacity: 1;
 }
 

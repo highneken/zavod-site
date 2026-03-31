@@ -115,10 +115,9 @@
         <figcaption class="work-title">Skilltree.</figcaption>
       </figure>
 
-      <figure class="work-item" data-title="It Was All A Dream.">
+      <figure class="work-item work-static" data-title="It Was All A Dream.">
         <div class="work-pixel-wrap">
           <img src="images/savanna-pixel.png" class="work-pixel" alt="It Was All A Dream">
-          <video src="images/savanna.mp4" loop muted playsinline poster="images/savanna.png" class="work-hd"></video>
         </div>
         <figcaption class="work-title">It Was All A Dream.</figcaption>
       </figure>
@@ -342,6 +341,7 @@
         // Pixel → HD on click/tap: reveal + start video
         var workItems = document.querySelectorAll('.work-item');
         workItems.forEach(function(item) {
+          if (item.classList.contains('work-static')) return;
           item.addEventListener('click', function() {
             if (!item.classList.contains('revealed')) {
               item.classList.add('revealed');
