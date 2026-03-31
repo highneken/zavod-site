@@ -148,6 +148,19 @@
       document.addEventListener('keydown', onFirstInput);
       document.addEventListener('touchstart', onFirstInput);
 
+      // Global touch handler: jump while playing, restart when crashed
+      document.addEventListener('touchstart', function(e) {
+        if (!gameStarted || !runner) return;
+        e.preventDefault();
+        if (runner.crashed) {
+          runner.restart();
+        } else if (runner.playing) {
+          if (!runner.tRex.jumping && !runner.tRex.ducking) {
+            runner.tRex.startJump(runner.currentSpeed);
+          }
+        }
+      }, { passive: false });
+
 
 
       document.addEventListener('zavod-unlock', function () {
