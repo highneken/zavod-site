@@ -226,9 +226,12 @@
         setTimeout(function () {
           showSection(manifestEl);
           manifestEl.style.opacity = '0';
+          manifestEl.style.transition = 'none';
           requestAnimationFrame(function () {
-            manifestEl.style.transition = 'opacity 1s ease';
-            manifestEl.style.opacity = '1';
+            requestAnimationFrame(function () {
+              manifestEl.style.transition = 'opacity 1s ease';
+              manifestEl.style.opacity = '1';
+            });
           });
           typeManifest();
         }, 800);
@@ -314,9 +317,12 @@
         setTimeout(function () {
           showSection(worksEl);
           worksEl.style.opacity = '0';
+          worksEl.style.transition = 'none';
           requestAnimationFrame(function () {
-            worksEl.style.transition = 'opacity 1s ease';
-            worksEl.style.opacity = '1';
+            requestAnimationFrame(function () {
+              worksEl.style.transition = 'opacity 1s ease';
+              worksEl.style.opacity = '1';
+            });
           });
           initWorks();
         }, 800);
