@@ -111,26 +111,37 @@
         return;
       }
 
-      // Show game canvas, hide only the static dino
+      // Show game canvas, hide only the static dino, keep text
       var gameStarted = false;
+      var runner = null;
+      var dinoStatic = document.querySelector('.gate-dino-static');
+      var wrapper = document.querySelector('.interstitial-wrapper');
+
       function showGame() {
         if (gameStarted) return;
         gameStarted = true;
-        document.querySelector('.interstitial-wrapper').style.display = 'block';
-        document.querySelector('.gate-dino-static').style.display = 'none';
+        // Reserve the space so text doesn't shift
+        dinoStatic.style.visibility = 'hidden';
+        dinoStatic.style.height = dinoStatic.offsetHeight + 'px';
+        // Show game canvas
+        wrapper.style.display = 'block';
       }
 
       // Init runner but hide canvas
-      document.querySelector('.interstitial-wrapper').style.display = 'none';
-      new Runner('.interstitial-wrapper');
+      wrapper.style.display = 'none';
+      runner = new Runner('.interstitial-wrapper');
 
-      // First input shows the game
+      // First input shows the game and triggers Runner
       function onFirstInput(e) {
         if (e.type === 'keydown' && e.code !== 'Space') return;
         e.preventDefault();
         showGame();
         document.removeEventListener('keydown', onFirstInput);
         document.removeEventListener('touchstart', onFirstInput);
+        // Give DOM a frame to layout the canvas, then trigger Runner's playIntro
+        requestAnimationFrame(function() {
+          runner.playIntro();
+        });
       }
       document.addEventListener('keydown', onFirstInput);
       document.addEventListener('touchstart', onFirstInput);
