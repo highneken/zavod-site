@@ -255,6 +255,34 @@ body {
   animation: blink 1s step-end infinite;
 }
 
+/* ── Credits ── */
+#credits {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+}
+
+.credits-content {
+  text-align: center;
+  padding: 2rem;
+}
+
+.credits-text {
+  font-size: 14px;
+  color: #fff;
+  line-height: 2.4;
+  letter-spacing: 2px;
+}
+
+.credits-prompt {
+  font-size: 10px;
+  color: #fff;
+  margin-top: 40px;
+  animation: blink 1s step-end infinite;
+}
+
 /* ── Works ── */
 #works {
   min-height: 100vh;
