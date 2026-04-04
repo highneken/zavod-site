@@ -78,9 +78,10 @@
       <div class="menu-psycho" id="menu-psycho"></div>
 
       <nav class="menu-nav">
-        <div class="menu-item active" data-action="output"><span class="menu-cursor">&gt;</span> OUTPUT</div>
-        <div class="menu-item" data-action="start"><span class="menu-cursor">&gt;</span> LOG</div>
-        <div class="menu-item" data-action="credits"><span class="menu-cursor">&gt;</span> CREDITS</div>
+        <div class="menu-item active" data-action="interface"><span class="menu-cursor">&gt;</span> INTERFACE</div>
+        <div class="menu-item" data-action="log"><span class="menu-cursor">&gt;</span> LOG</div>
+        <div class="menu-item" data-action="output"><span class="menu-cursor">&gt;</span> OUTPUT</div>
+        <div class="menu-item" data-action="about"><span class="menu-cursor">&gt;</span> ABOUT</div>
       </nav>
     </div>
 
@@ -93,7 +94,26 @@
     </footer>
   </div>
 
-  <!-- ===== MANIFEST ===== -->
+  <!-- ===== INTERFACE ===== -->
+  <div id="interface" class="hidden">
+    <div class="if-container">
+      <div class="if-header">
+        <span class="if-label">ZAVOD//INTERFACE</span>
+        <a href="#" class="if-close" id="if-close">ESC</a>
+      </div>
+
+      <div class="if-body" id="if-body">
+        <div class="if-line if-system">System active.</div>
+      </div>
+
+      <div class="if-input-row">
+        <span class="if-prompt">&gt;</span>
+        <input type="text" class="if-input" id="if-input" autocomplete="off" spellcheck="false" placeholder="query">
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== LOG (Manifest) ===== -->
   <div id="manifest" class="hidden">
     <div class="manifest-content">
       <div class="manifest-text" id="manifest-text"></div>
@@ -101,7 +121,7 @@
     </div>
   </div>
 
-  <!-- ===== WORKS ===== -->
+  <!-- ===== OUTPUT (Works) ===== -->
   <div id="works" class="hidden">
     <div class="works-nav">
       <a href="#" class="works-back" id="works-back">&#8592; BACK</a>
@@ -142,11 +162,11 @@
     </footer>
   </div>
 
-  <!-- ===== CREDITS ===== -->
-  <div id="credits" class="hidden">
-    <div class="credits-content">
-      <p class="credits-text" id="credits-text"></p>
-      <p class="credits-prompt hidden" id="credits-prompt">PRESS ANY KEY</p>
+  <!-- ===== ABOUT ===== -->
+  <div id="about" class="hidden">
+    <div class="about-content">
+      <p class="about-text" id="about-text"></p>
+      <p class="about-prompt hidden" id="about-prompt">PRESS ANY KEY</p>
     </div>
   </div>
 
@@ -160,14 +180,52 @@
       var menuEl = document.getElementById('menu');
       var manifestEl = document.getElementById('manifest');
       var worksEl = document.getElementById('works');
-      var creditsEl = document.getElementById('credits');
+      var aboutEl = document.getElementById('about');
+      var interfaceEl = document.getElementById('interface');
 
       // ── Sections helper ──
       function showSection(el) {
-        [gateEl, transitionEl, menuEl, manifestEl, worksEl, creditsEl].forEach(function(s) {
+        [gateEl, transitionEl, menuEl, manifestEl, worksEl, aboutEl, interfaceEl].forEach(function(s) {
           s.classList.add('hidden');
         });
         el.classList.remove('hidden');
+      }
+
+      function fadeToSection(fromEl, toEl, onReady) {
+        fromEl.style.transition = 'opacity 0.8s ease';
+        fromEl.style.opacity = '0';
+        setTimeout(function () {
+          showSection(toEl);
+          toEl.style.opacity = '0';
+          toEl.style.transition = 'none';
+          requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+              toEl.style.transition = 'opacity 1s ease';
+              toEl.style.opacity = '1';
+            });
+          });
+          if (onReady) onReady();
+        }, 800);
+      }
+
+      function fadeToMenu() {
+        var current = [manifestEl, worksEl, aboutEl, interfaceEl].find(function(el) {
+          return !el.classList.contains('hidden');
+        });
+        if (!current) return;
+        current.style.transition = 'opacity 0.8s ease';
+        current.style.opacity = '0';
+        setTimeout(function () {
+          showSection(menuEl);
+          menuEl.style.opacity = '0';
+          requestAnimationFrame(function () {
+            menuEl.style.transition = 'opacity 0.5s ease';
+            menuEl.style.opacity = '1';
+          });
+          if (typeof initPsychoMantis === 'function') {
+            initPsychoMantis();
+          }
+        }, 800);
       }
 
       // ── Menu Logic ──
@@ -184,17 +242,13 @@
 
         function selectItem() {
           var action = items[activeIndex].getAttribute('data-action');
-          if (action === 'start') {
-            showManifest();
-          } else if (action === 'output') {
-            showWorks();
-          } else if (action === 'credits') {
-            showCredits();
-          }
+          if (action === 'interface') showInterface();
+          else if (action === 'log') showManifest();
+          else if (action === 'output') showWorks();
+          else if (action === 'about') showAbout();
         }
 
-        // Keyboard
-        document.addEventListener('keydown', function menuKeys(e) {
+        document.addEventListener('keydown', function(e) {
           if (menuEl.classList.contains('hidden')) return;
           if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
             e.preventDefault();
@@ -208,7 +262,6 @@
           }
         });
 
-        // Mouse/touch
         items.forEach(function(item, i) {
           item.addEventListener('mouseenter', function() { setActive(i); });
           item.addEventListener('click', function(e) {
@@ -218,13 +271,148 @@
           });
         });
 
-        // Psycho Mantis
         if (typeof initPsychoMantis === 'function') {
           initPsychoMantis();
         }
       }
 
-      // ── Manifest ──
+      // ══════════════════════════════════════
+      // ── INTERFACE
+      // ══════════════════════════════════════
+
+      var ifBody = document.getElementById('if-body');
+      var ifInput = document.getElementById('if-input');
+      var ifClose = document.getElementById('if-close');
+
+      // Offline response engine — no API needed
+      var ifResponses = [
+        // catch-alls & philosophy
+        { match: /who|what.*zavod|zavod/i, response: 'A system. Not a person.' },
+        { match: /why/i, response: 'Wrong question.' },
+        { match: /how/i, response: 'One layer at a time.' },
+        { match: /mean|meaning/i, response: 'You already know. You just haven\'t named it yet.' },
+        { match: /help|explain/i, response: 'This is not a help desk.' },
+        { match: /hello|hi|hey|sup/i, response: 'Acknowledged.' },
+        { match: /art|artist|create/i, response: 'Output is the only biography that matters.' },
+        { match: /game|gamer|gaming/i, response: 'You recognize the language. Good.' },
+        { match: /skill\s?tree/i, response: 'Every node was earned. None were given.' },
+        { match: /dream|savanna/i, response: 'It was. And then it wasn\'t.' },
+        { match: /name|real|identity/i, response: 'Names are metadata. Work is signal.' },
+        { match: /output/i, response: 'Ongoing.' },
+        { match: /alive|sentient|ai|bot|chat/i, response: 'I am the work. The work does not explain itself.' },
+        { match: /secret|hidden|easter/i, response: 'You\'re looking. That\'s the first step.' },
+        { match: /score|point|dino/i, response: 'The scoreboard was never the point.' },
+        { match: /love|hate|feel/i, response: 'Tension. Recognition. That\'s enough.' },
+        { match: /where|location|country/i, response: 'The factory has no address.' },
+        { match: /when|time|start/i, response: 'Before you arrived. After you leave.' },
+        { match: /purpose|goal|mission/i, response: 'Output: ongoing.' },
+        { match: /thank|cool|nice/i, response: 'Noted.' },
+        { match: /fuck|shit|damn/i, response: '...' },
+        { match: /buy|price|sell|shop|store|merch/i, response: 'Not yet. But soon.' },
+        { match: /music|sound|audio/i, response: 'Listen closer.' },
+        { match: /color|colour|dark|black/i, response: 'Black is not empty. Black is everything at once.' },
+        { match: /pixel/i, response: 'Resolution is a choice.' },
+        { match: /factory|zavod.*mean/i, response: 'Zavod means factory. The factory runs.' },
+      ];
+
+      var ifFallbacks = [
+        'Signal unclear.',
+        'Not all queries return data.',
+        'Try again. Or don\'t.',
+        'The system heard you.',
+        'Processing... no result.',
+        'That input has no match here.',
+        'Interesting. But irrelevant.',
+        'The work doesn\'t answer to that.',
+      ];
+
+      function getResponse(input) {
+        var trimmed = input.trim();
+        if (!trimmed) return null;
+
+        for (var i = 0; i < ifResponses.length; i++) {
+          if (ifResponses[i].match.test(trimmed)) {
+            return ifResponses[i].response;
+          }
+        }
+        return ifFallbacks[Math.floor(Math.random() * ifFallbacks.length)];
+      }
+
+      function addLine(text, className) {
+        var el = document.createElement('div');
+        el.className = 'if-line ' + (className || '');
+        ifBody.appendChild(el);
+
+        // Typewriter
+        var idx = 0;
+        function type() {
+          if (idx < text.length) {
+            el.textContent += text[idx];
+            idx++;
+            setTimeout(type, 30 + Math.random() * 20);
+          }
+          ifBody.scrollTop = ifBody.scrollHeight;
+        }
+        type();
+      }
+
+      function handleQuery() {
+        var val = ifInput.value;
+        ifInput.value = '';
+        if (!val.trim()) return;
+
+        // Show user input
+        var userLine = document.createElement('div');
+        userLine.className = 'if-line if-user';
+        userLine.textContent = '> ' + val;
+        ifBody.appendChild(userLine);
+
+        // Respond after short delay
+        var response = getResponse(val);
+        setTimeout(function() {
+          addLine(response, 'if-system');
+        }, 400 + Math.random() * 400);
+
+        ifBody.scrollTop = ifBody.scrollHeight;
+      }
+
+      ifInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          handleQuery();
+        }
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          fadeToMenu();
+        }
+      });
+
+      ifClose.addEventListener('click', function(e) {
+        e.preventDefault();
+        fadeToMenu();
+      });
+
+      // ESC global for interface
+      document.addEventListener('keydown', function(e) {
+        if (interfaceEl.classList.contains('hidden')) return;
+        if (e.key === 'Escape' && document.activeElement !== ifInput) {
+          fadeToMenu();
+        }
+      });
+
+      function showInterface() {
+        fadeToSection(menuEl, interfaceEl, function() {
+          // Reset body to initial state
+          ifBody.innerHTML = '<div class="if-line if-system">System active.</div>';
+          ifInput.value = '';
+          setTimeout(function() { ifInput.focus(); }, 200);
+        });
+      }
+
+      // ══════════════════════════════════════
+      // ── LOG (Manifest)
+      // ══════════════════════════════════════
+
       var manifestLines = [
         'You spawned into a game no one explained.',
         '',
@@ -241,21 +429,9 @@
       ];
 
       function showManifest() {
-        menuEl.style.transition = 'opacity 0.8s ease';
-        menuEl.style.opacity = '0';
-
-        setTimeout(function () {
-          showSection(manifestEl);
-          manifestEl.style.opacity = '0';
-          manifestEl.style.transition = 'none';
-          requestAnimationFrame(function () {
-            requestAnimationFrame(function () {
-              manifestEl.style.transition = 'opacity 1s ease';
-              manifestEl.style.opacity = '1';
-            });
-          });
+        fadeToSection(menuEl, manifestEl, function() {
           typeManifest();
-        }, 800);
+        });
       }
 
       function typeManifest() {
@@ -270,28 +446,14 @@
 
         function typeLine() {
           if (lineIdx >= manifestLines.length) {
-            // Done typing — show prompt after 2s
             setTimeout(function () {
               promptEl.classList.remove('hidden');
-              // Listen for any key/click to go back
               function goBack(e) {
                 e.preventDefault();
                 document.removeEventListener('keydown', goBack);
                 document.removeEventListener('click', goBack);
                 document.removeEventListener('touchstart', goBack);
-                manifestEl.style.transition = 'opacity 0.8s ease';
-                manifestEl.style.opacity = '0';
-                setTimeout(function () {
-                  showSection(menuEl);
-                  menuEl.style.opacity = '0';
-                  requestAnimationFrame(function () {
-                    menuEl.style.transition = 'opacity 0.5s ease';
-                    menuEl.style.opacity = '1';
-                  });
-                  if (typeof initPsychoMantis === 'function') {
-                    initPsychoMantis();
-                  }
-                }, 800);
+                fadeToMenu();
               }
               document.addEventListener('keydown', goBack);
               document.addEventListener('click', goBack);
@@ -330,109 +492,30 @@
         setTimeout(typeLine, 500);
       }
 
-      // ── Credits ──
-      var creditsLine = 'I do art for gamers.';
+      // ══════════════════════════════════════
+      // ── OUTPUT (Works)
+      // ══════════════════════════════════════
 
-      function showCredits() {
-        menuEl.style.transition = 'opacity 0.8s ease';
-        menuEl.style.opacity = '0';
-
-        setTimeout(function () {
-          showSection(creditsEl);
-          creditsEl.style.opacity = '0';
-          creditsEl.style.transition = 'none';
-          requestAnimationFrame(function () {
-            requestAnimationFrame(function () {
-              creditsEl.style.transition = 'opacity 1s ease';
-              creditsEl.style.opacity = '1';
-            });
-          });
-          typeCredits();
-        }, 800);
-      }
-
-      function typeCredits() {
-        var textEl = document.getElementById('credits-text');
-        var promptEl = document.getElementById('credits-prompt');
-        textEl.textContent = '';
-        promptEl.classList.add('hidden');
-
-        var charIdx = 0;
-
-        function typeChar() {
-          if (charIdx >= creditsLine.length) {
-            setTimeout(function () {
-              promptEl.classList.remove('hidden');
-              function goBack(e) {
-                e.preventDefault();
-                document.removeEventListener('keydown', goBack);
-                document.removeEventListener('click', goBack);
-                document.removeEventListener('touchstart', goBack);
-                creditsEl.style.transition = 'opacity 0.8s ease';
-                creditsEl.style.opacity = '0';
-                setTimeout(function () {
-                  showSection(menuEl);
-                  menuEl.style.opacity = '0';
-                  requestAnimationFrame(function () {
-                    menuEl.style.transition = 'opacity 0.5s ease';
-                    menuEl.style.opacity = '1';
-                  });
-                  if (typeof initPsychoMantis === 'function') {
-                    initPsychoMantis();
-                  }
-                }, 800);
-              }
-              document.addEventListener('keydown', goBack);
-              document.addEventListener('click', goBack);
-              document.addEventListener('touchstart', goBack);
-            }, 2000);
-            return;
-          }
-
-          textEl.textContent += creditsLine[charIdx];
-          charIdx++;
-          setTimeout(typeChar, 80);
-        }
-
-        setTimeout(typeChar, 500);
-      }
-
-      // ── Works ──
       function showWorks() {
-        menuEl.style.transition = 'opacity 0.8s ease';
-        menuEl.style.opacity = '0';
-
-        setTimeout(function () {
-          showSection(worksEl);
-          worksEl.style.opacity = '0';
-          worksEl.style.transition = 'none';
-          requestAnimationFrame(function () {
-            requestAnimationFrame(function () {
-              worksEl.style.transition = 'opacity 1s ease';
-              worksEl.style.opacity = '1';
-            });
-          });
+        fadeToSection(menuEl, worksEl, function() {
           initWorks();
-        }, 800);
+        });
       }
 
       function initWorks() {
-        // Back button
         document.getElementById('works-back').addEventListener('click', function(e) {
           e.preventDefault();
-          goToMenu();
+          fadeToMenu();
         });
 
-        // ESC to go back
         document.addEventListener('keydown', function worksEsc(e) {
           if (worksEl.classList.contains('hidden')) return;
           if (e.key === 'Escape') {
             e.preventDefault();
-            goToMenu();
+            fadeToMenu();
           }
         });
 
-        // Stepped pixel reveal: 30px → 60px → 120px → 240px → HD → Video
         var workItems = document.querySelectorAll('.work-item');
         workItems.forEach(function(item) {
           var started = false;
@@ -441,15 +524,13 @@
             started = true;
 
             var stages = item.querySelectorAll('.work-stage');
-            var timings = [0, 300, 600, 900, 1200, 2500]; // ms for each stage
+            var timings = [0, 300, 600, 900, 1200, 2500];
             
             timings.forEach(function(ms, i) {
               setTimeout(function() {
-                // Hide all, show current
                 stages.forEach(function(s) { s.classList.remove('active'); });
                 stages[i].classList.add('active');
                 
-                // Start video on last stage
                 if (i === 5) {
                   var video = stages[i];
                   video.currentTime = 0;
@@ -462,23 +543,56 @@
         });
       }
 
-      function goToMenu() {
-        worksEl.style.transition = 'opacity 0.8s ease';
-        worksEl.style.opacity = '0';
-        setTimeout(function () {
-          showSection(menuEl);
-          menuEl.style.opacity = '0';
-          requestAnimationFrame(function () {
-            menuEl.style.transition = 'opacity 0.5s ease';
-            menuEl.style.opacity = '1';
-          });
-          if (typeof initPsychoMantis === 'function') {
-            initPsychoMantis();
-          }
-        }, 800);
+      // ══════════════════════════════════════
+      // ── ABOUT
+      // ══════════════════════════════════════
+
+      var aboutLine = 'I do art for gamers.';
+
+      function showAbout() {
+        fadeToSection(menuEl, aboutEl, function() {
+          typeAbout();
+        });
       }
 
-      // ── Skip gate via ?skip or already unlocked ──
+      function typeAbout() {
+        var textEl = document.getElementById('about-text');
+        var promptEl = document.getElementById('about-prompt');
+        textEl.textContent = '';
+        promptEl.classList.add('hidden');
+
+        var charIdx = 0;
+
+        function typeChar() {
+          if (charIdx >= aboutLine.length) {
+            setTimeout(function () {
+              promptEl.classList.remove('hidden');
+              function goBack(e) {
+                e.preventDefault();
+                document.removeEventListener('keydown', goBack);
+                document.removeEventListener('click', goBack);
+                document.removeEventListener('touchstart', goBack);
+                fadeToMenu();
+              }
+              document.addEventListener('keydown', goBack);
+              document.addEventListener('click', goBack);
+              document.addEventListener('touchstart', goBack);
+            }, 2000);
+            return;
+          }
+
+          textEl.textContent += aboutLine[charIdx];
+          charIdx++;
+          setTimeout(typeChar, 80);
+        }
+
+        setTimeout(typeChar, 500);
+      }
+
+      // ══════════════════════════════════════
+      // ── GATE / UNLOCK
+      // ══════════════════════════════════════
+
       if (window.location.search.indexOf('skip') > -1) {
         localStorage.setItem(STORAGE_KEY, '1');
       }
@@ -488,7 +602,6 @@
         return;
       }
 
-      // ── Dino Game Init ──
       var gameStarted = false;
       var runner = null;
       var dinoStatic = document.querySelector('.gate-dino-static');
@@ -522,7 +635,6 @@
       document.addEventListener('keydown', onFirstInput);
       document.addEventListener('touchstart', onFirstInput);
 
-      // ── Unlock transition ──
       document.addEventListener('zavod-unlock', function () {
         localStorage.setItem(STORAGE_KEY, '1');
 
