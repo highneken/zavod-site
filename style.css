@@ -22,6 +22,20 @@ body {
   min-height: 100vh;
 }
 
+/* ── System Status Line — the bloodline ── */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, var(--punk-beige) 0%, var(--punk-pink) 25%, var(--punk-blue) 50%, var(--punk-green) 75%, var(--punk-beige) 100%);
+  opacity: 0.15;
+  z-index: 9999;
+  pointer-events: none;
+}
+
 /* ── Utility ── */
 .hidden {
   display: none !important;
@@ -35,6 +49,8 @@ body {
   justify-content: center;
   background: #202124;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  position: relative;
+  z-index: 10000; /* covers system line during gate */
 }
 
 .gate-content {
@@ -200,9 +216,26 @@ body {
   font-size: 14px;
   color: #fff;
   padding: 8px 0;
+  padding-left: 8px;
   cursor: pointer;
   white-space: nowrap;
   transition: color 0.15s;
+  border-left: 2px solid transparent;
+  transition: border-color 0.3s;
+}
+
+.menu-item:nth-child(1) { --item-accent: var(--punk-blue); }
+.menu-item:nth-child(2) { --item-accent: var(--punk-pink); }
+.menu-item:nth-child(3) { --item-accent: var(--punk-beige); }
+.menu-item:nth-child(4) { --item-accent: var(--punk-green); }
+.menu-item:nth-child(5) { --item-accent: var(--punk-grey); }
+
+.menu-item.active {
+  border-left-color: var(--item-accent);
+}
+
+.menu-item:hover {
+  border-left-color: var(--item-accent);
 }
 
 .menu-cursor {
@@ -246,6 +279,7 @@ body {
   display: flex;
   flex-direction: column;
   border: 1px solid #1a1a1a;
+  border-top: 1px solid rgba(106, 127, 154, 0.2);
   background: #000;
 }
 
@@ -259,7 +293,7 @@ body {
 
 .if-label {
   font-size: 8px;
-  color: #333;
+  color: rgba(106, 127, 154, 0.4);
   letter-spacing: 2px;
 }
 
@@ -310,7 +344,7 @@ body {
 
 .if-prompt {
   font-size: 10px;
-  color: #333;
+  color: rgba(106, 127, 154, 0.5);
   flex-shrink: 0;
 }
 
@@ -370,7 +404,7 @@ body {
 
 .shop-label {
   font-size: 8px;
-  color: #333;
+  color: rgba(184, 122, 138, 0.4);
   letter-spacing: 2px;
 }
 
@@ -763,7 +797,7 @@ body {
 
 .out-label {
   font-size: 8px;
-  color: #333;
+  color: rgba(200, 184, 138, 0.4);
   letter-spacing: 2px;
 }
 
@@ -776,7 +810,7 @@ body {
 
 .out-summary-title {
   font-size: 10px;
-  color: #555;
+  color: rgba(106, 127, 154, 0.6);
   letter-spacing: 2px;
   display: block;
   margin-bottom: 8px;
@@ -865,7 +899,7 @@ body {
 }
 
 .out-cell-accent {
-  height: 3px;
+  height: 4px;
   width: 100%;
 }
 
@@ -1005,7 +1039,7 @@ body {
 
 .log-label {
   font-size: 8px;
-  color: #333;
+  color: rgba(122, 154, 106, 0.5);
   letter-spacing: 2px;
 }
 
@@ -1047,7 +1081,7 @@ body {
 
 .about-text {
   font-size: 14px;
-  color: #fff;
+  color: rgba(200, 184, 138, 0.9);
   line-height: 2.4;
   letter-spacing: 2px;
 }
@@ -1139,7 +1173,7 @@ body {
 
 .footer-year {
   font-size: 8px;
-  color: #666;
+  color: rgba(200, 184, 138, 0.35);
   margin-bottom: 8px;
 }
 
