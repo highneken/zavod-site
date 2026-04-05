@@ -402,6 +402,59 @@ body {
   opacity: 0.6;
 }
 
+/* ── Scale indicator ── */
+.reg-scale {
+  margin-bottom: 20px;
+}
+
+.reg-scale-bar {
+  width: 100%;
+  height: 3px;
+  background: #1a1a1a;
+  margin-bottom: 8px;
+  position: relative;
+}
+
+.reg-scale-fill {
+  height: 100%;
+  background: var(--reg-accent);
+  transition: width 0.8s ease;
+  min-width: 0;
+}
+
+.reg-scale-labels {
+  display: flex;
+  justify-content: space-between;
+}
+
+.reg-scale-left,
+.reg-scale-right {
+  font-size: 6px;
+  color: #333;
+  letter-spacing: 1px;
+}
+
+/* ── Index hint ── */
+.reg-index-hint {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #111;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.reg-index-range {
+  font-size: 7px;
+  color: #444;
+  letter-spacing: 1px;
+}
+
+.reg-index-note {
+  font-size: 6px;
+  color: #2a2a2a;
+}
+
 .reg-hero-stats {
   display: flex;
   gap: 0;
