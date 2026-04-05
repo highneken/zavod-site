@@ -172,7 +172,6 @@ body {
   margin-bottom: 60px;
 }
 
-/* ── Blinking cursor ── */
 .cursor {
   animation: blink 1s step-end infinite;
 }
@@ -182,7 +181,6 @@ body {
   50% { opacity: 0; }
 }
 
-/* ── Psycho Mantis (menu) ── */
 .menu-psycho {
   font-size: 10px;
   color: #444;
@@ -193,7 +191,6 @@ body {
   line-height: 1.8;
 }
 
-/* ── Menu navigation ── */
 .menu-nav {
   text-align: left;
   display: inline-block;
@@ -218,12 +215,20 @@ body {
   visibility: visible;
 }
 
-.menu-item:hover {
+/* ── Section Back Button ── */
+.section-back {
+  font-size: 10px;
+  color: #333;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.section-back:hover {
   color: #fff;
 }
 
 /* ══════════════════════════════════════
-   INTERFACE — Terminal / System Panel
+   INTERFACE
    ══════════════════════════════════════ */
 
 #interface {
@@ -240,7 +245,7 @@ body {
   height: 420px;
   display: flex;
   flex-direction: column;
-  border: 1px solid #222;
+  border: 1px solid #1a1a1a;
   background: #000;
 }
 
@@ -249,18 +254,18 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 12px 16px;
-  border-bottom: 1px solid #222;
+  border-bottom: 1px solid #1a1a1a;
 }
 
 .if-label {
   font-size: 8px;
-  color: #444;
+  color: #333;
   letter-spacing: 2px;
 }
 
 .if-close {
   font-size: 8px;
-  color: #333;
+  color: #222;
   text-decoration: none;
   transition: color 0.2s;
   cursor: pointer;
@@ -288,7 +293,7 @@ body {
 }
 
 .if-system {
-  color: #555;
+  color: #444;
 }
 
 .if-user {
@@ -299,13 +304,13 @@ body {
   display: flex;
   align-items: center;
   padding: 12px 16px;
-  border-top: 1px solid #222;
+  border-top: 1px solid #1a1a1a;
   gap: 8px;
 }
 
 .if-prompt {
   font-size: 10px;
-  color: #444;
+  color: #333;
   flex-shrink: 0;
 }
 
@@ -321,12 +326,121 @@ body {
 }
 
 .if-input::placeholder {
-  color: #222;
+  color: #1a1a1a;
   font-size: 10px;
 }
 
-/* ── Manifest (LOG) ── */
-#manifest {
+/* ══════════════════════════════════════
+   SHOP
+   ══════════════════════════════════════ */
+
+#shop {
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background: #000;
+}
+
+.shop-container {
+  width: 100%;
+  max-width: 640px;
+  padding: 40px 24px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.shop-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 48px;
+}
+
+.shop-label {
+  font-size: 8px;
+  color: #333;
+  letter-spacing: 2px;
+}
+
+.shop-grid {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.shop-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px 0;
+  border-bottom: 1px solid #111;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.shop-item:first-child {
+  border-top: 1px solid #111;
+}
+
+.shop-item:hover {
+  background: #0a0a0a;
+}
+
+.shop-item-selected {
+  background: #0a0a0a;
+}
+
+.shop-item[data-status="soon"] {
+  cursor: default;
+  opacity: 0.3;
+}
+
+.shop-item-left {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.shop-item-id {
+  font-size: 8px;
+  color: #333;
+  letter-spacing: 1px;
+}
+
+.shop-item-title {
+  font-size: 12px;
+  color: #fff;
+}
+
+.shop-item-meta {
+  font-size: 8px;
+  color: #444;
+}
+
+.shop-item-right {
+  display: flex;
+  align-items: flex-start;
+  padding-top: 4px;
+}
+
+.shop-item-status {
+  font-size: 8px;
+  color: #555;
+  letter-spacing: 1px;
+}
+
+.shop-item-status.dim {
+  color: #222;
+}
+
+/* ══════════════════════════════════════
+   LOG
+   ══════════════════════════════════════ */
+
+#log {
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -334,31 +448,57 @@ body {
   background: #000;
 }
 
-.manifest-content {
-  text-align: center;
-  padding: 2rem;
-  max-width: 600px;
+.log-container {
+  width: 100%;
+  max-width: 560px;
+  padding: 40px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  justify-content: center;
+  position: relative;
 }
 
-.manifest-text {
+.log-header {
+  position: absolute;
+  top: 40px;
+  left: 24px;
+  right: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.log-label {
+  font-size: 8px;
+  color: #333;
+  letter-spacing: 2px;
+}
+
+.log-body {
   font-size: 10px;
   color: #fff;
   line-height: 2.4;
   text-align: center;
+  max-width: 480px;
 }
 
-.manifest-line {
+.log-line {
   display: inline;
 }
 
-.manifest-prompt {
+.log-prompt {
   font-size: 10px;
   color: #fff;
   margin-top: 40px;
   animation: blink 1s step-end infinite;
 }
 
-/* ── About ── */
+/* ══════════════════════════════════════
+   ABOUT
+   ══════════════════════════════════════ */
+
 #about {
   min-height: 100vh;
   display: flex;
@@ -386,7 +526,10 @@ body {
   animation: blink 1s step-end infinite;
 }
 
-/* ── Works (OUTPUT) ── */
+/* ══════════════════════════════════════
+   HIDDEN WORKS (Easter Egg)
+   ══════════════════════════════════════ */
+
 #works {
   min-height: 100vh;
   background: #000;
@@ -396,17 +539,6 @@ body {
 
 .works-nav {
   padding: 24px;
-}
-
-.works-back {
-  font-size: 10px;
-  color: #666;
-  text-decoration: none;
-  transition: color 0.2s;
-}
-
-.works-back:hover {
-  color: #fff;
 }
 
 .works-grid {
@@ -466,7 +598,7 @@ body {
   opacity: 1;
 }
 
-/* ── Footer (retro) ── */
+/* ── Footer ── */
 .retro-footer {
   padding: 40px 24px 24px;
   text-align: center;
@@ -506,12 +638,23 @@ body {
   .gate-content {
     padding: 10vh 24px 24px;
   }
-  .works-grid {
-    padding: 0 16px;
-  }
   .if-container {
     height: 100vh;
     max-width: 100%;
     border: none;
+  }
+  .shop-container {
+    padding: 24px 16px;
+  }
+  .log-container {
+    padding: 24px 16px;
+  }
+  .log-header {
+    top: 24px;
+    left: 16px;
+    right: 16px;
+  }
+  .works-grid {
+    padding: 0 16px;
   }
 }

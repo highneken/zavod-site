@@ -4,18 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ZAVOD</title>
-  <meta name="description" content="ZAVOD — Output: ongoing.">
+  <meta name="description" content="ZAVOD — Digital art for gamers.">
 
   <!-- OG / Social -->
   <meta property="og:title" content="ZAVOD">
-  <meta property="og:description" content="Output: ongoing.">
+  <meta property="og:description" content="Digital art for gamers.">
   <meta property="og:image" content="https://highneken.github.io/zavod-site/images/skilltree.png">
   <meta property="og:url" content="https://highneken.github.io/zavod-site/">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@byZavod">
   <meta name="twitter:title" content="ZAVOD">
-  <meta name="twitter:description" content="Output: ongoing.">
+  <meta name="twitter:description" content="Digital art for gamers.">
   <meta name="twitter:image" content="https://highneken.github.io/zavod-site/images/skilltree.png">
 
   <!-- Favicon -->
@@ -64,7 +64,7 @@
     </div>
   </div>
 
-  <!-- ===== TRANSITION: "The scoreboard was never the point." ===== -->
+  <!-- ===== TRANSITION ===== -->
   <div id="transition" class="hidden">
     <p class="transition-text">The scoreboard was never the point.</p>
   </div>
@@ -79,8 +79,8 @@
 
       <nav class="menu-nav">
         <div class="menu-item active" data-action="interface"><span class="menu-cursor">&gt;</span> INTERFACE</div>
+        <div class="menu-item" data-action="shop"><span class="menu-cursor">&gt;</span> SHOP</div>
         <div class="menu-item" data-action="log"><span class="menu-cursor">&gt;</span> LOG</div>
-        <div class="menu-item" data-action="output"><span class="menu-cursor">&gt;</span> OUTPUT</div>
         <div class="menu-item" data-action="about"><span class="menu-cursor">&gt;</span> ABOUT</div>
       </nav>
     </div>
@@ -113,18 +113,87 @@
     </div>
   </div>
 
-  <!-- ===== LOG (Manifest) ===== -->
-  <div id="manifest" class="hidden">
-    <div class="manifest-content">
-      <div class="manifest-text" id="manifest-text"></div>
-      <p class="manifest-prompt hidden" id="manifest-prompt">PRESS ANY KEY</p>
+  <!-- ===== SHOP ===== -->
+  <div id="shop" class="hidden">
+    <div class="shop-container">
+      <div class="shop-header">
+        <a href="#" class="section-back" data-back="shop">&#8592; BACK</a>
+        <span class="shop-label">ZAVOD//SHOP</span>
+      </div>
+
+      <div class="shop-grid">
+
+        <div class="shop-item" data-status="available">
+          <div class="shop-item-left">
+            <span class="shop-item-id">001</span>
+            <span class="shop-item-title">Skilltree</span>
+            <span class="shop-item-meta">Digital Print · Edition of 50</span>
+          </div>
+          <div class="shop-item-right">
+            <span class="shop-item-status">AVAILABLE</span>
+          </div>
+        </div>
+
+        <div class="shop-item" data-status="available">
+          <div class="shop-item-left">
+            <span class="shop-item-id">002</span>
+            <span class="shop-item-title">It Was All A Dream</span>
+            <span class="shop-item-meta">Digital Print · Edition of 50</span>
+          </div>
+          <div class="shop-item-right">
+            <span class="shop-item-status">AVAILABLE</span>
+          </div>
+        </div>
+
+        <div class="shop-item" data-status="soon">
+          <div class="shop-item-left">
+            <span class="shop-item-id">003</span>
+            <span class="shop-item-title">???</span>
+            <span class="shop-item-meta">Drop · TBA</span>
+          </div>
+          <div class="shop-item-right">
+            <span class="shop-item-status dim">SOON</span>
+          </div>
+        </div>
+
+      </div>
+
+      <footer class="retro-footer">
+        <p class="footer-year">2026.</p>
+        <a href="https://x.com/byZavod" target="_blank" rel="noopener" class="footer-x">
+          <svg class="footer-x-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          @byZavod
+        </a>
+      </footer>
     </div>
   </div>
 
-  <!-- ===== OUTPUT (Works) ===== -->
+  <!-- ===== LOG ===== -->
+  <div id="log" class="hidden">
+    <div class="log-container">
+      <div class="log-header">
+        <a href="#" class="section-back" data-back="log">&#8592; BACK</a>
+        <span class="log-label">ZAVOD//LOG</span>
+      </div>
+
+      <div class="log-body" id="log-body"></div>
+
+      <p class="log-prompt hidden" id="log-prompt">PRESS ANY KEY</p>
+    </div>
+  </div>
+
+  <!-- ===== ABOUT ===== -->
+  <div id="about" class="hidden">
+    <div class="about-content">
+      <p class="about-text" id="about-text"></p>
+      <p class="about-prompt hidden" id="about-prompt">PRESS ANY KEY</p>
+    </div>
+  </div>
+
+  <!-- ===== HIDDEN: Old OUTPUT (Easter Eggs) ===== -->
   <div id="works" class="hidden">
     <div class="works-nav">
-      <a href="#" class="works-back" id="works-back">&#8592; BACK</a>
+      <a href="#" class="section-back" data-back="works">&#8592; BACK</a>
     </div>
 
     <div class="works-grid">
@@ -152,22 +221,6 @@
         <figcaption class="work-title">It Was All A Dream.</figcaption>
       </figure>
     </div>
-
-    <footer class="retro-footer">
-      <p class="footer-year">2026.</p>
-      <a href="https://x.com/byZavod" target="_blank" rel="noopener" class="footer-x">
-        <svg class="footer-x-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-        @byZavod
-      </a>
-    </footer>
-  </div>
-
-  <!-- ===== ABOUT ===== -->
-  <div id="about" class="hidden">
-    <div class="about-content">
-      <p class="about-text" id="about-text"></p>
-      <p class="about-prompt hidden" id="about-prompt">PRESS ANY KEY</p>
-    </div>
   </div>
 
   <script src="trex-runner.js"></script>
@@ -178,16 +231,17 @@
       var gateEl = document.getElementById('gate');
       var transitionEl = document.getElementById('transition');
       var menuEl = document.getElementById('menu');
-      var manifestEl = document.getElementById('manifest');
-      var worksEl = document.getElementById('works');
-      var aboutEl = document.getElementById('about');
       var interfaceEl = document.getElementById('interface');
+      var shopEl = document.getElementById('shop');
+      var logEl = document.getElementById('log');
+      var aboutEl = document.getElementById('about');
+      var worksEl = document.getElementById('works');
+
+      var allSections = [gateEl, transitionEl, menuEl, interfaceEl, shopEl, logEl, aboutEl, worksEl];
 
       // ── Sections helper ──
       function showSection(el) {
-        [gateEl, transitionEl, menuEl, manifestEl, worksEl, aboutEl, interfaceEl].forEach(function(s) {
-          s.classList.add('hidden');
-        });
+        allSections.forEach(function(s) { s.classList.add('hidden'); });
         el.classList.remove('hidden');
       }
 
@@ -209,8 +263,8 @@
       }
 
       function fadeToMenu() {
-        var current = [manifestEl, worksEl, aboutEl, interfaceEl].find(function(el) {
-          return !el.classList.contains('hidden');
+        var current = allSections.find(function(el) {
+          return el !== menuEl && el !== gateEl && el !== transitionEl && !el.classList.contains('hidden');
         });
         if (!current) return;
         current.style.transition = 'opacity 0.8s ease';
@@ -222,29 +276,43 @@
             menuEl.style.transition = 'opacity 0.5s ease';
             menuEl.style.opacity = '1';
           });
-          if (typeof initPsychoMantis === 'function') {
-            initPsychoMantis();
-          }
+          if (typeof initPsychoMantis === 'function') initPsychoMantis();
         }, 800);
       }
 
-      // ── Menu Logic ──
+      // ── Back buttons (all sections) ──
+      document.querySelectorAll('.section-back').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          fadeToMenu();
+        });
+      });
+
+      // ── Global ESC ──
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && menuEl.classList.contains('hidden') && gateEl.classList.contains('hidden') && transitionEl.classList.contains('hidden')) {
+          fadeToMenu();
+        }
+      });
+
+      // ══════════════════════════════════════
+      // ── MENU
+      // ══════════════════════════════════════
+
       function initMenu() {
         var items = document.querySelectorAll('.menu-item');
         var activeIndex = 0;
 
         function setActive(idx) {
-          items.forEach(function(item, i) {
-            item.classList.toggle('active', i === idx);
-          });
+          items.forEach(function(item, i) { item.classList.toggle('active', i === idx); });
           activeIndex = idx;
         }
 
         function selectItem() {
           var action = items[activeIndex].getAttribute('data-action');
           if (action === 'interface') showInterface();
-          else if (action === 'log') showManifest();
-          else if (action === 'output') showWorks();
+          else if (action === 'shop') showShop();
+          else if (action === 'log') showLog();
           else if (action === 'about') showAbout();
         }
 
@@ -271,9 +339,7 @@
           });
         });
 
-        if (typeof initPsychoMantis === 'function') {
-          initPsychoMantis();
-        }
+        if (typeof initPsychoMantis === 'function') initPsychoMantis();
       }
 
       // ══════════════════════════════════════
@@ -284,9 +350,7 @@
       var ifInput = document.getElementById('if-input');
       var ifClose = document.getElementById('if-close');
 
-      // Offline response engine — no API needed
       var ifResponses = [
-        // catch-alls & philosophy
         { match: /who|what.*zavod|zavod/i, response: 'A system. Not a person.' },
         { match: /why/i, response: 'Wrong question.' },
         { match: /how/i, response: 'One layer at a time.' },
@@ -299,6 +363,7 @@
         { match: /dream|savanna/i, response: 'It was. And then it wasn\'t.' },
         { match: /name|real|identity/i, response: 'Names are metadata. Work is signal.' },
         { match: /output/i, response: 'Ongoing.' },
+        { match: /shop|buy|price|sell|store|merch/i, response: 'The shop is open. Look closer.' },
         { match: /alive|sentient|ai|bot|chat/i, response: 'I am the work. The work does not explain itself.' },
         { match: /secret|hidden|easter/i, response: 'You\'re looking. That\'s the first step.' },
         { match: /score|point|dino/i, response: 'The scoreboard was never the point.' },
@@ -308,11 +373,11 @@
         { match: /purpose|goal|mission/i, response: 'Output: ongoing.' },
         { match: /thank|cool|nice/i, response: 'Noted.' },
         { match: /fuck|shit|damn/i, response: '...' },
-        { match: /buy|price|sell|shop|store|merch/i, response: 'Not yet. But soon.' },
         { match: /music|sound|audio/i, response: 'Listen closer.' },
         { match: /color|colour|dark|black/i, response: 'Black is not empty. Black is everything at once.' },
         { match: /pixel/i, response: 'Resolution is a choice.' },
         { match: /factory|zavod.*mean/i, response: 'Zavod means factory. The factory runs.' },
+        { match: /output|works|gallery/i, response: 'Look deeper. Not everything is on the surface.' },
       ];
 
       var ifFallbacks = [
@@ -329,11 +394,13 @@
       function getResponse(input) {
         var trimmed = input.trim();
         if (!trimmed) return null;
-
+        // Easter egg: typing "output" in interface reveals hidden works
+        if (/^output$/i.test(trimmed)) {
+          setTimeout(function() { showHiddenWorks(); }, 1500);
+          return 'Accessing archived output...';
+        }
         for (var i = 0; i < ifResponses.length; i++) {
-          if (ifResponses[i].match.test(trimmed)) {
-            return ifResponses[i].response;
-          }
+          if (ifResponses[i].match.test(trimmed)) return ifResponses[i].response;
         }
         return ifFallbacks[Math.floor(Math.random() * ifFallbacks.length)];
       }
@@ -342,8 +409,6 @@
         var el = document.createElement('div');
         el.className = 'if-line ' + (className || '');
         ifBody.appendChild(el);
-
-        // Typewriter
         var idx = 0;
         function type() {
           if (idx < text.length) {
@@ -360,49 +425,24 @@
         var val = ifInput.value;
         ifInput.value = '';
         if (!val.trim()) return;
-
-        // Show user input
         var userLine = document.createElement('div');
         userLine.className = 'if-line if-user';
         userLine.textContent = '> ' + val;
         ifBody.appendChild(userLine);
-
-        // Respond after short delay
         var response = getResponse(val);
-        setTimeout(function() {
-          addLine(response, 'if-system');
-        }, 400 + Math.random() * 400);
-
+        setTimeout(function() { addLine(response, 'if-system'); }, 400 + Math.random() * 400);
         ifBody.scrollTop = ifBody.scrollHeight;
       }
 
       ifInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          handleQuery();
-        }
-        if (e.key === 'Escape') {
-          e.preventDefault();
-          fadeToMenu();
-        }
+        if (e.key === 'Enter') { e.preventDefault(); handleQuery(); }
+        if (e.key === 'Escape') { e.preventDefault(); fadeToMenu(); }
       });
 
-      ifClose.addEventListener('click', function(e) {
-        e.preventDefault();
-        fadeToMenu();
-      });
-
-      // ESC global for interface
-      document.addEventListener('keydown', function(e) {
-        if (interfaceEl.classList.contains('hidden')) return;
-        if (e.key === 'Escape' && document.activeElement !== ifInput) {
-          fadeToMenu();
-        }
-      });
+      ifClose.addEventListener('click', function(e) { e.preventDefault(); fadeToMenu(); });
 
       function showInterface() {
         fadeToSection(menuEl, interfaceEl, function() {
-          // Reset body to initial state
           ifBody.innerHTML = '<div class="if-line if-system">System active.</div>';
           ifInput.value = '';
           setTimeout(function() { ifInput.focus(); }, 200);
@@ -410,10 +450,29 @@
       }
 
       // ══════════════════════════════════════
-      // ── LOG (Manifest)
+      // ── SHOP
       // ══════════════════════════════════════
 
-      var manifestLines = [
+      function showShop() {
+        fadeToSection(menuEl, shopEl);
+      }
+
+      // Shop item hover effect
+      document.querySelectorAll('.shop-item').forEach(function(item) {
+        item.addEventListener('click', function() {
+          var title = item.querySelector('.shop-item-title').textContent;
+          var status = item.getAttribute('data-status');
+          if (status === 'soon') return;
+          // For now, placeholder interaction
+          item.classList.toggle('shop-item-selected');
+        });
+      });
+
+      // ══════════════════════════════════════
+      // ── LOG
+      // ══════════════════════════════════════
+
+      var logLines = [
         'You spawned into a game no one explained.',
         '',
         'You learned the rules anyway. Played. Died. Respawned. Kept going.',
@@ -428,16 +487,14 @@
         'The score was never the point.'
       ];
 
-      function showManifest() {
-        fadeToSection(menuEl, manifestEl, function() {
-          typeManifest();
-        });
+      function showLog() {
+        fadeToSection(menuEl, logEl, function() { typeLog(); });
       }
 
-      function typeManifest() {
-        var textEl = document.getElementById('manifest-text');
-        var promptEl = document.getElementById('manifest-prompt');
-        textEl.innerHTML = '';
+      function typeLog() {
+        var bodyEl = document.getElementById('log-body');
+        var promptEl = document.getElementById('log-prompt');
+        bodyEl.innerHTML = '';
         promptEl.classList.add('hidden');
 
         var lineIdx = 0;
@@ -445,7 +502,7 @@
         var currentSpan = null;
 
         function typeLine() {
-          if (lineIdx >= manifestLines.length) {
+          if (lineIdx >= logLines.length) {
             setTimeout(function () {
               promptEl.classList.remove('hidden');
               function goBack(e) {
@@ -462,9 +519,9 @@
             return;
           }
 
-          var line = manifestLines[lineIdx];
+          var line = logLines[lineIdx];
           if (line === '') {
-            textEl.appendChild(document.createElement('br'));
+            bodyEl.appendChild(document.createElement('br'));
             lineIdx++;
             charIdx = 0;
             setTimeout(typeLine, 300);
@@ -473,8 +530,8 @@
 
           if (charIdx === 0) {
             currentSpan = document.createElement('span');
-            currentSpan.className = 'manifest-line';
-            textEl.appendChild(currentSpan);
+            currentSpan.className = 'log-line';
+            bodyEl.appendChild(currentSpan);
           }
 
           if (charIdx < line.length) {
@@ -482,7 +539,7 @@
             charIdx++;
             setTimeout(typeLine, 50);
           } else {
-            textEl.appendChild(document.createElement('br'));
+            bodyEl.appendChild(document.createElement('br'));
             lineIdx++;
             charIdx = 0;
             setTimeout(typeLine, 400);
@@ -493,66 +550,13 @@
       }
 
       // ══════════════════════════════════════
-      // ── OUTPUT (Works)
-      // ══════════════════════════════════════
-
-      function showWorks() {
-        fadeToSection(menuEl, worksEl, function() {
-          initWorks();
-        });
-      }
-
-      function initWorks() {
-        document.getElementById('works-back').addEventListener('click', function(e) {
-          e.preventDefault();
-          fadeToMenu();
-        });
-
-        document.addEventListener('keydown', function worksEsc(e) {
-          if (worksEl.classList.contains('hidden')) return;
-          if (e.key === 'Escape') {
-            e.preventDefault();
-            fadeToMenu();
-          }
-        });
-
-        var workItems = document.querySelectorAll('.work-item');
-        workItems.forEach(function(item) {
-          var started = false;
-          item.addEventListener('click', function() {
-            if (started) return;
-            started = true;
-
-            var stages = item.querySelectorAll('.work-stage');
-            var timings = [0, 300, 600, 900, 1200, 2500];
-            
-            timings.forEach(function(ms, i) {
-              setTimeout(function() {
-                stages.forEach(function(s) { s.classList.remove('active'); });
-                stages[i].classList.add('active');
-                
-                if (i === 5) {
-                  var video = stages[i];
-                  video.currentTime = 0;
-                  video.play();
-                  item.classList.add('revealed');
-                }
-              }, ms);
-            });
-          });
-        });
-      }
-
-      // ══════════════════════════════════════
       // ── ABOUT
       // ══════════════════════════════════════
 
       var aboutLine = 'I do art for gamers.';
 
       function showAbout() {
-        fadeToSection(menuEl, aboutEl, function() {
-          typeAbout();
-        });
+        fadeToSection(menuEl, aboutEl, function() { typeAbout(); });
       }
 
       function typeAbout() {
@@ -560,9 +564,7 @@
         var promptEl = document.getElementById('about-prompt');
         textEl.textContent = '';
         promptEl.classList.add('hidden');
-
         var charIdx = 0;
-
         function typeChar() {
           if (charIdx >= aboutLine.length) {
             setTimeout(function () {
@@ -580,13 +582,45 @@
             }, 2000);
             return;
           }
-
           textEl.textContent += aboutLine[charIdx];
           charIdx++;
           setTimeout(typeChar, 80);
         }
-
         setTimeout(typeChar, 500);
+      }
+
+      // ══════════════════════════════════════
+      // ── HIDDEN WORKS (Easter Egg)
+      // ══════════════════════════════════════
+
+      function showHiddenWorks() {
+        var current = allSections.find(function(el) { return !el.classList.contains('hidden'); });
+        if (current) fadeToSection(current, worksEl, function() { initWorks(); });
+      }
+
+      function initWorks() {
+        var workItems = document.querySelectorAll('.work-item');
+        workItems.forEach(function(item) {
+          var started = false;
+          item.addEventListener('click', function() {
+            if (started) return;
+            started = true;
+            var stages = item.querySelectorAll('.work-stage');
+            var timings = [0, 300, 600, 900, 1200, 2500];
+            timings.forEach(function(ms, i) {
+              setTimeout(function() {
+                stages.forEach(function(s) { s.classList.remove('active'); });
+                stages[i].classList.add('active');
+                if (i === 5) {
+                  var video = stages[i];
+                  video.currentTime = 0;
+                  video.play();
+                  item.classList.add('revealed');
+                }
+              }, ms);
+            });
+          });
+        });
       }
 
       // ══════════════════════════════════════
@@ -637,11 +671,9 @@
 
       document.addEventListener('zavod-unlock', function () {
         localStorage.setItem(STORAGE_KEY, '1');
-
         setTimeout(function () {
           gateEl.style.transition = 'opacity 2s ease';
           gateEl.style.opacity = '0';
-
           setTimeout(function () {
             gateEl.classList.add('hidden');
             showSection(transitionEl);
@@ -650,11 +682,9 @@
               transitionEl.style.transition = 'opacity 1s ease';
               transitionEl.style.opacity = '1';
             });
-
             setTimeout(function () {
               transitionEl.style.transition = 'opacity 1s ease';
               transitionEl.style.opacity = '0';
-
               setTimeout(function () {
                 showSection(menuEl);
                 menuEl.style.opacity = '0';
