@@ -331,20 +331,30 @@ body {
 }
 
 /* ══════════════════════════════════════
-   SHOP
+   SHOP — Punk-infected ZAVOD storefront
    ══════════════════════════════════════ */
+
+/* Punk accent palette — muted, dirty, early-web */
+:root {
+  --punk-beige: #c8b88a;
+  --punk-pink: #b87a8a;
+  --punk-blue: #6a7f9a;
+  --punk-green: #7a9a6a;
+  --punk-yellow: #b8a84a;
+  --punk-grey: #8a8a7a;
+}
 
 #shop {
   min-height: 100vh;
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  background: #000;
+  background: #050505;
 }
 
 .shop-container {
   width: 100%;
-  max-width: 640px;
+  max-width: 680px;
   padding: 40px 24px;
   display: flex;
   flex-direction: column;
@@ -355,12 +365,14 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 48px;
+  margin-bottom: 40px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #1a1a1a;
 }
 
 .shop-label {
   font-size: 8px;
-  color: #333;
+  color: #444;
   letter-spacing: 2px;
 }
 
@@ -368,62 +380,132 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 0;
 }
 
+/* ── Shop Item: archive block / collectible entry ── */
 .shop-item {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 20px 0;
-  border-bottom: 1px solid #111;
+  border: 1px solid #1a1a1a;
   cursor: pointer;
-  transition: background 0.2s;
-}
-
-.shop-item:first-child {
-  border-top: 1px solid #111;
+  transition: border-color 0.2s, background 0.2s;
+  margin-bottom: -1px;
+  position: relative;
 }
 
 .shop-item:hover {
-  background: #0a0a0a;
+  border-color: #333;
+  z-index: 1;
 }
 
 .shop-item-selected {
-  background: #0a0a0a;
+  border-color: #555;
 }
 
 .shop-item[data-status="soon"] {
   cursor: default;
-  opacity: 0.3;
+  opacity: 0.5;
+}
+
+.shop-item[data-status="locked"] {
+  cursor: default;
+  opacity: 0.2;
+}
+
+/* Left accent bar — the punk infection */
+.shop-item-accent {
+  width: 4px;
+  flex-shrink: 0;
+  background: #1a1a1a;
+  transition: background 0.2s;
+}
+
+.shop-item[data-accent="beige"] .shop-item-accent { background: var(--punk-beige); }
+.shop-item[data-accent="pink"] .shop-item-accent { background: var(--punk-pink); }
+.shop-item[data-accent="blue"] .shop-item-accent { background: var(--punk-blue); }
+.shop-item[data-accent="green"] .shop-item-accent { background: var(--punk-green); }
+.shop-item[data-accent="yellow"] .shop-item-accent { background: var(--punk-yellow); }
+
+.shop-item[data-status="soon"] .shop-item-accent,
+.shop-item[data-status="locked"] .shop-item-accent {
+  opacity: 0.4;
+}
+
+/* Hover: accent bar brightens */
+.shop-item:hover .shop-item-accent {
+  filter: brightness(1.3);
+}
+
+.shop-item-body {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 16px 16px;
+  gap: 12px;
+  background: #080808;
+  transition: background 0.2s;
+}
+
+.shop-item:hover .shop-item-body {
+  background: #0c0c0c;
 }
 
 .shop-item-left {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
+  flex: 1;
 }
 
 .shop-item-id {
   font-size: 8px;
-  color: #333;
+  color: #555;
   letter-spacing: 1px;
 }
 
 .shop-item-title {
-  font-size: 12px;
-  color: #fff;
+  font-size: 11px;
+  color: #ddd;
+}
+
+.shop-item-type {
+  font-size: 7px;
+  color: #444;
+  letter-spacing: 0.5px;
+}
+
+.shop-item-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
 }
 
 .shop-item-meta {
-  font-size: 8px;
+  font-size: 7px;
   color: #444;
 }
+
+.shop-item-tag {
+  font-size: 7px;
+  letter-spacing: 1px;
+  padding: 2px 6px;
+  border: 1px solid #222;
+  color: #555;
+}
+
+/* Tag color matches accent */
+.shop-item[data-accent="beige"] .shop-item-tag { border-color: #3a3526; color: var(--punk-beige); }
+.shop-item[data-accent="pink"] .shop-item-tag { border-color: #362428; color: var(--punk-pink); }
+.shop-item[data-accent="blue"] .shop-item-tag { border-color: #1f2a36; color: var(--punk-blue); }
+.shop-item[data-accent="green"] .shop-item-tag { border-color: #243020; color: var(--punk-green); }
 
 .shop-item-right {
   display: flex;
   align-items: flex-start;
-  padding-top: 4px;
+  flex-shrink: 0;
 }
 
 .shop-item-status {
@@ -432,8 +514,17 @@ body {
   letter-spacing: 1px;
 }
 
-.shop-item-status.dim {
-  color: #222;
+/* Footer info */
+.shop-footer-info {
+  padding: 24px 0 0;
+  border-top: 2px solid #1a1a1a;
+  margin-top: 0;
+}
+
+.shop-count {
+  font-size: 7px;
+  color: #333;
+  letter-spacing: 1px;
 }
 
 /* ══════════════════════════════════════
