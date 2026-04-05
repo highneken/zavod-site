@@ -443,18 +443,19 @@ body {
   letter-spacing: 1.5px;
 }
 
-/* ── Identity Panel ── */
-.reg-identity,
-.reg-claim,
-.reg-receipt {
+/* ── Registry Panels ── */
+.reg-panel {
   border: 1px solid #1a1a1a;
   margin-bottom: 8px;
   background: #080808;
+  transition: border-color 0.3s, opacity 0.3s;
 }
 
-.reg-identity-header,
-.reg-claim-header,
-.reg-receipt-header {
+.reg-panel-dim {
+  opacity: 0.4;
+}
+
+.reg-panel-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -463,35 +464,32 @@ body {
   background: #0a0a0a;
 }
 
-.reg-identity-label,
-.reg-claim-label,
-.reg-receipt-label {
+.reg-panel-label {
   font-size: 7px;
   color: #444;
   letter-spacing: 2px;
 }
 
-.reg-identity-state {
+.reg-panel-state {
   font-size: 7px;
   color: #333;
   letter-spacing: 1px;
+  transition: color 0.3s;
 }
 
-.reg-identity-state.linked {
+.reg-state-active {
   color: var(--reg-accent);
 }
 
-.reg-identity-body,
-.reg-claim-body,
-.reg-receipt-body {
+.reg-panel-body {
   padding: 20px 16px;
 }
 
-.reg-identity-addr {
+.reg-panel-desc {
   font-size: 8px;
-  color: #555;
-  margin-bottom: 12px;
-  word-break: break-all;
+  color: #444;
+  line-height: 2;
+  margin-bottom: 16px;
 }
 
 /* ── Buttons ── */
@@ -510,6 +508,16 @@ body {
 .reg-btn:hover {
   color: #fff;
   border-color: #555;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.reg-btn:active {
+  transform: scale(0.97);
+}
+
+.reg-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
 }
 
 .reg-btn-accent {
@@ -523,60 +531,139 @@ body {
   background: rgba(106, 127, 154, 0.08);
 }
 
-.reg-btn-disconnect {
-  border: none;
-  color: #333;
-  padding: 10px 0;
-  font-size: 7px;
+/* ── Unit Preview (Select step) ── */
+.reg-unit-preview {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
 }
 
-.reg-btn-disconnect:hover {
+.reg-unit-box {
+  width: 56px;
+  height: 56px;
+  border: 2px solid #1a1a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: border-color 0.3s, background 0.3s;
+}
+
+.reg-unit-q {
+  font-size: 18px;
+  color: #333;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+.reg-unit-active {
+  border-color: var(--reg-accent);
+  background: rgba(106, 127, 154, 0.05);
+}
+
+.reg-unit-active .reg-unit-q {
+  color: var(--reg-accent);
+}
+
+.reg-unit-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.reg-unit-label {
+  font-size: 9px;
   color: #666;
 }
 
-/* ── Claim Panel ── */
-.reg-claim-info {
-  margin-bottom: 16px;
-}
-
-.reg-claim-text {
-  font-size: 8px;
-  color: #555;
-  line-height: 2;
-}
-
-/* ── Receipt Panel ── */
-.reg-receipt-unit {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-}
-
-.reg-receipt-id {
-  font-size: 12px;
-  color: #fff;
-}
-
-.reg-receipt-status {
+.reg-unit-sub {
   font-size: 7px;
-  color: var(--reg-accent);
-  letter-spacing: 2px;
-  border: 1px solid #1f2a36;
-  padding: 3px 8px;
+  color: #333;
 }
 
-.reg-receipt-owner {
+/* ── Held Unit (Receipt step) ── */
+.reg-held-unit {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.reg-unit-claimed {
+  border-color: var(--reg-accent);
+  background: rgba(106, 127, 154, 0.08);
+}
+
+.reg-unit-id {
+  font-size: 11px;
+  color: var(--reg-accent);
+}
+
+.reg-held-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.reg-held-title {
+  font-size: 10px;
+  color: #ddd;
+}
+
+.reg-held-owner {
   font-size: 7px;
   color: #444;
-  margin-bottom: 16px;
   word-break: break-all;
 }
 
-.reg-receipt-msg {
+.reg-held-collection {
+  font-size: 7px;
+  color: #555;
+  letter-spacing: 1px;
+}
+
+.reg-held-msg {
   font-size: 8px;
   color: #333;
   font-style: italic;
+  padding-top: 8px;
+  border-top: 1px solid #1a1a1a;
+}
+
+/* ── Identity Bar (persistent bottom bar after link) ── */
+.reg-id-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  margin-top: 8px;
+  border-top: 1px solid #111;
+}
+
+.reg-id-bar-addr {
+  font-size: 7px;
+  color: #444;
+}
+
+.reg-id-bar-disconnect {
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+  font-size: 6px;
+  color: #333;
+  background: none;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: color 0.2s;
+  padding: 0;
+}
+
+.reg-id-bar-disconnect:hover {
+  color: #888;
 }
 
 /* ── Registry Footer ── */

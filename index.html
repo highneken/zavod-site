@@ -146,43 +146,63 @@
         </div>
       </div>
 
-      <!-- Identity Panel -->
-      <div class="reg-identity" id="reg-identity">
-        <div class="reg-identity-header">
-          <span class="reg-identity-label">IDENTITY</span>
-          <span class="reg-identity-state" id="reg-id-state">NOT LINKED</span>
+      <!-- Step 1: Access -->
+      <div class="reg-panel" id="reg-step-access">
+        <div class="reg-panel-header">
+          <span class="reg-panel-label">ACCESS</span>
+          <span class="reg-panel-state" id="reg-access-state">REQUIRED</span>
         </div>
-        <div class="reg-identity-body" id="reg-id-body">
+        <div class="reg-panel-body" id="reg-access-body">
+          <div class="reg-panel-desc">Link your identity to access the registry.</div>
           <button class="reg-btn" id="reg-link-btn">LINK IDENTITY</button>
         </div>
       </div>
 
-      <!-- Claim Panel (shown after identity linked) -->
-      <div class="reg-claim hidden" id="reg-claim">
-        <div class="reg-claim-header">
-          <span class="reg-claim-label">CLAIM</span>
+      <!-- Step 2: Select (shown after identity linked) -->
+      <div class="reg-panel reg-panel-dim hidden" id="reg-step-select">
+        <div class="reg-panel-header">
+          <span class="reg-panel-label">SELECT</span>
+          <span class="reg-panel-state" id="reg-select-state">1 UNIT AVAILABLE</span>
         </div>
-        <div class="reg-claim-body">
-          <div class="reg-claim-info">
-            <span class="reg-claim-text">1 unit available for your identity.</span>
+        <div class="reg-panel-body">
+          <div class="reg-unit-preview" id="reg-unit-preview">
+            <div class="reg-unit-box" id="reg-unit-box">
+              <span class="reg-unit-q">?</span>
+            </div>
+            <div class="reg-unit-info">
+              <span class="reg-unit-label">RANDOM UNIT</span>
+              <span class="reg-unit-sub">Character revealed on claim</span>
+            </div>
           </div>
           <button class="reg-btn reg-btn-accent" id="reg-claim-btn">CLAIM UNIT</button>
         </div>
       </div>
 
-      <!-- Receipt Panel (shown after claim) -->
-      <div class="reg-receipt hidden" id="reg-receipt">
-        <div class="reg-receipt-header">
-          <span class="reg-receipt-label">RECEIPT</span>
+      <!-- Step 3: Held (shown after claim) -->
+      <div class="reg-panel hidden" id="reg-step-held">
+        <div class="reg-panel-header">
+          <span class="reg-panel-label">REGISTRY</span>
+          <span class="reg-panel-state reg-state-active" id="reg-held-state">HELD</span>
         </div>
-        <div class="reg-receipt-body">
-          <div class="reg-receipt-unit">
-            <span class="reg-receipt-id" id="reg-receipt-id">UNIT #0042</span>
-            <span class="reg-receipt-status">HELD</span>
+        <div class="reg-panel-body">
+          <div class="reg-held-unit">
+            <div class="reg-unit-box reg-unit-claimed" id="reg-held-box">
+              <span class="reg-unit-id" id="reg-held-id">#0042</span>
+            </div>
+            <div class="reg-held-details">
+              <span class="reg-held-title" id="reg-held-title">UNIT #0042</span>
+              <span class="reg-held-owner" id="reg-held-owner">Owner: —</span>
+              <span class="reg-held-collection">PERMISSIONLESS</span>
+            </div>
           </div>
-          <div class="reg-receipt-owner" id="reg-receipt-owner">Owner: —</div>
-          <div class="reg-receipt-msg">The system remembers.</div>
+          <div class="reg-held-msg">The system remembers.</div>
         </div>
+      </div>
+
+      <!-- Identity bar (persistent after link) -->
+      <div class="reg-id-bar hidden" id="reg-id-bar">
+        <span class="reg-id-bar-addr" id="reg-id-bar-addr">—</span>
+        <button class="reg-id-bar-disconnect" id="reg-disconnect-btn">DISCONNECT</button>
       </div>
 
       <!-- Registry Footer -->
@@ -395,10 +415,10 @@
         { match: /dream|savanna/i, response: 'It was. And then it wasn\'t.' },
         { match: /name|real|identity/i, response: 'Names are metadata. Work is signal.' },
         { match: /output/i, response: 'Ongoing.' },
-        { match: /shop|buy|price|sell|store|merch/i, response: 'The registry is open. Look closer.' },
-        { match: /permissionless|collection|nft|mint|claim/i, response: 'PERMISSIONLESS. 420 units. The registry knows.' },
-        { match: /wallet|connect|metamask|eth/i, response: 'Try: link' },
-        { match: /inventory/i, response: 'Your inventory is empty. Claim a unit first.' },
+        { match: /shop|buy|price|sell|store|merch/i, response: 'The registry is open. You know where to find it.' },
+        { match: /permissionless|collection|nft|mint|claim/i, response: 'PERMISSIONLESS. 420 units. The collection speaks for itself.' },
+        { match: /wallet|connect|metamask|eth/i, response: 'The registry handles that. Not me.' },
+        { match: /inventory/i, response: 'That\'s between you and the registry.' },
         { match: /alive|sentient|ai|bot|chat/i, response: 'I am the work. The work does not explain itself.' },
         { match: /secret|hidden|easter/i, response: 'You\'re looking. That\'s the first step.' },
         { match: /score|point|dino/i, response: 'The scoreboard was never the point.' },
@@ -453,60 +473,15 @@
         var trimmed = input.trim();
         if (!trimmed) return null;
 
-        // ── Terminal commands for Registry (hidden power-user route) ──
-
-        // LINK — connect identity
-        if (/^link$/i.test(trimmed)) {
-          if (regState.linked) return 'Identity already linked: ' + formatAddr(regState.address);
-          regState.linked = true;
-          regState.address = generateAddress();
-          updateShopUI();
-          return 'Identity linked: ' + formatAddr(regState.address) + '\nStatus: VERIFIED';
-        }
-
-        // UNLINK — disconnect
-        if (/^unlink$/i.test(trimmed)) {
-          if (!regState.linked) return 'No identity linked.';
-          regState.linked = false;
-          regState.address = null;
-          updateShopUI();
-          return 'Identity removed.';
-        }
-
-        // STATUS — check collection
-        if (/^status$/i.test(trimmed)) {
-          var s = 'PERMISSIONLESS\n';
-          s += 'Units: 420 · Claimed: ' + (regState.claimed ? '1' : '0') + '\n';
-          s += 'Identity: ' + (regState.linked ? formatAddr(regState.address) : 'NOT LINKED') + '\n';
-          s += 'Status: OPEN';
-          return s;
-        }
-
-        // CLAIM — mint a unit
-        if (/^claim$/i.test(trimmed)) {
-          if (!regState.linked) return 'Identity required. Try: link';
-          if (regState.claimed) return 'Unit already claimed: #' + String(regState.unitId).padStart(4, '0');
-          regState.claimed = true;
-          regState.unitId = generateUnitId();
-          updateShopUI();
-          return 'Processing...\nUnit #' + String(regState.unitId).padStart(4, '0') + ' assigned.\nOwner: ' + formatAddr(regState.address) + '\nThe system remembers.';
-        }
-
-        // INVENTORY — check holdings
-        if (/^inventory$/i.test(trimmed)) {
-          if (!regState.claimed) return 'Inventory: EMPTY';
-          return 'Inventory:\n  UNIT #' + String(regState.unitId).padStart(4, '0') + ' · PERMISSIONLESS · HELD';
-        }
-
-        // HELP — show commands
-        if (/^help$/i.test(trimmed)) {
-          return 'Commands:\n  link · unlink · status · claim · inventory · output';
-        }
-
         // Easter egg: typing "output" reveals hidden works
         if (/^output$/i.test(trimmed)) {
           setTimeout(function() { showHiddenWorks(); }, 1500);
           return 'Accessing archived output...';
+        }
+
+        // Redirect registry commands back to the shop
+        if (/^(link|unlink|claim|status|inventory)$/i.test(trimmed)) {
+          return 'That\'s registry territory. The SHOP handles it.';
         }
 
         for (var i = 0; i < ifResponses.length; i++) {
@@ -563,57 +538,65 @@
       // ── SHOP / REGISTRY
       // ══════════════════════════════════════
 
-      var regLinkBtn = document.getElementById('reg-link-btn');
-      var regClaimBtn = document.getElementById('reg-claim-btn');
-      var regIdentity = document.getElementById('reg-identity');
-      var regClaim = document.getElementById('reg-claim');
-      var regReceipt = document.getElementById('reg-receipt');
-      var regIdState = document.getElementById('reg-id-state');
-      var regIdBody = document.getElementById('reg-id-body');
+      var stepAccess = document.getElementById('reg-step-access');
+      var stepSelect = document.getElementById('reg-step-select');
+      var stepHeld = document.getElementById('reg-step-held');
+      var idBar = document.getElementById('reg-id-bar');
 
       function updateShopUI() {
-        if (regState.linked && regState.claimed) {
-          // Show receipt
-          regIdState.textContent = formatAddr(regState.address);
-          regIdState.classList.add('linked');
-          regIdBody.innerHTML = '<span class="reg-identity-addr">' + regState.address + '</span><button class="reg-btn reg-btn-disconnect" id="reg-unlink-btn">DISCONNECT</button>';
-          regClaim.classList.add('hidden');
-          regReceipt.classList.remove('hidden');
-          document.getElementById('reg-receipt-id').textContent = 'UNIT #' + String(regState.unitId).padStart(4, '0');
-          document.getElementById('reg-receipt-owner').textContent = 'Owner: ' + regState.address;
+        var linkBtn = document.getElementById('reg-link-btn');
+        var claimBtn = document.getElementById('reg-claim-btn');
+        var disconnectBtn = document.getElementById('reg-disconnect-btn');
+
+        if (regState.claimed) {
+          // Step 3: Held
+          stepAccess.classList.add('hidden');
+          stepSelect.classList.add('hidden');
+          stepHeld.classList.remove('hidden');
+          idBar.classList.remove('hidden');
+
+          var uid = String(regState.unitId).padStart(4, '0');
+          document.getElementById('reg-held-id').textContent = '#' + uid;
+          document.getElementById('reg-held-title').textContent = 'UNIT #' + uid;
+          document.getElementById('reg-held-owner').textContent = 'Owner: ' + formatAddr(regState.address);
+          document.getElementById('reg-held-state').textContent = 'HELD';
+          document.getElementById('reg-id-bar-addr').textContent = formatAddr(regState.address);
           document.getElementById('reg-claimed').textContent = '1';
           document.getElementById('reg-remaining').textContent = '419';
-          bindUnlink();
-        } else if (regState.linked) {
-          // Show claim panel
-          regIdState.textContent = formatAddr(regState.address);
-          regIdState.classList.add('linked');
-          regIdBody.innerHTML = '<span class="reg-identity-addr">' + regState.address + '</span><button class="reg-btn reg-btn-disconnect" id="reg-unlink-btn">DISCONNECT</button>';
-          regClaim.classList.remove('hidden');
-          regReceipt.classList.add('hidden');
-          bindUnlink();
-        } else {
-          // Not linked
-          regIdState.textContent = 'NOT LINKED';
-          regIdState.classList.remove('linked');
-          regIdBody.innerHTML = '<button class="reg-btn" id="reg-link-btn">LINK IDENTITY</button>';
-          regClaim.classList.add('hidden');
-          regReceipt.classList.add('hidden');
-          document.getElementById('reg-link-btn').addEventListener('click', doLink);
-        }
-      }
+          document.getElementById('reg-status').textContent = 'OPEN';
 
-      function bindUnlink() {
-        var btn = document.getElementById('reg-unlink-btn');
-        if (btn) btn.addEventListener('click', function() {
-          regState.linked = false;
-          regState.address = null;
-          regState.claimed = false;
-          regState.unitId = null;
+        } else if (regState.linked) {
+          // Step 2: Select
+          stepAccess.classList.add('hidden');
+          stepSelect.classList.remove('hidden');
+          stepSelect.classList.remove('reg-panel-dim');
+          stepHeld.classList.add('hidden');
+          idBar.classList.remove('hidden');
+
+          document.getElementById('reg-access-state').textContent = 'GRANTED';
+          document.getElementById('reg-id-bar-addr').textContent = formatAddr(regState.address);
+
+          // Animate the ? box
+          var unitBox = document.getElementById('reg-unit-box');
+          unitBox.classList.add('reg-unit-active');
+
+        } else {
+          // Step 1: Access required
+          stepAccess.classList.remove('hidden');
+          stepSelect.classList.add('hidden');
+          stepHeld.classList.add('hidden');
+          idBar.classList.add('hidden');
+
+          document.getElementById('reg-access-state').textContent = 'REQUIRED';
+          document.getElementById('reg-access-body').innerHTML = '<div class="reg-panel-desc">Link your identity to access the registry.</div><button class="reg-btn" id="reg-link-btn">LINK IDENTITY</button>';
+          document.getElementById('reg-link-btn').addEventListener('click', doLink);
           document.getElementById('reg-claimed').textContent = '0';
           document.getElementById('reg-remaining').textContent = '420';
-          updateShopUI();
-        });
+        }
+
+        // Rebind disconnect
+        var dBtn = document.getElementById('reg-disconnect-btn');
+        if (dBtn) dBtn.addEventListener('click', doDisconnect);
       }
 
       function doLink() {
@@ -624,13 +607,37 @@
 
       function doClaim() {
         if (!regState.linked || regState.claimed) return;
-        regState.claimed = true;
-        regState.unitId = generateUnitId();
+        // Brief "processing" state
+        var claimBtn = document.getElementById('reg-claim-btn');
+        if (claimBtn) {
+          claimBtn.textContent = 'PROCESSING...';
+          claimBtn.disabled = true;
+        }
+        setTimeout(function() {
+          regState.claimed = true;
+          regState.unitId = generateUnitId();
+          updateShopUI();
+        }, 800);
+      }
+
+      function doDisconnect() {
+        regState.linked = false;
+        regState.address = null;
+        regState.claimed = false;
+        regState.unitId = null;
         updateShopUI();
       }
 
-      regLinkBtn.addEventListener('click', doLink);
-      regClaimBtn.addEventListener('click', doClaim);
+      // Initial bindings
+      document.getElementById('reg-link-btn').addEventListener('click', doLink);
+      document.getElementById('reg-claim-btn').addEventListener('click', doClaim);
+
+      // Delegate clicks for dynamically created buttons
+      shopEl.addEventListener('click', function(e) {
+        if (e.target.id === 'reg-link-btn') doLink();
+        if (e.target.id === 'reg-claim-btn') doClaim();
+        if (e.target.id === 'reg-disconnect-btn') doDisconnect();
+      });
 
       function showShop() {
         fadeToSection(menuEl, shopEl, function() {
