@@ -80,6 +80,7 @@
       <nav class="menu-nav">
         <div class="menu-item active" data-action="interface"><span class="menu-cursor">&gt;</span> INTERFACE</div>
         <div class="menu-item" data-action="shop"><span class="menu-cursor">&gt;</span> SHOP</div>
+        <div class="menu-item" data-action="output"><span class="menu-cursor">&gt;</span> OUTPUT</div>
         <div class="menu-item" data-action="log"><span class="menu-cursor">&gt;</span> LOG</div>
         <div class="menu-item" data-action="about"><span class="menu-cursor">&gt;</span> ABOUT</div>
       </nav>
@@ -238,6 +239,51 @@
     </div>
   </div>
 
+  <!-- ===== OUTPUT: Collection Browser ===== -->
+  <div id="output" class="hidden">
+    <div class="out-container">
+      <div class="out-header">
+        <a href="#" class="section-back" data-back="output">&#8592; BACK</a>
+        <span class="out-label">ZAVOD//OUTPUT</span>
+      </div>
+
+      <!-- Collection summary bar -->
+      <div class="out-summary">
+        <span class="out-summary-title">PERMISSIONLESS REGISTRY</span>
+        <div class="out-summary-stats">
+          <span class="out-stat"><span class="out-stat-val" id="out-total">10,000</span> total</span>
+          <span class="out-stat-sep">·</span>
+          <span class="out-stat"><span class="out-stat-val" id="out-claimed-count">0</span> claimed</span>
+          <span class="out-stat-sep">·</span>
+          <span class="out-stat"><span class="out-stat-val" id="out-hidden-count">9,900</span> hidden</span>
+        </div>
+      </div>
+
+      <!-- Filter bar -->
+      <div class="out-filters">
+        <button class="out-filter active" data-filter="all">ALL</button>
+        <button class="out-filter" data-filter="claimed">CLAIMED</button>
+        <button class="out-filter" data-filter="visible">VISIBLE</button>
+        <button class="out-filter" data-filter="hidden">HIDDEN</button>
+      </div>
+
+      <!-- Collection grid -->
+      <div class="out-grid" id="out-grid">
+        <!-- JS will populate this -->
+      </div>
+
+      <!-- Load more / range indicator -->
+      <div class="out-range">
+        <span class="out-range-text" id="out-range-text">Showing #0001 — #0100 of 10,000</span>
+        <button class="out-range-btn" id="out-load-more">LOAD MORE</button>
+      </div>
+
+      <footer class="retro-footer">
+        <p class="footer-year">2026.</p>
+      </footer>
+    </div>
+  </div>
+
   <!-- ===== LOG ===== -->
   <div id="log" class="hidden">
     <div class="log-container">
@@ -303,11 +349,12 @@
       var menuEl = document.getElementById('menu');
       var interfaceEl = document.getElementById('interface');
       var shopEl = document.getElementById('shop');
+      var outputEl = document.getElementById('output');
       var logEl = document.getElementById('log');
       var aboutEl = document.getElementById('about');
       var worksEl = document.getElementById('works');
 
-      var allSections = [gateEl, transitionEl, menuEl, interfaceEl, shopEl, logEl, aboutEl, worksEl];
+      var allSections = [gateEl, transitionEl, menuEl, interfaceEl, shopEl, outputEl, logEl, aboutEl, worksEl];
 
       // ── Sections helper ──
       function showSection(el) {
@@ -382,6 +429,7 @@
           var action = items[activeIndex].getAttribute('data-action');
           if (action === 'interface') showInterface();
           else if (action === 'shop') showShop();
+          else if (action === 'output') showOutput();
           else if (action === 'log') showLog();
           else if (action === 'about') showAbout();
         }
@@ -533,10 +581,16 @@
           return 'link · unlink · status · claim · inventory · output';
         }
 
-        // Easter egg: typing "output" reveals hidden works
+        // "output" in terminal opens the collection browser
         if (/^output$/i.test(trimmed)) {
+          setTimeout(function() { showOutput(); }, 1200);
+          return 'Accessing registry output...';
+        }
+
+        // Easter egg: "archive" reveals hidden legacy works
+        if (/^archive$/i.test(trimmed)) {
           setTimeout(function() { showHiddenWorks(); }, 1500);
-          return 'Accessing archived output...';
+          return 'Accessing archived works...';
         }
 
         for (var i = 0; i < ifResponses.length; i++) {
@@ -703,6 +757,109 @@
       function showShop() {
         fadeToSection(menuEl, shopEl, function() {
           updateShopUI();
+        });
+      }
+
+      // ══════════════════════════════════════
+      // ── OUTPUT: Collection Browser
+      // ══════════════════════════════════════
+
+      var outGrid = document.getElementById('out-grid');
+      var outRangeText = document.getElementById('out-range-text');
+      var outLoadMore = document.getElementById('out-load-more');
+      var outCurrentMax = 100;
+      var outFilter = 'all';
+
+      // Deterministic unit state based on ID
+      function getUnitState(id) {
+        // First 100: mix of states for visual interest
+        // Claimed: IDs that are "taken" (simulated)
+        var claimedIds = [7, 13, 22, 34, 42, 56, 71, 88];
+        if (regState.claimed && regState.unitId === id) return 'claimed';
+        if (claimedIds.indexOf(id) !== -1) return 'claimed';
+        // Visible but unclaimed: ~10% of first 100
+        var visibleIds = [1, 5, 11, 18, 25, 33, 47, 61, 77, 93];
+        if (visibleIds.indexOf(id) !== -1) return 'visible';
+        // Rest: hidden/redacted
+        return 'hidden';
+      }
+
+      // Deterministic pseudo-random color for a unit
+      function getUnitAccent(id) {
+        var accents = ['beige', 'pink', 'blue', 'green', 'grey'];
+        return accents[(id * 7 + 3) % accents.length];
+      }
+
+      function renderGrid() {
+        outGrid.innerHTML = '';
+        var claimedCount = 0;
+
+        for (var i = 1; i <= outCurrentMax; i++) {
+          var state = getUnitState(i);
+          if (state === 'claimed') claimedCount++;
+
+          // Filter
+          if (outFilter !== 'all' && outFilter !== state) continue;
+
+          var cell = document.createElement('div');
+          cell.className = 'out-cell out-cell-' + state;
+          cell.setAttribute('data-id', i);
+          cell.setAttribute('data-accent', getUnitAccent(i));
+
+          var idStr = String(i).padStart(4, '0');
+
+          if (state === 'claimed') {
+            cell.innerHTML = '<div class="out-cell-accent" style="background:var(--punk-' + getUnitAccent(i) + ')"></div>' +
+              '<span class="out-cell-id">#' + idStr + '</span>' +
+              '<span class="out-cell-state">HELD</span>';
+          } else if (state === 'visible') {
+            cell.innerHTML = '<div class="out-cell-accent" style="background:var(--punk-' + getUnitAccent(i) + '); opacity:0.4"></div>' +
+              '<span class="out-cell-id">#' + idStr + '</span>' +
+              '<span class="out-cell-state out-cell-open">OPEN</span>';
+          } else {
+            cell.innerHTML = '<div class="out-cell-accent" style="background:#1a1a1a"></div>' +
+              '<span class="out-cell-id out-cell-redacted">█████</span>' +
+              '<span class="out-cell-state out-cell-locked">LOCKED</span>';
+          }
+
+          outGrid.appendChild(cell);
+        }
+
+        // Update counts
+        document.getElementById('out-claimed-count').textContent = claimedCount + (regState.claimed ? 1 : 0);
+        outRangeText.textContent = 'Showing #0001 — #' + String(outCurrentMax).padStart(4, '0') + ' of 10,000';
+
+        if (outCurrentMax >= 500) {
+          outLoadMore.style.display = 'none';
+        }
+      }
+
+      // Filter buttons
+      document.querySelectorAll('.out-filter').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.out-filter').forEach(function(b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          outFilter = btn.getAttribute('data-filter');
+          renderGrid();
+        });
+      });
+
+      // Load more
+      outLoadMore.addEventListener('click', function() {
+        outCurrentMax = Math.min(outCurrentMax + 100, 500);
+        renderGrid();
+      });
+
+      // Cell click — expand info
+      outGrid.addEventListener('click', function(e) {
+        var cell = e.target.closest('.out-cell');
+        if (!cell) return;
+        cell.classList.toggle('out-cell-expanded');
+      });
+
+      function showOutput() {
+        fadeToSection(menuEl.classList.contains('hidden') ? interfaceEl : menuEl, outputEl, function() {
+          renderGrid();
         });
       }
 
