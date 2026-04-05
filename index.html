@@ -473,15 +473,52 @@
         var trimmed = input.trim();
         if (!trimmed) return null;
 
+        // ── Registry commands (hidden power-user route) ──
+
+        if (/^link$/i.test(trimmed)) {
+          if (regState.linked) return 'Identity already linked: ' + formatAddr(regState.address);
+          regState.linked = true;
+          regState.address = generateAddress();
+          updateShopUI();
+          return 'Identity linked: ' + formatAddr(regState.address) + '\nAccess granted.';
+        }
+
+        if (/^unlink$/i.test(trimmed)) {
+          if (!regState.linked) return 'No identity linked.';
+          regState.linked = false;
+          regState.address = null;
+          regState.claimed = false;
+          regState.unitId = null;
+          updateShopUI();
+          return 'Identity removed.';
+        }
+
+        if (/^status$/i.test(trimmed)) {
+          return 'PERMISSIONLESS\nUnits: 420 · Claimed: ' + (regState.claimed ? '1' : '0') + '\nIdentity: ' + (regState.linked ? formatAddr(regState.address) : 'NOT LINKED') + '\nStatus: OPEN';
+        }
+
+        if (/^claim$/i.test(trimmed)) {
+          if (!regState.linked) return 'Access required. Try: link';
+          if (regState.claimed) return 'Unit already held: #' + String(regState.unitId).padStart(4, '0');
+          regState.claimed = true;
+          regState.unitId = generateUnitId();
+          updateShopUI();
+          return 'Unit #' + String(regState.unitId).padStart(4, '0') + ' assigned.\nOwner: ' + formatAddr(regState.address) + '\nThe system remembers.';
+        }
+
+        if (/^inventory$/i.test(trimmed)) {
+          if (!regState.claimed) return 'Inventory: EMPTY';
+          return 'UNIT #' + String(regState.unitId).padStart(4, '0') + ' · PERMISSIONLESS · HELD';
+        }
+
+        if (/^help$/i.test(trimmed)) {
+          return 'link · unlink · status · claim · inventory · output';
+        }
+
         // Easter egg: typing "output" reveals hidden works
         if (/^output$/i.test(trimmed)) {
           setTimeout(function() { showHiddenWorks(); }, 1500);
           return 'Accessing archived output...';
-        }
-
-        // Redirect registry commands back to the shop
-        if (/^(link|unlink|claim|status|inventory)$/i.test(trimmed)) {
-          return 'That\'s registry territory. The SHOP handles it.';
         }
 
         for (var i = 0; i < ifResponses.length; i++) {
