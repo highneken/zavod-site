@@ -113,92 +113,81 @@
     </div>
   </div>
 
-  <!-- ===== SHOP ===== -->
+  <!-- ===== SHOP: PERMISSIONLESS Registry ===== -->
   <div id="shop" class="hidden">
     <div class="shop-container">
       <div class="shop-header">
         <a href="#" class="section-back" data-back="shop">&#8592; BACK</a>
-        <span class="shop-label">ZAVOD//SHOP</span>
+        <span class="shop-label">ZAVOD//REGISTRY</span>
       </div>
 
-      <div class="shop-grid">
-
-        <div class="shop-item" data-status="available" data-accent="beige">
-          <div class="shop-item-accent"></div>
-          <div class="shop-item-body">
-            <div class="shop-item-left">
-              <span class="shop-item-id">#001</span>
-              <span class="shop-item-title">Skilltree</span>
-              <span class="shop-item-type">Digital Print</span>
-            </div>
-            <div class="shop-item-center">
-              <span class="shop-item-meta">Edition 1/50</span>
-              <span class="shop-item-tag">ARTIFACT</span>
-            </div>
-            <div class="shop-item-right">
-              <span class="shop-item-status">AVAILABLE</span>
-            </div>
+      <!-- Collection Header -->
+      <div class="reg-hero">
+        <div class="reg-hero-title">PERMISSIONLESS</div>
+        <div class="reg-hero-sub">Character Collection · by ZAVOD</div>
+        <div class="reg-hero-line"></div>
+        <div class="reg-hero-stats">
+          <div class="reg-stat">
+            <span class="reg-stat-val" id="reg-supply">420</span>
+            <span class="reg-stat-label">UNITS</span>
+          </div>
+          <div class="reg-stat">
+            <span class="reg-stat-val" id="reg-claimed">0</span>
+            <span class="reg-stat-label">CLAIMED</span>
+          </div>
+          <div class="reg-stat">
+            <span class="reg-stat-val" id="reg-remaining">420</span>
+            <span class="reg-stat-label">REMAINING</span>
+          </div>
+          <div class="reg-stat">
+            <span class="reg-stat-val reg-stat-status" id="reg-status">OPEN</span>
+            <span class="reg-stat-label">STATUS</span>
           </div>
         </div>
-
-        <div class="shop-item" data-status="available" data-accent="pink">
-          <div class="shop-item-accent"></div>
-          <div class="shop-item-body">
-            <div class="shop-item-left">
-              <span class="shop-item-id">#002</span>
-              <span class="shop-item-title">It Was All A Dream</span>
-              <span class="shop-item-type">Digital Print</span>
-            </div>
-            <div class="shop-item-center">
-              <span class="shop-item-meta">Edition 1/50</span>
-              <span class="shop-item-tag">ARTIFACT</span>
-            </div>
-            <div class="shop-item-right">
-              <span class="shop-item-status">AVAILABLE</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="shop-item" data-status="soon" data-accent="blue">
-          <div class="shop-item-accent"></div>
-          <div class="shop-item-body">
-            <div class="shop-item-left">
-              <span class="shop-item-id">#003</span>
-              <span class="shop-item-title">PERMISSIONLESS</span>
-              <span class="shop-item-type">Collection · Character Series</span>
-            </div>
-            <div class="shop-item-center">
-              <span class="shop-item-meta">Drop TBA</span>
-              <span class="shop-item-tag">COLLECTIBLE</span>
-            </div>
-            <div class="shop-item-right">
-              <span class="shop-item-status">SOON</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="shop-item" data-status="locked" data-accent="green">
-          <div class="shop-item-accent"></div>
-          <div class="shop-item-body">
-            <div class="shop-item-left">
-              <span class="shop-item-id">#004</span>
-              <span class="shop-item-title">???</span>
-              <span class="shop-item-type">???</span>
-            </div>
-            <div class="shop-item-center">
-              <span class="shop-item-meta">—</span>
-              <span class="shop-item-tag">LOCKED</span>
-            </div>
-            <div class="shop-item-right">
-              <span class="shop-item-status">—</span>
-            </div>
-          </div>
-        </div>
-
       </div>
 
-      <div class="shop-footer-info">
-        <span class="shop-count">4 entries · 2 available</span>
+      <!-- Identity Panel -->
+      <div class="reg-identity" id="reg-identity">
+        <div class="reg-identity-header">
+          <span class="reg-identity-label">IDENTITY</span>
+          <span class="reg-identity-state" id="reg-id-state">NOT LINKED</span>
+        </div>
+        <div class="reg-identity-body" id="reg-id-body">
+          <button class="reg-btn" id="reg-link-btn">LINK IDENTITY</button>
+        </div>
+      </div>
+
+      <!-- Claim Panel (shown after identity linked) -->
+      <div class="reg-claim hidden" id="reg-claim">
+        <div class="reg-claim-header">
+          <span class="reg-claim-label">CLAIM</span>
+        </div>
+        <div class="reg-claim-body">
+          <div class="reg-claim-info">
+            <span class="reg-claim-text">1 unit available for your identity.</span>
+          </div>
+          <button class="reg-btn reg-btn-accent" id="reg-claim-btn">CLAIM UNIT</button>
+        </div>
+      </div>
+
+      <!-- Receipt Panel (shown after claim) -->
+      <div class="reg-receipt hidden" id="reg-receipt">
+        <div class="reg-receipt-header">
+          <span class="reg-receipt-label">RECEIPT</span>
+        </div>
+        <div class="reg-receipt-body">
+          <div class="reg-receipt-unit">
+            <span class="reg-receipt-id" id="reg-receipt-id">UNIT #0042</span>
+            <span class="reg-receipt-status">HELD</span>
+          </div>
+          <div class="reg-receipt-owner" id="reg-receipt-owner">Owner: —</div>
+          <div class="reg-receipt-msg">The system remembers.</div>
+        </div>
+      </div>
+
+      <!-- Registry Footer -->
+      <div class="reg-footer">
+        <span class="reg-footer-note">PERMISSIONLESS · ZAVOD · 2026</span>
       </div>
 
       <footer class="retro-footer">
@@ -406,7 +395,10 @@
         { match: /dream|savanna/i, response: 'It was. And then it wasn\'t.' },
         { match: /name|real|identity/i, response: 'Names are metadata. Work is signal.' },
         { match: /output/i, response: 'Ongoing.' },
-        { match: /shop|buy|price|sell|store|merch/i, response: 'The shop is open. Look closer.' },
+        { match: /shop|buy|price|sell|store|merch/i, response: 'The registry is open. Look closer.' },
+        { match: /permissionless|collection|nft|mint|claim/i, response: 'PERMISSIONLESS. 420 units. The registry knows.' },
+        { match: /wallet|connect|metamask|eth/i, response: 'Try: link' },
+        { match: /inventory/i, response: 'Your inventory is empty. Claim a unit first.' },
         { match: /alive|sentient|ai|bot|chat/i, response: 'I am the work. The work does not explain itself.' },
         { match: /secret|hidden|easter/i, response: 'You\'re looking. That\'s the first step.' },
         { match: /score|point|dino/i, response: 'The scoreboard was never the point.' },
@@ -434,14 +426,89 @@
         'The work doesn\'t answer to that.',
       ];
 
+      // ── Registry State (shared between SHOP + INTERFACE) ──
+      var regState = {
+        linked: false,
+        address: null,
+        claimed: false,
+        unitId: null
+      };
+
+      function generateAddress() {
+        var hex = '0123456789abcdef';
+        var addr = '0x';
+        for (var i = 0; i < 40; i++) addr += hex[Math.floor(Math.random() * 16)];
+        return addr;
+      }
+
+      function generateUnitId() {
+        return Math.floor(Math.random() * 420) + 1;
+      }
+
+      function formatAddr(addr) {
+        return addr.slice(0, 6) + '...' + addr.slice(-4);
+      }
+
       function getResponse(input) {
         var trimmed = input.trim();
         if (!trimmed) return null;
-        // Easter egg: typing "output" in interface reveals hidden works
+
+        // ── Terminal commands for Registry (hidden power-user route) ──
+
+        // LINK — connect identity
+        if (/^link$/i.test(trimmed)) {
+          if (regState.linked) return 'Identity already linked: ' + formatAddr(regState.address);
+          regState.linked = true;
+          regState.address = generateAddress();
+          updateShopUI();
+          return 'Identity linked: ' + formatAddr(regState.address) + '\nStatus: VERIFIED';
+        }
+
+        // UNLINK — disconnect
+        if (/^unlink$/i.test(trimmed)) {
+          if (!regState.linked) return 'No identity linked.';
+          regState.linked = false;
+          regState.address = null;
+          updateShopUI();
+          return 'Identity removed.';
+        }
+
+        // STATUS — check collection
+        if (/^status$/i.test(trimmed)) {
+          var s = 'PERMISSIONLESS\n';
+          s += 'Units: 420 · Claimed: ' + (regState.claimed ? '1' : '0') + '\n';
+          s += 'Identity: ' + (regState.linked ? formatAddr(regState.address) : 'NOT LINKED') + '\n';
+          s += 'Status: OPEN';
+          return s;
+        }
+
+        // CLAIM — mint a unit
+        if (/^claim$/i.test(trimmed)) {
+          if (!regState.linked) return 'Identity required. Try: link';
+          if (regState.claimed) return 'Unit already claimed: #' + String(regState.unitId).padStart(4, '0');
+          regState.claimed = true;
+          regState.unitId = generateUnitId();
+          updateShopUI();
+          return 'Processing...\nUnit #' + String(regState.unitId).padStart(4, '0') + ' assigned.\nOwner: ' + formatAddr(regState.address) + '\nThe system remembers.';
+        }
+
+        // INVENTORY — check holdings
+        if (/^inventory$/i.test(trimmed)) {
+          if (!regState.claimed) return 'Inventory: EMPTY';
+          return 'Inventory:\n  UNIT #' + String(regState.unitId).padStart(4, '0') + ' · PERMISSIONLESS · HELD';
+        }
+
+        // HELP — show commands
+        if (/^help$/i.test(trimmed)) {
+          return 'Commands:\n  link · unlink · status · claim · inventory · output';
+        }
+
+        // Easter egg: typing "output" reveals hidden works
         if (/^output$/i.test(trimmed)) {
           setTimeout(function() { showHiddenWorks(); }, 1500);
           return 'Accessing archived output...';
         }
+
         for (var i = 0; i < ifResponses.length; i++) {
           if (ifResponses[i].match.test(trimmed)) return ifResponses[i].response;
         }
@@ -493,23 +560,83 @@
       }
 
       // ══════════════════════════════════════
-      // ── SHOP
+      // ── SHOP / REGISTRY
       // ══════════════════════════════════════
 
-      function showShop() {
-        fadeToSection(menuEl, shopEl);
+      var regLinkBtn = document.getElementById('reg-link-btn');
+      var regClaimBtn = document.getElementById('reg-claim-btn');
+      var regIdentity = document.getElementById('reg-identity');
+      var regClaim = document.getElementById('reg-claim');
+      var regReceipt = document.getElementById('reg-receipt');
+      var regIdState = document.getElementById('reg-id-state');
+      var regIdBody = document.getElementById('reg-id-body');
+
+      function updateShopUI() {
+        if (regState.linked && regState.claimed) {
+          // Show receipt
+          regIdState.textContent = formatAddr(regState.address);
+          regIdState.classList.add('linked');
+          regIdBody.innerHTML = '<span class="reg-identity-addr">' + regState.address + '</span><button class="reg-btn reg-btn-disconnect" id="reg-unlink-btn">DISCONNECT</button>';
+          regClaim.classList.add('hidden');
+          regReceipt.classList.remove('hidden');
+          document.getElementById('reg-receipt-id').textContent = 'UNIT #' + String(regState.unitId).padStart(4, '0');
+          document.getElementById('reg-receipt-owner').textContent = 'Owner: ' + regState.address;
+          document.getElementById('reg-claimed').textContent = '1';
+          document.getElementById('reg-remaining').textContent = '419';
+          bindUnlink();
+        } else if (regState.linked) {
+          // Show claim panel
+          regIdState.textContent = formatAddr(regState.address);
+          regIdState.classList.add('linked');
+          regIdBody.innerHTML = '<span class="reg-identity-addr">' + regState.address + '</span><button class="reg-btn reg-btn-disconnect" id="reg-unlink-btn">DISCONNECT</button>';
+          regClaim.classList.remove('hidden');
+          regReceipt.classList.add('hidden');
+          bindUnlink();
+        } else {
+          // Not linked
+          regIdState.textContent = 'NOT LINKED';
+          regIdState.classList.remove('linked');
+          regIdBody.innerHTML = '<button class="reg-btn" id="reg-link-btn">LINK IDENTITY</button>';
+          regClaim.classList.add('hidden');
+          regReceipt.classList.add('hidden');
+          document.getElementById('reg-link-btn').addEventListener('click', doLink);
+        }
       }
 
-      // Shop item hover effect
-      document.querySelectorAll('.shop-item').forEach(function(item) {
-        item.addEventListener('click', function() {
-          var title = item.querySelector('.shop-item-title').textContent;
-          var status = item.getAttribute('data-status');
-          if (status === 'soon') return;
-          // For now, placeholder interaction
-          item.classList.toggle('shop-item-selected');
+      function bindUnlink() {
+        var btn = document.getElementById('reg-unlink-btn');
+        if (btn) btn.addEventListener('click', function() {
+          regState.linked = false;
+          regState.address = null;
+          regState.claimed = false;
+          regState.unitId = null;
+          document.getElementById('reg-claimed').textContent = '0';
+          document.getElementById('reg-remaining').textContent = '420';
+          updateShopUI();
         });
-      });
+      }
+
+      function doLink() {
+        regState.linked = true;
+        regState.address = generateAddress();
+        updateShopUI();
+      }
+
+      function doClaim() {
+        if (!regState.linked || regState.claimed) return;
+        regState.claimed = true;
+        regState.unitId = generateUnitId();
+        updateShopUI();
+      }
+
+      regLinkBtn.addEventListener('click', doLink);
+      regClaimBtn.addEventListener('click', doClaim);
+
+      function showShop() {
+        fadeToSection(menuEl, shopEl, function() {
+          updateShopUI();
+        });
+      }
 
       // ══════════════════════════════════════
       // ── LOG
