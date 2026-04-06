@@ -639,7 +639,20 @@
         fadeToSection(menuEl, interfaceEl, function() {
           ifBody.innerHTML = '<div class="if-line if-system">System active.</div>';
           ifInput.value = '';
-          setTimeout(function() { ifInput.focus(); }, 200);
+          setTimeout(function() {
+            ifInput.focus();
+            // iOS: scroll to bottom after keyboard opens
+            ifBody.scrollTop = ifBody.scrollHeight;
+          }, 300);
+        });
+      }
+
+      // iOS keyboard: scroll body to keep input visible
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', function() {
+          if (!interfaceEl.classList.contains('hidden')) {
+            ifBody.scrollTop = ifBody.scrollHeight;
+          }
         });
       }
 
