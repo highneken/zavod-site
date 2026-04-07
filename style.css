@@ -36,21 +36,7 @@ body::before {
   pointer-events: none;
 }
 
-/* ── Scan Lines ── */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0,0,0,0.06) 2px,
-    rgba(0,0,0,0.06) 4px
-  );
-  pointer-events: none;
-  z-index: 9998;
-}
+
 
 /* ── Utility ── */
 .hidden {
