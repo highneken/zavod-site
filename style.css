@@ -76,11 +76,15 @@ body::before {
   border-radius: 2px;
   overflow: hidden;
   width: 100%;
+  min-height: 150px;
+  position: relative;
 }
 
-.gb-screen-inner .gate-dino-area {
+/* Runner canvas fills GB screen */
+.gb-screen-inner canvas {
+  display: block;
   width: 100% !important;
-  margin: 0 !important;
+  height: auto !important;
 }
 
 .gb-controls {

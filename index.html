@@ -37,19 +37,28 @@
   <!-- ===== GATE: Chrome offline page (dark) ===== -->
   <div id="gate">
     <div class="gate-content">
-      <div class="gate-dino-area">
-        <div class="gate-dino-static">
-          <img src="dino-images/100-percent/100-offline-sprite.png" class="gate-dino-img" alt="">
+
+      <!-- 404 state — visible before first tap -->
+      <div id="gate-404">
+        <div class="gate-dino-area">
+          <div class="gate-dino-static">
+            <img src="dino-images/100-percent/100-offline-sprite.png" class="gate-dino-img" alt="">
+          </div>
         </div>
-        <div class="dino-wrapper">
-          <div class="interstitial-wrapper"></div>
-        </div>
+        <h1 class="gate-title">Press space to start the game</h1>
+        <p class="gate-sub">Try the following:</p>
+        <ul class="gate-list">
+          <li>Check network cables, modem, and router</li>
+          <li>Reconnect to Wi-Fi</li>
+        </ul>
+        <p class="gate-code">ERR_OUTPUT_ONGOING</p>
       </div>
 
-      <!-- Gameboy frame — injected by JS on game start -->
+      <!-- Gameboy — hidden until first tap -->
       <div class="gb-device hidden" id="gb-device">
         <div class="gb-screen-bezel">
-          <div class="gb-screen-inner" id="gb-screen-inner"></div>
+          <!-- Runner mounts here -->
+          <div class="interstitial-wrapper" id="gb-screen-inner"></div>
         </div>
         <div class="gb-controls">
           <div class="gb-dpad">
@@ -70,16 +79,6 @@
         </div>
         <div class="gb-brand">ZAVOD</div>
       </div>
-
-      <h1 class="gate-title">Press space to start the game</h1>
-
-      <p class="gate-sub">Try the following:</p>
-      <ul class="gate-list">
-        <li>Check network cables, modem, and router</li>
-        <li>Reconnect to Wi-Fi</li>
-      </ul>
-
-      <p class="gate-code">ERR_OUTPUT_ONGOING</p>
 
       <div id="offline-resources">
         <img id="offline-resources-1x" src="dino-images/100-percent/100-offline-sprite.png">
@@ -1103,63 +1102,40 @@
       }
 
       var gameStarted = false;
+      var gbReady = false;
       var runner = null;
-      var dinoStatic = document.querySelector('.gate-dino-static');
-      var wrapper = document.querySelector('.interstitial-wrapper');
       var gbDevice = document.getElementById('gb-device');
-      var gbScreenInner = document.getElementById('gb-screen-inner');
-      var gateTitle = document.querySelector('.gate-title');
-      var gateSub = document.querySelector('.gate-sub');
-      var gateList = document.querySelector('.gate-list');
-      var gateCode = document.querySelector('.gate-code');
+      var gate404 = document.getElementById('gate-404');
 
-      wrapper.style.position = 'absolute';
-      wrapper.style.opacity = '0';
-      wrapper.style.pointerEvents = 'none';
-      wrapper.style.display = 'block';
-
-      runner = new Runner('.interstitial-wrapper');
+      // Runner mounts directly inside #gb-screen-inner (which has class interstitial-wrapper)
+      runner = new Runner('#gb-screen-inner');
 
       function fireKey(code, keyCode) {
         var down = new KeyboardEvent('keydown', { code: code, keyCode: keyCode, bubbles: true });
         var up = new KeyboardEvent('keyup', { code: code, keyCode: keyCode, bubbles: true });
         document.dispatchEvent(down);
-        setTimeout(function() { document.dispatchEvent(up); }, 100);
+        setTimeout(function() { document.dispatchEvent(up); }, 80);
       }
 
-      var gbReady = false; // true after gameboy is shown
-
       function showGameboy() {
-        // Phase 1: fade out 404 text, show gameboy — do NOT start game yet
-        [gateTitle, gateSub, gateList, gateCode].forEach(function(el) {
-          if (el) { el.style.transition = 'opacity 0.4s'; el.style.opacity = '0'; setTimeout(function(){ el.style.display = 'none'; }, 400); }
-        });
-
+        gate404.style.transition = 'opacity 0.4s';
+        gate404.style.opacity = '0';
         setTimeout(function() {
-          dinoStatic.style.display = 'none';
-
-          // Move the dino wrapper inside GB screen
-          var dinoArea = document.querySelector('.gate-dino-area');
-          gbScreenInner.appendChild(dinoArea);
-
-          // Show gameboy
+          gate404.style.display = 'none';
           gbDevice.classList.remove('hidden');
           gbDevice.style.opacity = '0';
-          gbDevice.style.transition = 'opacity 0.6s';
+          gbDevice.style.transition = 'opacity 0.5s';
+          requestAnimationFrame(function() { gbDevice.style.opacity = '1'; });
           setTimeout(function() {
-            gbDevice.style.opacity = '1';
             gbReady = true;
-          }, 50);
-        }, 350);
+            runner.adjustDimensions();
+          }, 550);
+        }, 420);
       }
 
       function startGame() {
         if (gameStarted) return;
         gameStarted = true;
-        wrapper.style.position = '';
-        wrapper.style.opacity = '1';
-        wrapper.style.pointerEvents = '';
-        runner.adjustDimensions();
         runner.handleEvent({ type: Runner.events.TOUCHSTART, keyCode: 32, preventDefault: function(){}, target: runner.containerEl });
       }
 
@@ -1176,12 +1152,11 @@
         fireKey('ArrowDown', 40);
       }
 
-      // Gameboy touch controls
-      ['touchstart','click'].forEach(function(ev) {
-        document.getElementById('gb-up').addEventListener(ev, gbJump, {passive: false});
-        document.getElementById('gb-a').addEventListener(ev, gbJump, {passive: false});
-        document.getElementById('gb-down').addEventListener(ev, gbDuck, {passive: false});
-        document.getElementById('gb-b').addEventListener(ev, gbDuck, {passive: false});
+      ['touchstart', 'click'].forEach(function(ev) {
+        document.getElementById('gb-up').addEventListener(ev, gbJump, { passive: false });
+        document.getElementById('gb-a').addEventListener(ev, gbJump, { passive: false });
+        document.getElementById('gb-down').addEventListener(ev, gbDuck, { passive: false });
+        document.getElementById('gb-b').addEventListener(ev, gbDuck, { passive: false });
       });
 
       function onFirstInput(e) {
@@ -1189,31 +1164,27 @@
         e.preventDefault();
         document.removeEventListener('keydown', onFirstInput);
         document.removeEventListener('touchstart', onFirstInput);
-
-        if (!gbReady) {
-          // First input: show gameboy, don't start game
-          showGameboy();
-        } else {
-          // Already showing: start game
-          startGame();
-        }
+        showGameboy();
       }
       document.addEventListener('keydown', onFirstInput);
-      document.addEventListener('touchstart', onFirstInput);
+      document.addEventListener('touchstart', onFirstInput, { passive: false });
+
+      document.addEventListener('keydown', function(e) {
+        if (e.code === 'Space' && gbReady && !gameStarted) { e.preventDefault(); startGame(); }
+      });
 
       // Konami Code skip
-      var konamiSequence = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
-      var konamiIndex = 0;
+      var konamiSeq = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+      var konamiIdx = 0;
       document.addEventListener('keydown', function(e) {
-        var key = e.key;
-        if (key === konamiSequence[konamiIndex]) {
-          konamiIndex++;
-          if (konamiIndex === konamiSequence.length) {
-            konamiIndex = 0;
+        if (e.key === konamiSeq[konamiIdx]) {
+          konamiIdx++;
+          if (konamiIdx === konamiSeq.length) {
+            konamiIdx = 0;
             document.dispatchEvent(new CustomEvent('zavod-unlock'));
           }
         } else {
-          konamiIndex = key === konamiSequence[0] ? 1 : 0;
+          konamiIdx = e.key === konamiSeq[0] ? 1 : 0;
         }
       });
 
