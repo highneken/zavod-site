@@ -91,7 +91,7 @@
       <div class="gb-brand-bar">ZAVOD · PERMISSIONLESS</div>
     </div>
 
-    <div id="offline-resources" style="display:none">
+    <div id="offline-resources" style="position:absolute;width:0;height:0;overflow:hidden;pointer-events:none">
       <img id="offline-resources-1x" src="dino-images/100-percent/100-offline-sprite.png">
       <img id="offline-resources-2x" src="dino-images/200-percent/200-offline-sprite.png">
       <div id="audio-resources"></div>
@@ -1117,9 +1117,6 @@
       var gbDevice = document.getElementById('gb-device');
       var gate404 = document.getElementById('gate-404');
 
-      // Runner mounts directly inside #gb-screen-inner (which has class interstitial-wrapper)
-      runner = new Runner('#gb-screen-inner');
-
       function fireKey(code, keyCode) {
         var down = new KeyboardEvent('keydown', { code: code, keyCode: keyCode, bubbles: true });
         var up = new KeyboardEvent('keyup', { code: code, keyCode: keyCode, bubbles: true });
@@ -1132,19 +1129,24 @@
         gate404.style.opacity = '0';
         setTimeout(function() {
           gate404.style.display = 'none';
+          // Show GB device first so offsetWidth is real
           gbDevice.classList.remove('hidden');
           gbDevice.style.opacity = '0';
           gbDevice.style.transition = 'opacity 0.5s';
           requestAnimationFrame(function() { gbDevice.style.opacity = '1'; });
+          // Init runner AFTER GB is visible (needs real offsetWidth)
           setTimeout(function() {
-            gbReady = true;
-            runner.adjustDimensions();
-          }, 550);
+            runner = new Runner('#gb-screen-inner');
+            setTimeout(function() {
+              runner.adjustDimensions();
+              gbReady = true;
+            }, 200);
+          }, 100);
         }, 420);
       }
 
       function startGame() {
-        if (gameStarted) return;
+        if (gameStarted || !runner) return;
         gameStarted = true;
         runner.handleEvent({ type: Runner.events.TOUCHSTART, keyCode: 32, preventDefault: function(){}, target: runner.containerEl });
       }
