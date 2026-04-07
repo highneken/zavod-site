@@ -397,6 +397,21 @@
         }, 800);
       }
 
+      // ── History API — push state when entering sections ──
+      function pushSection(name) {
+        if (window.history && window.history.pushState) {
+          window.history.pushState({ section: name }, '', '');
+        }
+      }
+
+      window.addEventListener('popstate', function(e) {
+        // Android back / browser back → return to menu
+        if (!menuEl.classList.contains('hidden')) return;
+        if (!gateEl.classList.contains('hidden')) return;
+        if (!transitionEl.classList.contains('hidden')) return;
+        fadeToMenu();
+      });
+
       // ── Back buttons (all sections) ──
       document.querySelectorAll('.section-back').forEach(function(btn) {
         btn.addEventListener('click', function(e) {
@@ -427,11 +442,11 @@
 
         function selectItem() {
           var action = items[activeIndex].getAttribute('data-action');
-          if (action === 'interface') showInterface();
-          else if (action === 'shop') showShop();
-          else if (action === 'output') showOutput();
-          else if (action === 'log') showLog();
-          else if (action === 'about') showAbout();
+          if (action === 'interface') { pushSection('interface'); showInterface(); }
+          else if (action === 'shop') { pushSection('shop'); showShop(); }
+          else if (action === 'output') { pushSection('output'); showOutput(); }
+          else if (action === 'log') { pushSection('log'); showLog(); }
+          else if (action === 'about') { pushSection('about'); showAbout(); }
         }
 
         document.addEventListener('keydown', function(e) {

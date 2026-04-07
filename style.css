@@ -231,13 +231,15 @@ body::after {
 .menu-item {
   font-size: 14px;
   color: #fff;
-  padding: 8px 0;
-  padding-left: 8px;
+  padding: 14px 24px 14px 8px;
   cursor: pointer;
   white-space: nowrap;
   transition: color 0.15s;
   border-left: 2px solid transparent;
   transition: border-color 0.3s;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
 }
 
 .menu-item:nth-child(1) { --item-accent: var(--punk-blue); }
@@ -267,9 +269,13 @@ body::after {
 /* ── Section Back Button ── */
 .section-back {
   font-size: 10px;
-  color: #333;
+  color: #555;
   text-decoration: none;
   transition: color 0.2s;
+  padding: 12px 16px 12px 0;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
 }
 
 .section-back:hover {
@@ -326,7 +332,7 @@ body::after {
 }
 
 .if-boot {
-  color: #2a2a2a !important;
+  color: #555 !important;
 }
 
 /* Glitch-label on section enter */
@@ -343,10 +349,14 @@ body::after {
 
 .if-close {
   font-size: 8px;
-  color: #222;
+  color: #555;
   text-decoration: none;
   transition: color 0.2s;
   cursor: pointer;
+  padding: 12px 0 12px 16px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
 }
 
 .if-close:hover {
@@ -372,7 +382,7 @@ body::after {
 }
 
 .if-system {
-  color: #444;
+  color: #666;
 }
 
 .if-user {
@@ -904,14 +914,15 @@ body::after {
 .out-filter {
   font-family: 'Press Start 2P', 'Courier New', monospace;
   font-size: 7px;
-  color: #333;
+  color: #555;
   background: transparent;
   border: none;
   border-right: 1px solid #1a1a1a;
-  padding: 8px 14px;
+  padding: 14px 16px;
   cursor: pointer;
   letter-spacing: 1px;
   transition: all 0.15s;
+  min-height: 44px;
 }
 
 .out-filter:last-child {
@@ -960,16 +971,16 @@ body::after {
 
 .out-cell-id {
   font-size: 9px;
-  color: #666;
-  padding: 12px 10px 4px;
+  color: #777;
+  padding: 14px 10px 4px;
   letter-spacing: 1px;
 }
 
 .out-cell-state {
   font-size: 6px;
-  color: #444;
+  color: #555;
   letter-spacing: 1.5px;
-  padding: 4px 10px 12px;
+  padding: 4px 10px 14px;
 }
 
 /* Claimed */
