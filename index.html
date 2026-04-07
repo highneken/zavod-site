@@ -849,8 +849,6 @@
 
           var idStr = String(i).padStart(4, '0');
 
-          var isCorrupt = (state === 'hidden') && ((i * 13 + 7) % 23 === 0);
-
           if (state === 'claimed') {
             var ownerFrag = '0x' + ((i * 0x4f3a + 0x8c1) % 0xffff).toString(16).padStart(4,'0').toUpperCase() + '…';
             cell.innerHTML = '<div class="out-cell-accent" style="background:var(--punk-' + getUnitAccent(i) + ')"></div>' +
@@ -860,11 +858,7 @@
           } else if (state === 'visible') {
             cell.innerHTML = '<div class="out-cell-accent" style="background:var(--punk-' + getUnitAccent(i) + '); opacity:0.4"></div>' +
               '<span class="out-cell-id">#' + idStr + '</span>' +
-              '<span class="out-cell-state out-cell-open">◈ AVAILABLE</span>';
-          } else if (isCorrupt) {
-            cell.innerHTML = '<div class="out-cell-accent" style="background:#0e0e0e"></div>' +
-              '<span class="out-cell-id out-cell-redacted">ERR</span>' +
-              '<span class="out-cell-state out-cell-locked out-cell-err">░░░░</span>';
+              '<span class="out-cell-state out-cell-open">AVAILABLE</span>';
           } else {
             var partialId = ((i * 7 + 3) % 3 === 0)
               ? '#' + idStr[0] + idStr[1] + '██'
