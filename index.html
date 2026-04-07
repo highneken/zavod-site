@@ -36,55 +36,65 @@
 
   <!-- ===== GATE: Chrome offline page (dark) ===== -->
   <div id="gate">
-    <div class="gate-content">
 
-      <!-- 404 state — visible before first tap -->
-      <div id="gate-404">
-        <div class="gate-dino-area">
-          <div class="gate-dino-static">
-            <img src="dino-images/100-percent/100-offline-sprite.png" class="gate-dino-img" alt="">
-          </div>
+    <!-- 404 state — visible before first tap -->
+    <div id="gate-404" class="gate-content">
+      <div class="gate-dino-area">
+        <div class="gate-dino-static">
+          <img src="dino-images/100-percent/100-offline-sprite.png" class="gate-dino-img" alt="">
         </div>
-        <h1 class="gate-title">Press space to start the game</h1>
-        <p class="gate-sub">Try the following:</p>
-        <ul class="gate-list">
-          <li>Check network cables, modem, and router</li>
-          <li>Reconnect to Wi-Fi</li>
-        </ul>
-        <p class="gate-code">ERR_OUTPUT_ONGOING</p>
       </div>
+      <h1 class="gate-title">Press space to start the game</h1>
+      <p class="gate-sub">Try the following:</p>
+      <ul class="gate-list">
+        <li>Check network cables, modem, and router</li>
+        <li>Reconnect to Wi-Fi</li>
+      </ul>
+      <p class="gate-code">ERR_OUTPUT_ONGOING</p>
+    </div>
 
-      <!-- Gameboy — hidden until first tap -->
-      <div class="gb-device hidden" id="gb-device">
-        <div class="gb-screen-bezel">
-          <!-- Runner mounts here -->
-          <div class="interstitial-wrapper" id="gb-screen-inner"></div>
+    <!-- Gameboy — fullscreen, hidden until first tap -->
+    <div class="gb-device hidden" id="gb-device">
+      <!-- Screen section: fills top portion -->
+      <div class="gb-screen-bezel">
+        <div class="gb-screen-label">ZAVOD SYSTEM</div>
+        <div class="interstitial-wrapper" id="gb-screen-inner"></div>
+      </div>
+      <!-- Controls section: fills bottom portion -->
+      <div class="gb-controls">
+        <div class="gb-dpad">
+          <div class="gb-dpad-h"></div>
+          <div class="gb-dpad-v"></div>
+          <button class="gb-dpad-btn gb-up" id="gb-up">▲</button>
+          <button class="gb-dpad-btn gb-down" id="gb-down">▼</button>
+          <button class="gb-dpad-btn gb-left" id="gb-left">◀</button>
+          <button class="gb-dpad-btn gb-right" id="gb-right">▶</button>
         </div>
-        <div class="gb-controls">
-          <div class="gb-dpad">
-            <div class="gb-dpad-h"></div>
-            <div class="gb-dpad-v"></div>
-            <button class="gb-dpad-btn gb-up" id="gb-up">▲</button>
-            <button class="gb-dpad-btn gb-down" id="gb-down">▼</button>
-            <button class="gb-dpad-btn gb-left" id="gb-left">◀</button>
-            <button class="gb-dpad-btn gb-right" id="gb-right">▶</button>
+        <div class="gb-mid">
+          <div class="gb-speaker">
+            <span></span><span></span><span></span>
           </div>
-          <div class="gb-buttons">
-            <div class="gb-ab-row">
+        </div>
+        <div class="gb-buttons">
+          <div class="gb-ab-row">
+            <div class="gb-btn-wrap">
               <button class="gb-btn-b" id="gb-b">B</button>
-              <button class="gb-btn-a" id="gb-a">A</button>
+              <span class="gb-btn-tag">DUCK</span>
             </div>
-            <span class="gb-btn-label">JUMP / DUCK</span>
+            <div class="gb-btn-wrap">
+              <button class="gb-btn-a" id="gb-a">A</button>
+              <span class="gb-btn-tag">JUMP</span>
+            </div>
           </div>
         </div>
-        <div class="gb-brand">ZAVOD</div>
       </div>
+      <div class="gb-brand-bar">ZAVOD · PERMISSIONLESS</div>
+    </div>
 
-      <div id="offline-resources">
-        <img id="offline-resources-1x" src="dino-images/100-percent/100-offline-sprite.png">
-        <img id="offline-resources-2x" src="dino-images/200-percent/200-offline-sprite.png">
-        <div id="audio-resources"></div>
-      </div>
+    <div id="offline-resources" style="display:none">
+      <img id="offline-resources-1x" src="dino-images/100-percent/100-offline-sprite.png">
+      <img id="offline-resources-2x" src="dino-images/200-percent/200-offline-sprite.png">
+      <div id="audio-resources"></div>
     </div>
   </div>
 
