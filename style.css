@@ -36,6 +36,22 @@ body::before {
   pointer-events: none;
 }
 
+/* ── Scan Lines ── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.06) 2px,
+    rgba(0,0,0,0.06) 4px
+  );
+  pointer-events: none;
+  z-index: 9998;
+}
+
 /* ── Utility ── */
 .hidden {
   display: none !important;
@@ -298,6 +314,33 @@ body::before {
   letter-spacing: 2px;
 }
 
+.if-status-dot {
+  color: rgba(106, 154, 106, 0.7);
+  animation: pulse-dot 2.5s ease-in-out infinite;
+  margin-right: 4px;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 0.2; }
+}
+
+.if-boot {
+  color: #2a2a2a !important;
+}
+
+/* Glitch-label on section enter */
+@keyframes glitch-in {
+  0%   { opacity: 0; letter-spacing: 6px; }
+  40%  { opacity: 1; letter-spacing: 2px; }
+  60%  { letter-spacing: 3px; }
+  100% { letter-spacing: 2px; }
+}
+
+.if-label, .shop-label, .out-label, .log-label {
+  animation: glitch-in 0.5s ease forwards;
+}
+
 .if-close {
   font-size: 8px;
   color: #222;
@@ -528,6 +571,13 @@ body::before {
   color: var(--reg-accent);
 }
 
+.reg-pulse {
+  color: rgba(106, 154, 106, 0.7);
+  animation: pulse-dot 2.5s ease-in-out infinite;
+  margin-right: 3px;
+  font-size: 0.7em;
+}
+
 .reg-stat-label {
   font-size: 6px;
   color: #444;
@@ -578,9 +628,10 @@ body::before {
 
 .reg-panel-desc {
   font-size: 8px;
-  color: #444;
-  line-height: 2;
+  color: #3a3a3a;
+  line-height: 2.4;
   margin-bottom: 16px;
+  letter-spacing: 0.5px;
 }
 
 /* ── Buttons ── */
@@ -720,8 +771,9 @@ body::before {
 
 .reg-held-msg {
   font-size: 8px;
-  color: #333;
-  font-style: italic;
+  color: #3a3a3a;
+  letter-spacing: 0.5px;
+  line-height: 2.2;
   padding-top: 8px;
   border-top: 1px solid #1a1a1a;
 }
@@ -966,6 +1018,25 @@ body::before {
 
 .out-cell-locked {
   color: #1a1a1a;
+}
+
+/* Owner fragment on claimed cells */
+.out-cell-owner {
+  font-size: 5px;
+  color: #333;
+  padding: 0 10px 2px;
+  letter-spacing: 0.5px;
+  font-family: 'Courier New', monospace;
+}
+
+/* Corrupted / ERR cells */
+.out-cell-err {
+  color: #2a1a1a !important;
+  letter-spacing: 2px;
+}
+
+.out-cell-hidden.out-cell-corrupt {
+  border-color: #100808;
 }
 
 /* Expanded state */

@@ -99,7 +99,7 @@
   <div id="interface" class="hidden">
     <div class="if-container">
       <div class="if-header">
-        <span class="if-label">ZAVOD//INTERFACE</span>
+        <span class="if-label"><span class="if-status-dot">●</span> ZAVOD//INTERFACE</span>
         <a href="#" class="if-close" id="if-close">ESC</a>
       </div>
 
@@ -109,7 +109,7 @@
 
       <div class="if-input-row">
         <span class="if-prompt">&gt;</span>
-        <input type="text" class="if-input" id="if-input" autocomplete="off" spellcheck="false" placeholder="query">
+        <input type="text" class="if-input" id="if-input" autocomplete="off" spellcheck="false" placeholder="enter signal">
       </div>
     </div>
   </div>
@@ -153,7 +153,7 @@
             <span class="reg-stat-label">REMAINING</span>
           </div>
           <div class="reg-stat">
-            <span class="reg-stat-val reg-stat-status" id="reg-status">OPEN</span>
+            <span class="reg-stat-val reg-stat-status" id="reg-status"><span class="reg-pulse">●</span> OPEN</span>
             <span class="reg-stat-label">REGISTRY</span>
           </div>
         </div>
@@ -172,7 +172,7 @@
           <span class="reg-panel-state" id="reg-access-state">REQUIRED</span>
         </div>
         <div class="reg-panel-body" id="reg-access-body">
-          <div class="reg-panel-desc">Link your identity to access the registry.</div>
+          <div class="reg-panel-desc">IDENTITY UNVERIFIED<br>REGISTRY ACCESS DENIED</div>
           <button class="reg-btn" id="reg-link-btn">LINK IDENTITY</button>
         </div>
       </div>
@@ -190,7 +190,7 @@
             </div>
             <div class="reg-unit-info">
               <span class="reg-unit-label">RANDOM UNIT</span>
-              <span class="reg-unit-sub">Character revealed on claim</span>
+              <span class="reg-unit-sub">UNIT ASSIGNED ON CLAIM · IRREVERSIBLE</span>
             </div>
           </div>
           <button class="reg-btn reg-btn-accent" id="reg-claim-btn">CLAIM UNIT</button>
@@ -214,7 +214,7 @@
               <span class="reg-held-collection">PERMISSIONLESS</span>
             </div>
           </div>
-          <div class="reg-held-msg">The system remembers.</div>
+          <div class="reg-held-msg">UNIT LOCKED TO IDENTITY.<br>THE SYSTEM REMEMBERS.</div>
         </div>
       </div>
 
@@ -635,15 +635,28 @@
 
       ifClose.addEventListener('click', function(e) { e.preventDefault(); fadeToMenu(); });
 
+      var ifBootLines = [
+        'ZAVOD SYSTEM v0.9.1',
+        'REGISTRY: PERMISSIONLESS · 10,000 UNITS',
+        'CONNECTION: UNVERIFIED',
+        '...',
+      ];
+
       function showInterface() {
         fadeToSection(menuEl, interfaceEl, function() {
-          ifBody.innerHTML = '<div class="if-line if-system">System active.</div>';
+          ifBody.innerHTML = '';
           ifInput.value = '';
+          var delay = 0;
+          ifBootLines.forEach(function(line, i) {
+            delay += 260 + i * 120;
+            setTimeout(function() {
+              addLine(line, 'if-system if-boot');
+            }, delay);
+          });
           setTimeout(function() {
             ifInput.focus();
-            // iOS: scroll to bottom after keyboard opens
             ifBody.scrollTop = ifBody.scrollHeight;
-          }, 300);
+          }, delay + 300);
         });
       }
 
@@ -821,17 +834,28 @@
 
           var idStr = String(i).padStart(4, '0');
 
+          var isCorrupt = (state === 'hidden') && ((i * 13 + 7) % 23 === 0);
+
           if (state === 'claimed') {
+            var ownerFrag = '0x' + ((i * 0x4f3a + 0x8c1) % 0xffff).toString(16).padStart(4,'0').toUpperCase() + '…';
             cell.innerHTML = '<div class="out-cell-accent" style="background:var(--punk-' + getUnitAccent(i) + ')"></div>' +
               '<span class="out-cell-id">#' + idStr + '</span>' +
+              '<span class="out-cell-owner">' + ownerFrag + '</span>' +
               '<span class="out-cell-state">HELD</span>';
           } else if (state === 'visible') {
             cell.innerHTML = '<div class="out-cell-accent" style="background:var(--punk-' + getUnitAccent(i) + '); opacity:0.4"></div>' +
               '<span class="out-cell-id">#' + idStr + '</span>' +
-              '<span class="out-cell-state out-cell-open">OPEN</span>';
+              '<span class="out-cell-state out-cell-open">◈ AVAILABLE</span>';
+          } else if (isCorrupt) {
+            cell.innerHTML = '<div class="out-cell-accent" style="background:#0e0e0e"></div>' +
+              '<span class="out-cell-id out-cell-redacted">ERR</span>' +
+              '<span class="out-cell-state out-cell-locked out-cell-err">░░░░</span>';
           } else {
-            cell.innerHTML = '<div class="out-cell-accent" style="background:#1a1a1a"></div>' +
-              '<span class="out-cell-id out-cell-redacted">█████</span>' +
+            var partialId = ((i * 7 + 3) % 3 === 0)
+              ? '#' + idStr[0] + idStr[1] + '██'
+              : '█████';
+            cell.innerHTML = '<div class="out-cell-accent" style="background:#0a0a0a"></div>' +
+              '<span class="out-cell-id out-cell-redacted">' + partialId + '</span>' +
               '<span class="out-cell-state out-cell-locked">LOCKED</span>';
           }
 
