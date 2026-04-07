@@ -46,6 +46,31 @@
         </div>
       </div>
 
+      <!-- Gameboy frame — injected by JS on game start -->
+      <div class="gb-device hidden" id="gb-device">
+        <div class="gb-screen-bezel">
+          <div class="gb-screen-inner" id="gb-screen-inner"></div>
+        </div>
+        <div class="gb-controls">
+          <div class="gb-dpad">
+            <div class="gb-dpad-h"></div>
+            <div class="gb-dpad-v"></div>
+            <button class="gb-dpad-btn gb-up" id="gb-up">▲</button>
+            <button class="gb-dpad-btn gb-down" id="gb-down">▼</button>
+            <button class="gb-dpad-btn gb-left" id="gb-left">◀</button>
+            <button class="gb-dpad-btn gb-right" id="gb-right">▶</button>
+          </div>
+          <div class="gb-buttons">
+            <div class="gb-ab-row">
+              <button class="gb-btn-b" id="gb-b">B</button>
+              <button class="gb-btn-a" id="gb-a">A</button>
+            </div>
+            <span class="gb-btn-label">JUMP / DUCK</span>
+          </div>
+        </div>
+        <div class="gb-brand">ZAVOD</div>
+      </div>
+
       <h1 class="gate-title">Press space to start the game</h1>
 
       <p class="gate-sub">Try the following:</p>
@@ -1081,6 +1106,12 @@
       var runner = null;
       var dinoStatic = document.querySelector('.gate-dino-static');
       var wrapper = document.querySelector('.interstitial-wrapper');
+      var gbDevice = document.getElementById('gb-device');
+      var gbScreenInner = document.getElementById('gb-screen-inner');
+      var gateTitle = document.querySelector('.gate-title');
+      var gateSub = document.querySelector('.gate-sub');
+      var gateList = document.querySelector('.gate-list');
+      var gateCode = document.querySelector('.gate-code');
 
       wrapper.style.position = 'absolute';
       wrapper.style.opacity = '0';
@@ -1089,14 +1120,50 @@
 
       runner = new Runner('.interstitial-wrapper');
 
+      function fireKey(code, keyCode) {
+        var down = new KeyboardEvent('keydown', { code: code, keyCode: keyCode, bubbles: true });
+        var up = new KeyboardEvent('keyup', { code: code, keyCode: keyCode, bubbles: true });
+        document.dispatchEvent(down);
+        setTimeout(function() { document.dispatchEvent(up); }, 100);
+      }
+
       function showGame() {
         if (gameStarted) return;
         gameStarted = true;
-        dinoStatic.style.display = 'none';
-        wrapper.style.position = '';
-        wrapper.style.opacity = '1';
-        wrapper.style.pointerEvents = '';
+
+        // Fade out 404 text
+        [gateTitle, gateSub, gateList, gateCode].forEach(function(el) {
+          if (el) { el.style.transition = 'opacity 0.4s'; el.style.opacity = '0'; setTimeout(function(){ el.style.display = 'none'; }, 400); }
+        });
+
+        // Move canvas into GB screen
+        setTimeout(function() {
+          dinoStatic.style.display = 'none';
+          wrapper.style.position = '';
+          wrapper.style.opacity = '1';
+          wrapper.style.pointerEvents = '';
+
+          // Move the dino wrapper inside GB screen
+          var dinoArea = document.querySelector('.gate-dino-area');
+          gbScreenInner.appendChild(dinoArea);
+
+          // Show gameboy
+          gbDevice.classList.remove('hidden');
+          gbDevice.style.opacity = '0';
+          gbDevice.style.transition = 'opacity 0.5s';
+          setTimeout(function() { gbDevice.style.opacity = '1'; }, 50);
+        }, 350);
       }
+
+      // Gameboy touch controls
+      document.getElementById('gb-up').addEventListener('touchstart', function(e) { e.preventDefault(); fireKey('Space', 32); });
+      document.getElementById('gb-a').addEventListener('touchstart', function(e) { e.preventDefault(); fireKey('Space', 32); });
+      document.getElementById('gb-down').addEventListener('touchstart', function(e) { e.preventDefault(); fireKey('ArrowDown', 40); });
+      document.getElementById('gb-b').addEventListener('touchstart', function(e) { e.preventDefault(); fireKey('ArrowDown', 40); });
+      document.getElementById('gb-up').addEventListener('click', function() { fireKey('Space', 32); });
+      document.getElementById('gb-a').addEventListener('click', function() { fireKey('Space', 32); });
+      document.getElementById('gb-down').addEventListener('click', function() { fireKey('ArrowDown', 40); });
+      document.getElementById('gb-b').addEventListener('click', function() { fireKey('ArrowDown', 40); });
 
       function onFirstInput(e) {
         if (e.type === 'keydown' && e.code !== 'Space') return;
@@ -1109,6 +1176,22 @@
       }
       document.addEventListener('keydown', onFirstInput);
       document.addEventListener('touchstart', onFirstInput);
+
+      // Konami Code skip
+      var konamiSequence = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+      var konamiIndex = 0;
+      document.addEventListener('keydown', function(e) {
+        var key = e.key;
+        if (key === konamiSequence[konamiIndex]) {
+          konamiIndex++;
+          if (konamiIndex === konamiSequence.length) {
+            konamiIndex = 0;
+            document.dispatchEvent(new CustomEvent('zavod-unlock'));
+          }
+        } else {
+          konamiIndex = key === konamiSequence[0] ? 1 : 0;
+        }
+      });
 
       document.addEventListener('zavod-unlock', function () {
         localStorage.setItem(STORAGE_KEY, '1');
