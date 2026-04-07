@@ -52,10 +52,10 @@ body::before {
   flex-direction: column;
   align-items: center;
   background: #111;
-  border-radius: 12px 12px 40px 40px;
-  padding: 12px 12px 20px;
-  width: 100%;
-  max-width: 420px;
+  border-radius: 10px 10px 32px 32px;
+  padding: 10px 10px 16px;
+  width: calc(100vw - 32px);
+  max-width: 380px;
   margin: 0 auto;
   box-shadow: 0 0 0 2px #222, 0 8px 32px rgba(0,0,0,0.8);
   border: 1px solid #1a1a1a;
@@ -94,8 +94,8 @@ body::before {
 /* ── D-Pad ── */
 .gb-dpad {
   position: relative;
-  width: 88px;
-  height: 88px;
+  width: 96px;
+  height: 96px;
 }
 
 .gb-dpad-h, .gb-dpad-v {
@@ -160,9 +160,9 @@ body::before {
 
 .gb-btn-a, .gb-btn-b {
   font-family: 'Press Start 2P', monospace;
-  font-size: 8px;
-  width: 40px;
-  height: 40px;
+  font-size: 9px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   border: none;
   cursor: pointer;
@@ -217,9 +217,12 @@ body::before {
 
 .gate-content {
   text-align: left;
-  padding: 15vh 40px 40px;
+  padding: 15vh 16px 40px;
   max-width: 600px;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .gate-dino-area {

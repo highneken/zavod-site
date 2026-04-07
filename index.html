@@ -1127,21 +1127,16 @@
         setTimeout(function() { document.dispatchEvent(up); }, 100);
       }
 
-      function showGame() {
-        if (gameStarted) return;
-        gameStarted = true;
+      var gbReady = false; // true after gameboy is shown
 
-        // Fade out 404 text
+      function showGameboy() {
+        // Phase 1: fade out 404 text, show gameboy — do NOT start game yet
         [gateTitle, gateSub, gateList, gateCode].forEach(function(el) {
           if (el) { el.style.transition = 'opacity 0.4s'; el.style.opacity = '0'; setTimeout(function(){ el.style.display = 'none'; }, 400); }
         });
 
-        // Move canvas into GB screen
         setTimeout(function() {
           dinoStatic.style.display = 'none';
-          wrapper.style.position = '';
-          wrapper.style.opacity = '1';
-          wrapper.style.pointerEvents = '';
 
           // Move the dino wrapper inside GB screen
           var dinoArea = document.querySelector('.gate-dino-area');
@@ -1150,29 +1145,58 @@
           // Show gameboy
           gbDevice.classList.remove('hidden');
           gbDevice.style.opacity = '0';
-          gbDevice.style.transition = 'opacity 0.5s';
-          setTimeout(function() { gbDevice.style.opacity = '1'; }, 50);
+          gbDevice.style.transition = 'opacity 0.6s';
+          setTimeout(function() {
+            gbDevice.style.opacity = '1';
+            gbReady = true;
+          }, 50);
         }, 350);
       }
 
+      function startGame() {
+        if (gameStarted) return;
+        gameStarted = true;
+        wrapper.style.position = '';
+        wrapper.style.opacity = '1';
+        wrapper.style.pointerEvents = '';
+        runner.adjustDimensions();
+        runner.handleEvent({ type: Runner.events.TOUCHSTART, keyCode: 32, preventDefault: function(){}, target: runner.containerEl });
+      }
+
+      function gbJump(e) {
+        if (e && e.preventDefault) e.preventDefault();
+        if (!gbReady) return;
+        if (!gameStarted) { startGame(); return; }
+        fireKey('Space', 32);
+      }
+
+      function gbDuck(e) {
+        if (e && e.preventDefault) e.preventDefault();
+        if (!gbReady || !gameStarted) return;
+        fireKey('ArrowDown', 40);
+      }
+
       // Gameboy touch controls
-      document.getElementById('gb-up').addEventListener('touchstart', function(e) { e.preventDefault(); fireKey('Space', 32); });
-      document.getElementById('gb-a').addEventListener('touchstart', function(e) { e.preventDefault(); fireKey('Space', 32); });
-      document.getElementById('gb-down').addEventListener('touchstart', function(e) { e.preventDefault(); fireKey('ArrowDown', 40); });
-      document.getElementById('gb-b').addEventListener('touchstart', function(e) { e.preventDefault(); fireKey('ArrowDown', 40); });
-      document.getElementById('gb-up').addEventListener('click', function() { fireKey('Space', 32); });
-      document.getElementById('gb-a').addEventListener('click', function() { fireKey('Space', 32); });
-      document.getElementById('gb-down').addEventListener('click', function() { fireKey('ArrowDown', 40); });
-      document.getElementById('gb-b').addEventListener('click', function() { fireKey('ArrowDown', 40); });
+      ['touchstart','click'].forEach(function(ev) {
+        document.getElementById('gb-up').addEventListener(ev, gbJump, {passive: false});
+        document.getElementById('gb-a').addEventListener(ev, gbJump, {passive: false});
+        document.getElementById('gb-down').addEventListener(ev, gbDuck, {passive: false});
+        document.getElementById('gb-b').addEventListener(ev, gbDuck, {passive: false});
+      });
 
       function onFirstInput(e) {
         if (e.type === 'keydown' && e.code !== 'Space') return;
         e.preventDefault();
-        showGame();
         document.removeEventListener('keydown', onFirstInput);
         document.removeEventListener('touchstart', onFirstInput);
-        runner.adjustDimensions();
-        runner.handleEvent({ type: Runner.events.TOUCHSTART, keyCode: 32, preventDefault: function(){}, target: runner.containerEl });
+
+        if (!gbReady) {
+          // First input: show gameboy, don't start game
+          showGameboy();
+        } else {
+          // Already showing: start game
+          startGame();
+        }
       }
       document.addEventListener('keydown', onFirstInput);
       document.addEventListener('touchstart', onFirstInput);
