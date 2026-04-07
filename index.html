@@ -1136,19 +1136,29 @@
           requestAnimationFrame(function() { gbDevice.style.opacity = '1'; });
           // Init runner AFTER GB is visible (needs real offsetWidth)
           setTimeout(function() {
+            // Reset singleton so Runner creates fresh on new element
+            Runner.instance_ = null;
             runner = new Runner('#gb-screen-inner');
             setTimeout(function() {
               runner.adjustDimensions();
               gbReady = true;
-            }, 200);
-          }, 100);
+            }, 300);
+          }, 150);
         }, 420);
       }
 
       function startGame() {
         if (gameStarted || !runner) return;
         gameStarted = true;
-        runner.handleEvent({ type: Runner.events.TOUCHSTART, keyCode: 32, preventDefault: function(){}, target: runner.containerEl });
+        // Dispatch real touchstart on runner container to activate game
+        var evt = new TouchEvent('touchstart', { bubbles: true, cancelable: true, touches: [] });
+        try {
+          runner.containerEl.dispatchEvent(evt);
+        } catch(err) {
+          // Fallback: synthetic keydown Space
+          var ke = new KeyboardEvent('keydown', { keyCode: 32, code: 'Space', bubbles: true });
+          document.dispatchEvent(ke);
+        }
       }
 
       function gbJump(e) {

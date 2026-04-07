@@ -98,7 +98,7 @@ body::before {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 24px;
+  padding: 16px 28px 32px;
   background: #0e0e0e;
 }
 
@@ -135,9 +135,10 @@ body::before {
 
 .gb-dpad-btn {
   position: absolute;
-  background: transparent;
-  border: none;
-  color: #444;
+  background: #161616;
+  border: 1px solid #222;
+  border-radius: 3px;
+  color: #555;
   font-size: 10px;
   cursor: pointer;
   z-index: 2;
@@ -148,9 +149,14 @@ body::before {
   justify-content: center;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
+  transition: background 0.08s, color 0.08s, transform 0.08s;
 }
 
-.gb-dpad-btn:active { color: #fff; background: rgba(255,255,255,0.05); border-radius: 2px; }
+.gb-dpad-btn:active {
+  color: #fff;
+  background: #2a2a2a;
+  transform: scale(0.88);
+}
 
 .gb-up    { top: 2px;    left: 50%; transform: translateX(-50%); }
 .gb-down  { bottom: 2px; left: 50%; transform: translateX(-50%); }
@@ -200,9 +206,9 @@ body::before {
 
 .gb-btn-a, .gb-btn-b {
   font-family: 'Press Start 2P', monospace;
-  font-size: 10px;
-  width: 56px;
-  height: 56px;
+  font-size: 11px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   border: none;
   cursor: pointer;
