@@ -53,8 +53,8 @@
       <p class="gate-code">ERR_OUTPUT_ONGOING</p>
     </div>
 
-    <!-- Gameboy — fullscreen, hidden until first tap -->
-    <div class="gb-device hidden" id="gb-device">
+    <!-- Gameboy — fullscreen, invisible until first tap (visibility:hidden keeps layout/dimensions) -->
+    <div class="gb-device" id="gb-device" style="visibility:hidden;position:fixed;inset:0;z-index:50">
       <!-- Screen section: fills top portion -->
       <div class="gb-screen-bezel">
         <div class="gb-screen-label">ZAVOD SYSTEM</div>
@@ -1113,9 +1113,11 @@
 
       var gameStarted = false;
       var gbReady = false;
-      var runner = null;
       var gbDevice = document.getElementById('gb-device');
       var gate404 = document.getElementById('gate-404');
+
+      // Init Runner immediately — gb-device uses visibility:hidden so it has real dimensions
+      var runner = new Runner('#gb-screen-inner');
 
       function fireKey(code, keyCode) {
         var down = new KeyboardEvent('keydown', { code: code, keyCode: keyCode, bubbles: true });
@@ -1129,36 +1131,24 @@
         gate404.style.opacity = '0';
         setTimeout(function() {
           gate404.style.display = 'none';
-          // Show GB device first so offsetWidth is real
-          gbDevice.classList.remove('hidden');
+          // Reveal GB (was visibility:hidden, now visible)
+          gbDevice.style.visibility = 'visible';
           gbDevice.style.opacity = '0';
           gbDevice.style.transition = 'opacity 0.5s';
           requestAnimationFrame(function() { gbDevice.style.opacity = '1'; });
-          // Init runner AFTER GB is visible (needs real offsetWidth)
           setTimeout(function() {
-            // Reset singleton so Runner creates fresh on new element
-            Runner.instance_ = null;
-            runner = new Runner('#gb-screen-inner');
-            setTimeout(function() {
-              runner.adjustDimensions();
-              gbReady = true;
-            }, 300);
-          }, 150);
+            runner.adjustDimensions();
+            gbReady = true;
+          }, 300);
         }, 420);
       }
 
       function startGame() {
-        if (gameStarted || !runner) return;
+        if (gameStarted) return;
         gameStarted = true;
-        // Dispatch real touchstart on runner container to activate game
-        var evt = new TouchEvent('touchstart', { bubbles: true, cancelable: true, touches: [] });
-        try {
-          runner.containerEl.dispatchEvent(evt);
-        } catch(err) {
-          // Fallback: synthetic keydown Space
-          var ke = new KeyboardEvent('keydown', { keyCode: 32, code: 'Space', bubbles: true });
-          document.dispatchEvent(ke);
-        }
+        // Fire space keydown — Runner listens to document keydown
+        var ke = new KeyboardEvent('keydown', { keyCode: 32, code: 'Space', which: 32, bubbles: true });
+        document.dispatchEvent(ke);
       }
 
       function gbJump(e) {
