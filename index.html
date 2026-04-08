@@ -1197,6 +1197,12 @@
       document.addEventListener('keydown', onFirstInput);
       document.addEventListener('touchstart', onFirstInput, { passive: false });
 
+      // Second tap anywhere on screen starts game
+      document.addEventListener('touchstart', function(e) {
+        if (!gbReady || gameStarted) return;
+        startGame();
+      }, { passive: false });
+
       document.addEventListener('keydown', function(e) {
         if (e.code === 'Space' && gbReady && !gameStarted) { e.preventDefault(); startGame(); }
       });
