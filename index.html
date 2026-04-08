@@ -37,13 +37,8 @@
   <!-- ===== GATE: Chrome offline page (dark) ===== -->
   <div id="gate">
 
-    <!-- 404 state — visible before first tap -->
+    <!-- Gate: 404 text shown before first tap -->
     <div id="gate-404" class="gate-content">
-      <div class="gate-dino-area">
-        <div class="gate-dino-static">
-          <img src="dino-images/100-percent/100-offline-sprite.png" class="gate-dino-img" alt="">
-        </div>
-      </div>
       <h1 class="gate-title">Press space to start the game</h1>
       <p class="gate-sub">Try the following:</p>
       <ul class="gate-list">
@@ -53,50 +48,60 @@
       <p class="gate-code">ERR_OUTPUT_ONGOING</p>
     </div>
 
-    <!-- Gameboy — fullscreen, invisible until first tap (visibility:hidden keeps layout/dimensions) -->
-    <div class="gb-device" id="gb-device" style="visibility:hidden;position:fixed;inset:0;z-index:50">
-      <!-- Screen section: fills top portion -->
-      <div class="gb-screen-bezel">
-        <div class="gb-screen-label">ZAVOD SYSTEM</div>
-        <div style="position:relative;flex:1;display:flex;flex-direction:column;min-height:0;">
-          <div class="interstitial-wrapper" id="gb-screen-inner"></div>
-          <!-- ZAVOD overlay: boss messages + beam effects -->
-          <div id="zavod-overlay" style="display:none;position:absolute;inset:0;pointer-events:none;z-index:10;">
-            <div id="zavod-msg" style="position:absolute;bottom:6px;left:0;right:0;text-align:center;font-family:'Press Start 2P',monospace;font-size:6px;color:#fff;letter-spacing:1px;padding:3px 6px;"></div>
-            <div id="boss-beam" style="display:none;position:absolute;inset:0;background:rgba(255,30,30,0.2);border:2px solid rgba(255,30,30,0.7);"></div>
-            <div id="charged-shot" style="display:none;position:absolute;top:50%;left:0;right:0;height:3px;margin-top:-1.5px;background:linear-gradient(90deg,transparent,#fff,#88aaff,#fff,transparent);box-shadow:0 0 10px #fff,0 0 20px #6af;"></div>
-          </div>
+    <!-- Runner lives here from page load — never moved -->
+    <div id="gate-runner">
+      <div class="gate-dino-static" id="gate-dino-static">
+        <img src="dino-images/100-percent/100-offline-sprite.png" class="gate-dino-img" alt="">
+      </div>
+      <div class="dino-wrapper">
+        <div class="interstitial-wrapper"></div>
+      </div>
+    </div>
+
+    <!-- Gameboy frame — CSS overlay, hidden until tap 1 -->
+    <div id="gb-frame" style="display:none;position:fixed;inset:0;z-index:50;pointer-events:none;">
+      <!-- Top bezel (above screen area) -->
+      <div id="gb-top-bar" style="background:#111;border-bottom:3px solid #1a1a1a;height:var(--gb-top,28px);display:flex;align-items:center;justify-content:center;">
+        <span style="font-family:'Press Start 2P',monospace;font-size:6px;color:#222;letter-spacing:3px;">ZAVOD SYSTEM</span>
+      </div>
+      <!-- Screen overlay (sits over the runner area) -->
+      <div id="gb-screen-overlay" style="background:transparent;border-left:10px solid #111;border-right:10px solid #111;">
+        <!-- ZAVOD overlay: boss messages + beam effects -->
+        <div id="zavod-overlay" style="display:none;position:absolute;inset:0;pointer-events:none;z-index:10;">
+          <div id="zavod-msg" style="position:absolute;bottom:6px;left:0;right:0;text-align:center;font-family:'Press Start 2P',monospace;font-size:6px;color:#fff;letter-spacing:1px;padding:3px 6px;"></div>
+          <div id="boss-beam" style="display:none;position:absolute;inset:0;background:rgba(255,30,30,0.2);border:2px solid rgba(255,30,30,0.7);"></div>
+          <div id="charged-shot" style="display:none;position:absolute;top:50%;left:0;right:0;height:3px;margin-top:-1.5px;background:linear-gradient(90deg,transparent,#fff,#88aaff,#fff,transparent);box-shadow:0 0 10px #fff,0 0 20px #6af;"></div>
         </div>
       </div>
-      <!-- Controls section: fills bottom portion -->
-      <div class="gb-controls">
-        <div class="gb-dpad">
-          <div class="gb-dpad-h"></div>
-          <div class="gb-dpad-v"></div>
-          <button class="gb-dpad-btn gb-up" id="gb-up">▲</button>
-          <button class="gb-dpad-btn gb-down" id="gb-down">▼</button>
-          <button class="gb-dpad-btn gb-left" id="gb-left">◀</button>
-          <button class="gb-dpad-btn gb-right" id="gb-right">▶</button>
-        </div>
-        <div class="gb-mid">
-          <div class="gb-speaker">
-            <span></span><span></span><span></span>
+      <!-- Controls section — pointer-events on, rest blocked -->
+      <div id="gb-controls-wrap" style="background:#0e0e0e;border-top:3px solid #1a1a1a;position:absolute;bottom:0;left:0;right:0;pointer-events:all;">
+        <div class="gb-controls">
+          <div class="gb-dpad">
+            <div class="gb-dpad-h"></div>
+            <div class="gb-dpad-v"></div>
+            <button class="gb-dpad-btn gb-up" id="gb-up">▲</button>
+            <button class="gb-dpad-btn gb-down" id="gb-down">▼</button>
+            <button class="gb-dpad-btn gb-left" id="gb-left">◀</button>
+            <button class="gb-dpad-btn gb-right" id="gb-right">▶</button>
+          </div>
+          <div class="gb-mid">
+            <div class="gb-speaker"><span></span><span></span><span></span></div>
+          </div>
+          <div class="gb-buttons">
+            <div class="gb-ab-row">
+              <div class="gb-btn-wrap">
+                <button class="gb-btn-b" id="gb-b">B</button>
+                <span class="gb-btn-tag">DUCK</span>
+              </div>
+              <div class="gb-btn-wrap">
+                <button class="gb-btn-a" id="gb-a">A</button>
+                <span class="gb-btn-tag">JUMP</span>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="gb-buttons">
-          <div class="gb-ab-row">
-            <div class="gb-btn-wrap">
-              <button class="gb-btn-b" id="gb-b">B</button>
-              <span class="gb-btn-tag">DUCK</span>
-            </div>
-            <div class="gb-btn-wrap">
-              <button class="gb-btn-a" id="gb-a">A</button>
-              <span class="gb-btn-tag">JUMP</span>
-            </div>
-          </div>
-        </div>
+        <div class="gb-brand-bar">ZAVOD · PERMISSIONLESS</div>
       </div>
-      <div class="gb-brand-bar">ZAVOD · PERMISSIONLESS</div>
     </div>
 
     <div id="offline-resources" style="position:absolute;width:0;height:0;overflow:hidden;pointer-events:none">
@@ -1119,66 +1124,39 @@
         return;
       }
 
+      // Init Runner on page load — it lives in .interstitial-wrapper, never moved
+      var runner = new Runner('.interstitial-wrapper');
+
       var gameStarted = false;
-      var gbReady = false;
-      var runner = null;
-      var gbDevice = document.getElementById('gb-device');
+      var gbFrame = document.getElementById('gb-frame');
       var gate404 = document.getElementById('gate-404');
+      var gateDinoStatic = document.getElementById('gate-dino-static');
+
+      function showGameboy() {
+        // Fade out 404 text
+        gate404.style.transition = 'opacity 0.4s';
+        gate404.style.opacity = '0';
+        setTimeout(function() { gate404.style.display = 'none'; }, 400);
+        // Hide static dino image
+        if (gateDinoStatic) gateDinoStatic.style.display = 'none';
+        // Show GB frame overlay with fade
+        gbFrame.style.display = 'block';
+        gbFrame.style.opacity = '0';
+        gbFrame.style.transition = 'opacity 0.5s';
+        requestAnimationFrame(function() { gbFrame.style.opacity = '1'; });
+        // Make gate background black (game vibe)
+        document.getElementById('gate').style.background = '#111';
+      }
 
       function fireKey(code, keyCode) {
         var down = new KeyboardEvent('keydown', { code: code, keyCode: keyCode, bubbles: true });
-        var up = new KeyboardEvent('keyup', { code: code, keyCode: keyCode, bubbles: true });
+        var up   = new KeyboardEvent('keyup',   { code: code, keyCode: keyCode, bubbles: true });
         document.dispatchEvent(down);
         setTimeout(function() { document.dispatchEvent(up); }, 80);
       }
 
-      function showGameboy() {
-        gate404.style.transition = 'opacity 0.4s';
-        gate404.style.opacity = '0';
-        setTimeout(function() {
-          gate404.style.display = 'none';
-          gbDevice.style.visibility = 'visible';
-          gbDevice.style.opacity = '0';
-          gbDevice.style.transition = 'opacity 0.6s';
-          requestAnimationFrame(function() {
-            gbDevice.style.opacity = '1';
-          });
-          // Show tap-to-start prompt on screen
-          var screen = document.getElementById('gb-screen-inner');
-          screen.innerHTML = '<div id="gb-tap-prompt" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#202124;"><span style="font-family:Press Start 2P,monospace;font-size:8px;color:#666;letter-spacing:1px;animation:gbBlink 1s step-end infinite;">TAP TO START</span></div>';
-          gbReady = true;
-        }, 420);
-      }
-
-      function startGame() {
-        if (gameStarted) return;
-        gameStarted = true;
-        // Clear prompt, init Runner now with real dimensions
-        var screen = document.getElementById('gb-screen-inner');
-        screen.innerHTML = '';
-        Runner.instance_ = null;
-        runner = new Runner('#gb-screen-inner');
-        // After Runner creates canvas, fire touchstart on its container
-        setTimeout(function() {
-          runner.adjustDimensions();
-          if (runner.containerEl) {
-            runner.containerEl.dispatchEvent(new Event('touchstart', { bubbles: true }));
-          }
-        }, 100);
-      }
-
-      function gbJump(e) {
-        if (e && e.preventDefault) e.preventDefault();
-        if (!gbReady) return;
-        if (!gameStarted) { startGame(); return; }
-        fireKey('Space', 32);
-      }
-
-      function gbDuck(e) {
-        if (e && e.preventDefault) e.preventDefault();
-        if (!gbReady || !gameStarted) return;
-        fireKey('ArrowDown', 40);
-      }
+      function gbJump(e) { if (e) e.preventDefault(); fireKey('Space', 32); }
+      function gbDuck(e) { if (e) e.preventDefault(); fireKey('ArrowDown', 40); }
 
       ['touchstart', 'click'].forEach(function(ev) {
         document.getElementById('gb-up').addEventListener(ev, gbJump, { passive: false });
@@ -1187,25 +1165,20 @@
         document.getElementById('gb-b').addEventListener(ev, gbDuck, { passive: false });
       });
 
+      // First input: show gameboy frame (game was already waiting for Space)
       function onFirstInput(e) {
         if (e.type === 'keydown' && e.code !== 'Space') return;
-        e.preventDefault();
         document.removeEventListener('keydown', onFirstInput);
         document.removeEventListener('touchstart', onFirstInput);
         showGameboy();
+        // Forward this input to runner so game starts immediately
+        if (e.type === 'touchstart') {
+          fireKey('Space', 32);
+        }
+        gameStarted = true;
       }
       document.addEventListener('keydown', onFirstInput);
       document.addEventListener('touchstart', onFirstInput, { passive: false });
-
-      // Second tap anywhere on screen starts game
-      document.addEventListener('touchstart', function(e) {
-        if (!gbReady || gameStarted) return;
-        startGame();
-      }, { passive: false });
-
-      document.addEventListener('keydown', function(e) {
-        if (e.code === 'Space' && gbReady && !gameStarted) { e.preventDefault(); startGame(); }
-      });
 
       // Konami Code skip
       var konamiSeq = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
