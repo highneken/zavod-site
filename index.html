@@ -35,6 +35,35 @@
 <body>
 
   <!-- ===== GATE: Chrome offline page (dark) ===== -->
+  <div id="gate">
+    <div class="gate-content">
+      <div class="gate-dino-area">
+        <div class="gate-dino-static">
+          <img src="dino-images/100-percent/100-offline-sprite.png" class="gate-dino-img" alt="">
+        </div>
+        <div class="dino-wrapper">
+          <div class="interstitial-wrapper"></div>
+        </div>
+      </div>
+
+      <h1 class="gate-title">Press space to start the game</h1>
+
+      <p class="gate-sub">Try the following:</p>
+      <ul class="gate-list">
+        <li>Check network cables, modem, and router</li>
+        <li>Reconnect to Wi-Fi</li>
+      </ul>
+
+      <p class="gate-code">ERR_OUTPUT_ONGOING</p>
+
+      <div id="offline-resources">
+        <img id="offline-resources-1x" src="dino-images/100-percent/100-offline-sprite.png">
+        <img id="offline-resources-2x" src="dino-images/200-percent/200-offline-sprite.png">
+        <div id="audio-resources"></div>
+      </div>
+    </div>
+  </div>
+
   <!-- ===== TRANSITION ===== -->
   <div id="transition" class="hidden">
     <p class="transition-text">The scoreboard was never the point.</p>
@@ -1036,53 +1065,50 @@
       }
 
       // ══════════════════════════════════════
-      // ── GATE: Gameboy frame + Konami skip
+      // ── GATE / UNLOCK
       // ══════════════════════════════════════
 
-      var gateText = [
-        document.querySelector('.gate-title'),
-        document.querySelector('.gate-sub'),
-        document.querySelector('.gate-list'),
-        document.querySelector('.gate-code')
-      ];
-
-      function activateGameboyFrame() {
-        // Fade out 404 text
-        gateText.forEach(function(el) {
-          if (!el) return;
-          el.style.transition = 'opacity 0.4s';
-          el.style.opacity = '0';
-          setTimeout(function() { if(el) el.style.display = 'none'; }, 400);
-        });
-        // Add gameboy frame class to gate
-        gateEl.classList.add('gb-active');
+      if (window.location.search.indexOf('skip') > -1) {
+        localStorage.setItem(STORAGE_KEY, '1');
+      }
+      if (localStorage.getItem(STORAGE_KEY)) {
+        showSection(menuEl);
+        initMenu();
+        return;
       }
 
-      // First tap/space → show frame, game starts via normal runner listener
-      var gbFrameShown = false;
-      function onGateFirstInput(e) {
+      var gameStarted = false;
+      var runner = null;
+      var dinoStatic = document.querySelector('.gate-dino-static');
+      var wrapper = document.querySelector('.interstitial-wrapper');
+
+      wrapper.style.position = 'absolute';
+      wrapper.style.opacity = '0';
+      wrapper.style.pointerEvents = 'none';
+      wrapper.style.display = 'block';
+
+      runner = new Runner('.interstitial-wrapper');
+
+      function showGame() {
+        if (gameStarted) return;
+        gameStarted = true;
+        dinoStatic.style.display = 'none';
+        wrapper.style.position = '';
+        wrapper.style.opacity = '1';
+        wrapper.style.pointerEvents = '';
+      }
+
+      function onFirstInput(e) {
         if (e.type === 'keydown' && e.code !== 'Space') return;
-        if (gbFrameShown) return;
-        gbFrameShown = true;
-        activateGameboyFrame();
+        e.preventDefault();
+        showGame();
+        document.removeEventListener('keydown', onFirstInput);
+        document.removeEventListener('touchstart', onFirstInput);
+        runner.adjustDimensions();
+        runner.handleEvent({ type: Runner.events.TOUCHSTART, keyCode: 32, preventDefault: function(){}, target: runner.containerEl });
       }
-      document.addEventListener('keydown', onGateFirstInput);
-      document.addEventListener('touchstart', onGateFirstInput, { passive: true });
-
-      // Konami Code skip
-      var konamiSeq = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
-      var konamiIdx = 0;
-      document.addEventListener('keydown', function(e) {
-        if (e.key === konamiSeq[konamiIdx]) {
-          konamiIdx++;
-          if (konamiIdx === konamiSeq.length) {
-            konamiIdx = 0;
-            document.dispatchEvent(new CustomEvent('zavod-unlock'));
-          }
-        } else {
-          konamiIdx = e.key === konamiSeq[0] ? 1 : 0;
-        }
-      });
+      document.addEventListener('keydown', onFirstInput);
+      document.addEventListener('touchstart', onFirstInput);
 
       document.addEventListener('zavod-unlock', function () {
         localStorage.setItem(STORAGE_KEY, '1');
