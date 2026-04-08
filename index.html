@@ -37,24 +37,31 @@
   <!-- ===== GATE: Chrome offline page (dark) ===== -->
   <div id="gate">
 
-    <!-- Gate: 404 text shown before first tap -->
-    <div id="gate-404" class="gate-content">
-      <h1 class="gate-title">Press space to start the game</h1>
-      <p class="gate-sub">Try the following:</p>
-      <ul class="gate-list">
+    <!-- Original 404 layout — never touch this structure -->
+    <div class="gate-content" id="gate-content">
+      <div class="gate-dino-area">
+        <div class="gate-dino-static">
+          <img src="dino-images/100-percent/100-offline-sprite.png" class="gate-dino-img" alt="">
+        </div>
+        <div class="dino-wrapper">
+          <div class="interstitial-wrapper"></div>
+        </div>
+      </div>
+
+      <h1 class="gate-title" id="gate-title">Press space to start the game</h1>
+
+      <p class="gate-sub" id="gate-sub">Try the following:</p>
+      <ul class="gate-list" id="gate-list">
         <li>Check network cables, modem, and router</li>
         <li>Reconnect to Wi-Fi</li>
       </ul>
-      <p class="gate-code">ERR_OUTPUT_ONGOING</p>
-    </div>
 
-    <!-- Runner lives here from page load — never moved -->
-    <div id="gate-runner">
-      <div class="gate-dino-static" id="gate-dino-static">
-        <img src="dino-images/100-percent/100-offline-sprite.png" class="gate-dino-img" alt="">
-      </div>
-      <div class="dino-wrapper">
-        <div class="interstitial-wrapper"></div>
+      <p class="gate-code" id="gate-code">ERR_OUTPUT_ONGOING</p>
+
+      <div id="offline-resources" style="position:absolute;width:0;height:0;overflow:hidden;pointer-events:none">
+        <img id="offline-resources-1x" src="dino-images/100-percent/100-offline-sprite.png">
+        <img id="offline-resources-2x" src="dino-images/200-percent/200-offline-sprite.png">
+        <div id="audio-resources"></div>
       </div>
     </div>
 
@@ -1129,22 +1136,24 @@
 
       var gameStarted = false;
       var gbFrame = document.getElementById('gb-frame');
-      var gate404 = document.getElementById('gate-404');
-      var gateDinoStatic = document.getElementById('gate-dino-static');
+      var gateTitle = document.getElementById('gate-title');
+      var gateSub = document.getElementById('gate-sub');
+      var gateList = document.getElementById('gate-list');
+      var gateCode = document.getElementById('gate-code');
 
       function showGameboy() {
-        // Fade out 404 text
-        gate404.style.transition = 'opacity 0.4s';
-        gate404.style.opacity = '0';
-        setTimeout(function() { gate404.style.display = 'none'; }, 400);
-        // Hide static dino image
-        if (gateDinoStatic) gateDinoStatic.style.display = 'none';
-        // Show GB frame overlay with fade
-        gbFrame.style.display = 'block';
+        // Fade out 404 text elements only — keep dino/runner in place
+        [gateTitle, gateSub, gateList, gateCode].forEach(function(el) {
+          if (!el) return;
+          el.style.transition = 'opacity 0.4s';
+          el.style.opacity = '0';
+          setTimeout(function() { el.style.display = 'none'; }, 400);
+        });
+        // Show GB frame overlay
+        gbFrame.style.display = 'flex';
         gbFrame.style.opacity = '0';
         gbFrame.style.transition = 'opacity 0.5s';
         requestAnimationFrame(function() { gbFrame.style.opacity = '1'; });
-        // Make gate background black (game vibe)
         document.getElementById('gate').style.background = '#111';
       }
 
