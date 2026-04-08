@@ -1035,6 +1035,55 @@
         });
       }
 
+      // ══════════════════════════════════════
+      // ── GATE: Gameboy frame + Konami skip
+      // ══════════════════════════════════════
+
+      var gateText = [
+        document.querySelector('.gate-title'),
+        document.querySelector('.gate-sub'),
+        document.querySelector('.gate-list'),
+        document.querySelector('.gate-code')
+      ];
+
+      function activateGameboyFrame() {
+        // Fade out 404 text
+        gateText.forEach(function(el) {
+          if (!el) return;
+          el.style.transition = 'opacity 0.4s';
+          el.style.opacity = '0';
+          setTimeout(function() { if(el) el.style.display = 'none'; }, 400);
+        });
+        // Add gameboy frame class to gate
+        gateEl.classList.add('gb-active');
+      }
+
+      // First tap/space → show frame, game starts via normal runner listener
+      var gbFrameShown = false;
+      function onGateFirstInput(e) {
+        if (e.type === 'keydown' && e.code !== 'Space') return;
+        if (gbFrameShown) return;
+        gbFrameShown = true;
+        activateGameboyFrame();
+      }
+      document.addEventListener('keydown', onGateFirstInput);
+      document.addEventListener('touchstart', onGateFirstInput, { passive: true });
+
+      // Konami Code skip
+      var konamiSeq = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+      var konamiIdx = 0;
+      document.addEventListener('keydown', function(e) {
+        if (e.key === konamiSeq[konamiIdx]) {
+          konamiIdx++;
+          if (konamiIdx === konamiSeq.length) {
+            konamiIdx = 0;
+            document.dispatchEvent(new CustomEvent('zavod-unlock'));
+          }
+        } else {
+          konamiIdx = e.key === konamiSeq[0] ? 1 : 0;
+        }
+      });
+
       document.addEventListener('zavod-unlock', function () {
         localStorage.setItem(STORAGE_KEY, '1');
         setTimeout(function () {

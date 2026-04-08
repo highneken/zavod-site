@@ -203,6 +203,35 @@ body::before {
   background: #0c0c0c;
 }
 
+@keyframes gbBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ── Gameboy frame — applied to #gate when game starts ── */
+#gate.gb-active {
+  background: #111 !important;
+}
+
+#gate.gb-active .gate-content {
+  padding-top: 24px;
+  justify-content: flex-start;
+}
+
+#gate.gb-active .gate-dino-area {
+  background: #202124;
+  border: 8px solid #1a1a1a;
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  box-shadow: 0 0 0 2px #0a0a0a, 0 -4px 0 #111;
+  width: calc(100% + 0px);
+  padding: 6px 6px 0;
+}
+
+#gate.gb-active .gate-dino-static {
+  display: none;
+}
+
 /* ── Gate (Chrome offline – dark mode) ── */
 #gate {
   min-height: 100vh;
