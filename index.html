@@ -1132,24 +1132,6 @@
         setTimeout(function() { document.dispatchEvent(up); }, 80);
       }
 
-      function waitForWidth(el, cb) {
-        if (el.offsetWidth > 0) { cb(); return; }
-        var t = setInterval(function() {
-          if (el.offsetWidth > 0) { clearInterval(t); cb(); }
-        }, 30);
-      }
-
-      function initRunner() {
-        Runner.instance_ = null;
-        var screenEl = document.getElementById('gb-screen-inner');
-        runner = new Runner('#gb-screen-inner');
-        // Poll until canvas has real width
-        waitForWidth(screenEl, function() {
-          runner.adjustDimensions();
-          gbReady = true;
-        });
-      }
-
       function showGameboy() {
         gate404.style.transition = 'opacity 0.4s';
         gate404.style.opacity = '0';
@@ -1160,19 +1142,29 @@
           gbDevice.style.transition = 'opacity 0.6s';
           requestAnimationFrame(function() {
             gbDevice.style.opacity = '1';
-            initRunner();
           });
+          // Show tap-to-start prompt on screen
+          var screen = document.getElementById('gb-screen-inner');
+          screen.innerHTML = '<div id="gb-tap-prompt" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#202124;"><span style="font-family:Press Start 2P,monospace;font-size:8px;color:#666;letter-spacing:1px;animation:gbBlink 1s step-end infinite;">TAP TO START</span></div>';
+          gbReady = true;
         }, 420);
       }
 
       function startGame() {
-        if (gameStarted || !runner) return;
+        if (gameStarted) return;
         gameStarted = true;
-        // Use Runner's own onKeyDown via a real keydown on document
-        var ke = new KeyboardEvent('keydown', {
-          keyCode: 32, code: 'Space', which: 32, bubbles: true, cancelable: true
-        });
-        document.dispatchEvent(ke);
+        // Clear prompt, init Runner now with real dimensions
+        var screen = document.getElementById('gb-screen-inner');
+        screen.innerHTML = '';
+        Runner.instance_ = null;
+        runner = new Runner('#gb-screen-inner');
+        // After Runner creates canvas, fire touchstart on its container
+        setTimeout(function() {
+          runner.adjustDimensions();
+          if (runner.containerEl) {
+            runner.containerEl.dispatchEvent(new Event('touchstart', { bubbles: true }));
+          }
+        }, 100);
       }
 
       function gbJump(e) {
