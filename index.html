@@ -1113,11 +1113,9 @@
 
       var gameStarted = false;
       var gbReady = false;
+      var runner = null;
       var gbDevice = document.getElementById('gb-device');
       var gate404 = document.getElementById('gate-404');
-
-      // Init Runner immediately — gb-device uses visibility:hidden so it has real dimensions
-      var runner = new Runner('#gb-screen-inner');
 
       function fireKey(code, keyCode) {
         var down = new KeyboardEvent('keydown', { code: code, keyCode: keyCode, bubbles: true });
@@ -1126,28 +1124,45 @@
         setTimeout(function() { document.dispatchEvent(up); }, 80);
       }
 
+      function initRunner() {
+        // Reset singleton in case of re-init
+        Runner.instance_ = null;
+        runner = new Runner('#gb-screen-inner');
+        // Wait for Runner to finish its own init (sprite load etc.)
+        setTimeout(function() {
+          runner.adjustDimensions();
+          gbReady = true;
+        }, 400);
+      }
+
       function showGameboy() {
+        // Step 1: fade out 404
         gate404.style.transition = 'opacity 0.4s';
         gate404.style.opacity = '0';
         setTimeout(function() {
           gate404.style.display = 'none';
-          // Reveal GB (was visibility:hidden, now visible)
+          // Step 2: make GB fully visible in DOM with real layout
           gbDevice.style.visibility = 'visible';
           gbDevice.style.opacity = '0';
-          gbDevice.style.transition = 'opacity 0.5s';
-          requestAnimationFrame(function() { gbDevice.style.opacity = '1'; });
-          setTimeout(function() {
-            runner.adjustDimensions();
-            gbReady = true;
-          }, 300);
+          gbDevice.style.transition = 'opacity 0.6s';
+          // Step 3: force layout paint, THEN init runner
+          requestAnimationFrame(function() {
+            requestAnimationFrame(function() {
+              // Now GB has real dimensions — init Runner
+              initRunner();
+              gbDevice.style.opacity = '1';
+            });
+          });
         }, 420);
       }
 
       function startGame() {
-        if (gameStarted) return;
+        if (gameStarted || !runner) return;
         gameStarted = true;
-        // Fire space keydown — Runner listens to document keydown
-        var ke = new KeyboardEvent('keydown', { keyCode: 32, code: 'Space', which: 32, bubbles: true });
+        // Use Runner's own onKeyDown via a real keydown on document
+        var ke = new KeyboardEvent('keydown', {
+          keyCode: 32, code: 'Space', which: 32, bubbles: true, cancelable: true
+        });
         document.dispatchEvent(ke);
       }
 
