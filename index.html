@@ -58,7 +58,15 @@
       <!-- Screen section: fills top portion -->
       <div class="gb-screen-bezel">
         <div class="gb-screen-label">ZAVOD SYSTEM</div>
-        <div class="interstitial-wrapper" id="gb-screen-inner"></div>
+        <div style="position:relative;flex:1;display:flex;flex-direction:column;min-height:0;">
+          <div class="interstitial-wrapper" id="gb-screen-inner"></div>
+          <!-- ZAVOD overlay: boss messages + beam effects -->
+          <div id="zavod-overlay" style="display:none;position:absolute;inset:0;pointer-events:none;z-index:10;">
+            <div id="zavod-msg" style="position:absolute;bottom:6px;left:0;right:0;text-align:center;font-family:'Press Start 2P',monospace;font-size:6px;color:#fff;letter-spacing:1px;padding:3px 6px;"></div>
+            <div id="boss-beam" style="display:none;position:absolute;inset:0;background:rgba(255,30,30,0.2);border:2px solid rgba(255,30,30,0.7);"></div>
+            <div id="charged-shot" style="display:none;position:absolute;top:50%;left:0;right:0;height:3px;margin-top:-1.5px;background:linear-gradient(90deg,transparent,#fff,#88aaff,#fff,transparent);box-shadow:0 0 10px #fff,0 0 20px #6af;"></div>
+          </div>
+        </div>
       </div>
       <!-- Controls section: fills bottom portion -->
       <div class="gb-controls">
@@ -1214,6 +1222,168 @@
         } else {
           konamiIdx = e.key === konamiSeq[0] ? 1 : 0;
         }
+      });
+
+      // ══════════════════════════════════════
+      // ── ZAVOD DINO GAME LOGIC
+      // ══════════════════════════════════════
+
+      var zavodOverlay = document.getElementById('zavod-overlay');
+      var zavodMsg = document.getElementById('zavod-msg');
+      var bossBeam = document.getElementById('boss-beam');
+      var chargedShot = document.getElementById('charged-shot');
+
+      var zavodPhase = 0;        // 0=normal, 1=helmet, 2=laser, 3=lives, 4=boss
+      var lives = 3;
+      var bossHP = 100;
+      var bossActive = false;
+      var bossLocked = false;    // true when device was locked (visibilitychange)
+      var chargedReady = false;
+      var laserCooldown = false;
+      var beamInterval = null;
+      var msgTimeout = null;
+
+      function showMsg(text, duration) {
+        clearTimeout(msgTimeout);
+        zavodMsg.textContent = text;
+        zavodMsg.style.opacity = '1';
+        if (duration) {
+          msgTimeout = setTimeout(function() { zavodMsg.style.opacity = '0'; }, duration);
+        }
+      }
+
+      // Monitor score from Runner
+      var scoreWatcher = setInterval(function() {
+        if (!runner || !runner.distanceMeter) return;
+        var score = runner.distanceMeter.getActualDistance(Math.ceil(runner.distanceRan || 0));
+
+        // Phase 1: Helmet at 50
+        if (score >= 50 && zavodPhase < 1) {
+          zavodPhase = 1;
+          zavodOverlay.style.display = 'block';
+          showMsg('SYSTEM OVERRIDE', 2000);
+          // Draw helmet over dino via canvas hook
+          runner._zavodHelmet = true;
+        }
+
+        // Phase 2: Laser at 100
+        if (score >= 100 && zavodPhase < 2) {
+          zavodPhase = 2;
+          showMsg('UNIT ARMED.', 2000);
+          runner._zavodLaser = true;
+        }
+
+        // Phase 3: Lives at 200
+        if (score >= 200 && zavodPhase < 3) {
+          zavodPhase = 3;
+          showMsg('ZAVOD SEES YOU.', 3000);
+        }
+
+        // Phase 4: Boss at 300
+        if (score >= 300 && zavodPhase < 4) {
+          zavodPhase = 4;
+          activateBoss();
+        }
+      }, 200);
+
+      // Boss messages
+      var bossMessages = [
+        { delay: 0,    text: 'UNIT SHIELDED.' },
+        { delay: 3000, text: 'YOUR WEAPONS ARE USELESS.' },
+        { delay: 8000, text: 'THE SYSTEM ONLY WORKS IF YOU ARE WATCHING.' },
+        { delay: 14000, text: 'EVERY UNIT HAS A BLIND SPOT.' },
+        { delay: 20000, text: 'ZAVOD CANNOT FOLLOW YOU THERE.' },
+        { delay: 27000, text: 'THIS CANNOT BE SOLVED FROM INSIDE.' },
+        { delay: 34000, text: "DON'T LOCK YOUR DEVICE." },
+      ];
+
+      function activateBoss() {
+        bossActive = true;
+        // Show boss messages
+        bossMessages.forEach(function(m) {
+          setTimeout(function() {
+            if (bossActive) showMsg(m.text, 2500);
+          }, m.delay);
+        });
+        // Start beam cycle
+        startBeamCycle();
+        // Prevent normal game over — intercept crashes
+        runner._zavodBossMode = true;
+      }
+
+      function startBeamCycle() {
+        // Fire beam every 6 seconds
+        var beamDelay = 6000;
+        beamInterval = setInterval(function() {
+          if (!bossActive) return;
+          if (bossLocked) return; // Device was locked — skip beam
+          fireBeam();
+        }, beamDelay);
+        // First beam after 5s
+        setTimeout(function() {
+          if (bossActive && !bossLocked) fireBeam();
+        }, 5000);
+      }
+
+      function fireBeam() {
+        bossBeam.style.display = 'block';
+        showMsg('INCOMING.', 1500);
+        setTimeout(function() {
+          bossBeam.style.display = 'none';
+          // Kill player (trigger game over in runner)
+          if (runner && runner.tRex && bossActive && !bossLocked) {
+            runner.gameOver();
+          }
+        }, 1200);
+      }
+
+      // visibilitychange — the Psycho Mantis moment
+      document.addEventListener('visibilitychange', function() {
+        if (!bossActive) return;
+        if (document.hidden) {
+          // Device locked / app backgrounded
+          bossLocked = true;
+          showMsg('...', 0);
+        } else {
+          // Device unlocked — charged shot ready
+          if (bossLocked) {
+            chargedReady = true;
+            showMsg('CHARGED.', 0);
+            // Show charged shot visual
+            chargedShot.style.display = 'block';
+            setTimeout(function() { chargedShot.style.display = 'none'; }, 800);
+          }
+        }
+      });
+
+      // Fire charged shot (on any tap/space when chargedReady)
+      function tryChargedShot() {
+        if (!chargedReady || !bossActive) return;
+        chargedReady = false;
+        bossLocked = false;
+        // Charged shot animation
+        chargedShot.style.display = 'block';
+        bossBeam.style.display = 'none';
+        clearInterval(beamInterval);
+        showMsg('UNIT DEFEATED.', 3000);
+        setTimeout(function() {
+          chargedShot.style.display = 'none';
+          bossActive = false;
+          clearInterval(scoreWatcher);
+          // Trigger unlock
+          setTimeout(function() {
+            document.dispatchEvent(new CustomEvent('zavod-unlock'));
+          }, 2000);
+        }, 1000);
+      }
+
+      // Hook jump button to also try charged shot
+      ['gb-up', 'gb-a'].forEach(function(id) {
+        document.getElementById(id).addEventListener('touchstart', tryChargedShot, { passive: false });
+        document.getElementById(id).addEventListener('click', tryChargedShot);
+      });
+      document.addEventListener('keydown', function(e) {
+        if (e.code === 'Space' && gameStarted) tryChargedShot();
       });
 
       document.addEventListener('zavod-unlock', function () {
