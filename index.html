@@ -1124,34 +1124,35 @@
         setTimeout(function() { document.dispatchEvent(up); }, 80);
       }
 
+      function waitForWidth(el, cb) {
+        if (el.offsetWidth > 0) { cb(); return; }
+        var t = setInterval(function() {
+          if (el.offsetWidth > 0) { clearInterval(t); cb(); }
+        }, 30);
+      }
+
       function initRunner() {
-        // Reset singleton in case of re-init
         Runner.instance_ = null;
+        var screenEl = document.getElementById('gb-screen-inner');
         runner = new Runner('#gb-screen-inner');
-        // Wait for Runner to finish its own init (sprite load etc.)
-        setTimeout(function() {
+        // Poll until canvas has real width
+        waitForWidth(screenEl, function() {
           runner.adjustDimensions();
           gbReady = true;
-        }, 400);
+        });
       }
 
       function showGameboy() {
-        // Step 1: fade out 404
         gate404.style.transition = 'opacity 0.4s';
         gate404.style.opacity = '0';
         setTimeout(function() {
           gate404.style.display = 'none';
-          // Step 2: make GB fully visible in DOM with real layout
           gbDevice.style.visibility = 'visible';
           gbDevice.style.opacity = '0';
           gbDevice.style.transition = 'opacity 0.6s';
-          // Step 3: force layout paint, THEN init runner
           requestAnimationFrame(function() {
-            requestAnimationFrame(function() {
-              // Now GB has real dimensions — init Runner
-              initRunner();
-              gbDevice.style.opacity = '1';
-            });
+            gbDevice.style.opacity = '1';
+            initRunner();
           });
         }, 420);
       }
