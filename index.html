@@ -1110,60 +1110,6 @@
       document.addEventListener('keydown', onFirstInput);
       document.addEventListener('touchstart', onFirstInput);
 
-      // ── Helm: sprite swap at score 100 ───────────────────
-      // At score 100: obstacles pause 2s, sprite swaps to helm version
-      // Helm blinks 3x (swap back/forth), then locks permanently
-
-      var helmTriggered = false;
-
-      function swapToHelmSprite(locked) {
-        var src = locked
-          ? 'dino-images/100-percent/100-offline-sprite-helm.png'
-          : 'dino-images/100-percent/100-offline-sprite.png';
-        if (Runner.imageSprite.src.indexOf('helm') === -1 || !locked) {
-          var img = new Image();
-          img.onload = function() { Runner.imageSprite = img; };
-          img.src = src;
-        }
-      }
-
-      function triggerHelm() {
-        var r = Runner.instance_;
-        var savedSpeed = r.currentSpeed;
-
-        // Pause obstacles for 2s
-        r.currentSpeed = 0;
-        setTimeout(function() { r.currentSpeed = savedSpeed; }, 2000);
-
-        // Blink 3x by alternating sprite
-        var blinks = 0;
-        var helmOn = false;
-        var blinkIv = setInterval(function() {
-          helmOn = !helmOn;
-          var img = new Image();
-          var src = helmOn
-            ? 'dino-images/100-percent/100-offline-sprite-helm.png'
-            : 'dino-images/100-percent/100-offline-sprite.png';
-          img.onload = function() { Runner.imageSprite = img; };
-          img.src = src;
-          if (helmOn) blinks++;
-          if (blinks >= 3 && helmOn) {
-            clearInterval(blinkIv);
-            // Locked — helm stays forever
-          }
-        }, 280);
-      }
-
-      setInterval(function() {
-        var r = Runner.instance_;
-        if (!r || !r.distanceMeter || !r.playing) return;
-        var score = Math.ceil(r.distanceRan || 0);
-        if (!helmTriggered && score >= 100) {
-          helmTriggered = true;
-          triggerHelm();
-        }
-      }, 100);
-
       document.addEventListener('zavod-unlock', function () {
         localStorage.setItem(STORAGE_KEY, '1');
         setTimeout(function () {
