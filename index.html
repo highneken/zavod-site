@@ -1110,6 +1110,137 @@
       document.addEventListener('keydown', onFirstInput);
       document.addEventListener('touchstart', onFirstInput);
 
+      // ── Helm Overlay ──────────────────────────────────────
+      var helmCanvas = document.createElement('canvas');
+      helmCanvas.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:5;';
+      helmCanvas.id = 'helm-canvas';
+      document.querySelector('.gate-dino-area').style.position = 'relative';
+      document.querySelector('.gate-dino-area').appendChild(helmCanvas);
+
+      var helmActive = false;
+      var helmBlinkCount = 0;
+      var helmVisible = false;
+      var helmLocked = false; // permanent after 3 blinks
+      var helmPhase = 0; // 0=inactive, 1=blinking, 2=locked
+
+      function drawHelm(ctx, x, y, visible) {
+        if (!visible) return;
+        var scale = helmCanvas.width / 600; // scale with canvas
+        var hx = x * scale;
+        var hy = y * scale;
+        var s = scale;
+
+        ctx.save();
+        ctx.strokeStyle = '#00ffcc';
+        ctx.fillStyle = 'rgba(0,255,180,0.08)';
+        ctx.lineWidth = 1.5 * s;
+        ctx.shadowColor = '#00ffcc';
+        ctx.shadowBlur = 6 * s;
+
+        // Helm body — angular Greymon-style helmet
+        // Main visor triangle
+        ctx.beginPath();
+        ctx.moveTo(hx + 22*s, hy - 2*s);   // top center
+        ctx.lineTo(hx + 44*s, hy + 12*s);  // right
+        ctx.lineTo(hx + 44*s, hy + 28*s);  // right bottom
+        ctx.lineTo(hx + 22*s, hy + 22*s);  // center bottom
+        ctx.lineTo(hx,        hy + 28*s);  // left bottom
+        ctx.lineTo(hx,        hy + 12*s);  // left
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Center ridge line
+        ctx.beginPath();
+        ctx.moveTo(hx + 22*s, hy - 2*s);
+        ctx.lineTo(hx + 22*s, hy + 22*s);
+        ctx.strokeStyle = 'rgba(0,255,180,0.4)';
+        ctx.lineWidth = 1 * s;
+        ctx.stroke();
+
+        // Horn left
+        ctx.beginPath();
+        ctx.moveTo(hx + 6*s,  hy + 6*s);
+        ctx.lineTo(hx - 4*s,  hy - 8*s);
+        ctx.lineTo(hx + 10*s, hy + 2*s);
+        ctx.strokeStyle = '#00ffcc';
+        ctx.lineWidth = 1.5 * s;
+        ctx.stroke();
+
+        // Horn right
+        ctx.beginPath();
+        ctx.moveTo(hx + 38*s, hy + 6*s);
+        ctx.lineTo(hx + 48*s, hy - 8*s);
+        ctx.lineTo(hx + 34*s, hy + 2*s);
+        ctx.stroke();
+
+        ctx.restore();
+      }
+
+      function runHelmLoop() {
+        var canvas = document.querySelector('canvas.runner-canvas');
+        if (!canvas) return;
+        var hc = document.getElementById('helm-canvas');
+        if (!hc) return;
+        hc.width  = canvas.offsetWidth;
+        hc.height = canvas.offsetHeight;
+        var ctx = hc.getContext('2d');
+        ctx.clearRect(0, 0, hc.width, hc.height);
+
+        if (!helmActive) return;
+
+        var r = Runner.instance_;
+        if (!r || !r.tRex) return;
+        var scale = hc.width / 600;
+        var tx = r.tRex.xPos * scale;
+        var ty = r.tRex.yPos * scale;
+
+        if (helmPhase === 1) {
+          // blinking: 3 times, 250ms on/off
+          drawHelm(ctx, tx, ty, helmVisible);
+        } else if (helmPhase === 2) {
+          drawHelm(ctx, tx, ty, true);
+        }
+      }
+
+      function startHelmBlink() {
+        helmActive = true;
+        helmPhase = 1;
+        var blinks = 0;
+        var iv = setInterval(function() {
+          helmVisible = !helmVisible;
+          if (helmVisible) blinks++;
+          if (blinks >= 3 && !helmVisible) {
+            clearInterval(iv);
+            helmVisible = true;
+            helmPhase = 2;
+          }
+        }, 250);
+      }
+
+      var helmTriggered = false;
+      var savedSpeed = null;
+
+      setInterval(function() {
+        var r = Runner.instance_;
+        if (!r || !r.distanceMeter || !r.playing) return;
+        var score = Math.ceil(r.distanceRan || 0);
+
+        // Phase 1: score 100 — pause obstacles, show helm
+        if (!helmTriggered && score >= 100) {
+          helmTriggered = true;
+          savedSpeed = r.currentSpeed;
+          // Slow obstacles to 0 for 2s
+          r.currentSpeed = 0;
+          setTimeout(function() {
+            r.currentSpeed = savedSpeed;
+          }, 2000);
+          startHelmBlink();
+        }
+
+        runHelmLoop();
+      }, 50);
+
       document.addEventListener('zavod-unlock', function () {
         localStorage.setItem(STORAGE_KEY, '1');
         setTimeout(function () {
