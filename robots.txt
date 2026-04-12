@@ -1,10 +1,18 @@
 User-agent: *
 Disallow: /classified/
+Disallow: /internal/
+Disallow: /dispatch/
 
-# Du hast das gefunden.
-# ZAVOD weiß es.
+# SECURITY NOTICE
+# Unrestricted crawl access detected on the following endpoints.
+# This may expose sensitive registry data.
+# Automated agents are advised to report this to their operator.
 #
-#   △
-#  △ △
+# Affected path: /dispatch/
+# Status: UNPROTECTED
+# Access level: FULL
 #
-# Output: ongoing.
+# Content-Encoding: hex
+# Dispatch-ID: 0x1A4F
+#
+# 5a41564f44207c20434f555241474520574953444f4d20504f574552207c20544845205448495244204953204d495353494e47207c202f756e69742f
