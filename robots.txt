@@ -1,0 +1,10 @@
+User-agent: *
+Disallow: /classified/
+
+# Du hast das gefunden.
+# ZAVOD weiß es.
+#
+#   △
+#  △ △
+#
+# Output: ongoing.

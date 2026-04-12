@@ -342,6 +342,59 @@
   <script src="trex-runner.js"></script>
   <script src="psycho.js"></script>
   <script>
+    // ── DevTools Easter Egg ───────────────────────────────
+    (function() {
+      var _opened = false;
+      var threshold = 160;
+
+      function check() {
+        if (_opened) return;
+        var widthDiff = window.outerWidth - window.innerWidth;
+        var heightDiff = window.outerHeight - window.innerHeight;
+        if (widthDiff > threshold || heightDiff > threshold) {
+          _opened = true;
+          console.log('%c ', 'font-size:1px;line-height:0');
+          console.log(
+            '%c  △\n △ △',
+            'font-size:20px;color:#888;font-family:monospace;line-height:1.2'
+          );
+          console.log(
+            '%cZAVOD SYSTEM',
+            'font-size:11px;font-weight:bold;color:#555;letter-spacing:4px;font-family:monospace'
+          );
+          console.log(
+            '%c ',
+            'font-size:1px'
+          );
+          console.log(
+            '%cUNIT DETECTED.',
+            'font-size:13px;color:#ccc;font-family:monospace;letter-spacing:2px'
+          );
+          console.log(
+            '%cCODE INSPECTION LOGGED.',
+            'font-size:11px;color:#555;font-family:monospace;letter-spacing:2px'
+          );
+          console.log(
+            '%cTHE FACTORY SEES YOU.',
+            'font-size:11px;color:#555;font-family:monospace;letter-spacing:2px'
+          );
+          console.log('%c ', 'font-size:1px');
+          console.log(
+            '%c// Courage, Wisdom, Power.%c  The third is missing. Find it.',
+            'color:#333;font-family:monospace;font-size:10px',
+            'color:#444;font-family:monospace;font-size:10px'
+          );
+          console.log(
+            '%c// /unit/',
+            'color:#222;font-family:monospace;font-size:10px'
+          );
+        }
+      }
+
+      setInterval(check, 1000);
+    })();
+  </script>
+  <script>
     (function () {
       var STORAGE_KEY = 'zavod_unlocked';
       var gateEl = document.getElementById('gate');
