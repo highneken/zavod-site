@@ -242,6 +242,12 @@ body::before {
   border-left-color: var(--item-accent);
 }
 
+.menu-item:focus-visible {
+  border-left-color: var(--item-accent);
+  outline: 1px solid rgba(255, 255, 255, 0.22);
+  outline-offset: 2px;
+}
+
 .menu-cursor {
   display: inline-block;
   width: 1.2em;
@@ -266,6 +272,17 @@ body::before {
 
 .section-back:hover {
   color: #fff;
+}
+
+.section-back:focus-visible,
+.if-close:focus-visible,
+.reg-btn:focus-visible,
+.reg-id-bar-disconnect:focus-visible,
+.out-filter:focus-visible,
+.out-range-btn:focus-visible,
+.out-cell:focus-visible {
+  outline: 1px solid rgba(255, 255, 255, 0.3);
+  outline-offset: 2px;
 }
 
 /* ══════════════════════════════════════
@@ -469,6 +486,14 @@ body::before {
   color: #666;
   letter-spacing: 1px;
   margin-bottom: 20px;
+}
+
+.reg-disclaimer {
+  font-size: 7px;
+  color: #4d4d4d;
+  letter-spacing: 0.5px;
+  line-height: 1.8;
+  margin-bottom: 18px;
 }
 
 .reg-hero-line {
@@ -871,6 +896,13 @@ body::before {
   display: flex;
   align-items: center;
   gap: 0;
+}
+
+.out-disclaimer {
+  margin-top: 10px;
+  font-size: 7px;
+  color: #3e3e3e;
+  letter-spacing: 0.5px;
 }
 
 .out-stat {

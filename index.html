@@ -4,18 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ZAVOD</title>
-  <meta name="description" content="ZAVOD — Digital art for gamers.">
+  <meta name="description" content="ZAVOD — interactive digital art interface for gamers and the PERMISSIONLESS registry preview.">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#000000">
+  <link rel="canonical" href="https://highneken.github.io/zavod-site/">
 
   <!-- OG / Social -->
   <meta property="og:title" content="ZAVOD">
-  <meta property="og:description" content="Digital art for gamers.">
+  <meta property="og:description" content="Interactive digital art interface for gamers and the PERMISSIONLESS registry preview.">
   <meta property="og:image" content="https://highneken.github.io/zavod-site/images/skilltree.png">
   <meta property="og:url" content="https://highneken.github.io/zavod-site/">
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="ZAVOD">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@byZavod">
   <meta name="twitter:title" content="ZAVOD">
-  <meta name="twitter:description" content="Digital art for gamers.">
+  <meta name="twitter:description" content="Interactive digital art interface for gamers and the PERMISSIONLESS registry preview.">
   <meta name="twitter:image" content="https://highneken.github.io/zavod-site/images/skilltree.png">
 
   <!-- Favicon -->
@@ -58,8 +62,8 @@
       <p class="gate-code">ERR_OUTPUT_ONGOING</p>
 
       <div id="offline-resources">
-        <img id="offline-resources-1x" src="dino-images/100-percent/100-offline-sprite.png">
-        <img id="offline-resources-2x" src="dino-images/200-percent/200-offline-sprite.png">
+        <img id="offline-resources-1x" src="dino-images/100-percent/100-offline-sprite.png" alt="" aria-hidden="true">
+        <img id="offline-resources-2x" src="dino-images/200-percent/200-offline-sprite.png" alt="" aria-hidden="true">
         <div id="audio-resources"></div>
       </div>
     </div>
@@ -78,12 +82,12 @@
 
       <div class="menu-psycho" id="menu-psycho"></div>
 
-      <nav class="menu-nav">
-        <div class="menu-item active" data-action="interface"><span class="menu-cursor">&gt;</span> INTERFACE</div>
-        <div class="menu-item" data-action="shop"><span class="menu-cursor">&gt;</span> SHOP</div>
-        <div class="menu-item" data-action="output"><span class="menu-cursor">&gt;</span> OUTPUT</div>
-        <div class="menu-item" data-action="log"><span class="menu-cursor">&gt;</span> LOG</div>
-        <div class="menu-item" data-action="about"><span class="menu-cursor">&gt;</span> ABOUT</div>
+      <nav class="menu-nav" aria-label="Main navigation">
+        <div class="menu-item active" data-action="interface" role="button" tabindex="0" aria-label="Open interface"><span class="menu-cursor">&gt;</span> INTERFACE</div>
+        <div class="menu-item" data-action="shop" role="button" tabindex="-1" aria-label="Open shop registry"><span class="menu-cursor">&gt;</span> SHOP</div>
+        <div class="menu-item" data-action="output" role="button" tabindex="-1" aria-label="Open output browser"><span class="menu-cursor">&gt;</span> OUTPUT</div>
+        <div class="menu-item" data-action="log" role="button" tabindex="-1" aria-label="Open log"><span class="menu-cursor">&gt;</span> LOG</div>
+        <div class="menu-item" data-action="about" role="button" tabindex="-1" aria-label="Open about"><span class="menu-cursor">&gt;</span> ABOUT</div>
       </nav>
     </div>
 
@@ -101,16 +105,16 @@
     <div class="if-container">
       <div class="if-header">
         <span class="if-label"><span class="if-status-dot">●</span> ZAVOD//INTERFACE</span>
-        <a href="#" class="if-close" id="if-close">ESC</a>
+        <a href="#" class="if-close" id="if-close" aria-label="Back to menu">ESC</a>
       </div>
 
-      <div class="if-body" id="if-body">
+      <div class="if-body" id="if-body" role="log" aria-live="polite" aria-relevant="additions text">
         <div class="if-line if-system">System active.</div>
       </div>
 
       <div class="if-input-row">
         <span class="if-prompt">&gt;</span>
-        <input type="text" class="if-input" id="if-input" autocomplete="off" spellcheck="false" placeholder="enter signal">
+        <input type="text" class="if-input" id="if-input" autocomplete="off" spellcheck="false" placeholder="enter signal" aria-label="Interface command input">
       </div>
     </div>
   </div>
@@ -119,14 +123,15 @@
   <div id="shop" class="hidden">
     <div class="shop-container">
       <div class="shop-header">
-        <a href="#" class="section-back" data-back="shop">&#8592; BACK</a>
+        <a href="#" class="section-back" data-back="shop" aria-label="Back to menu">&#8592; BACK</a>
         <span class="shop-label">ZAVOD//REGISTRY</span>
       </div>
 
       <!-- Collection Header -->
       <div class="reg-hero">
         <div class="reg-hero-title">PERMISSIONLESS</div>
-        <div class="reg-hero-sub">10,000 Units · Digital Collectible Registry · ZAVOD</div>
+        <div class="reg-hero-sub">10,000 Units · Registry Simulation · ZAVOD</div>
+        <p class="reg-disclaimer">Simulation only — no wallet connection, no on-chain claim, no mint transaction.</p>
         <div class="reg-hero-line"></div>
 
         <!-- Scale indicator — visual grid suggesting volume -->
@@ -162,7 +167,7 @@
         <!-- Collection index hint -->
         <div class="reg-index-hint">
           <span class="reg-index-range">UNIT #0001 — #9999</span>
-          <span class="reg-index-note">Each unit is unique. Assignment is random.</span>
+          <span class="reg-index-note">Each unit is unique. Assignment is random in this simulation.</span>
         </div>
       </div>
 
@@ -174,7 +179,7 @@
         </div>
         <div class="reg-panel-body" id="reg-access-body">
           <div class="reg-panel-desc">IDENTITY UNVERIFIED<br>REGISTRY ACCESS DENIED</div>
-          <button class="reg-btn" id="reg-link-btn">LINK IDENTITY</button>
+          <button class="reg-btn" id="reg-link-btn" type="button">LINK IDENTITY</button>
         </div>
       </div>
 
@@ -194,7 +199,7 @@
               <span class="reg-unit-sub">UNIT ASSIGNED ON CLAIM · IRREVERSIBLE</span>
             </div>
           </div>
-          <button class="reg-btn reg-btn-accent" id="reg-claim-btn">CLAIM UNIT</button>
+          <button class="reg-btn reg-btn-accent" id="reg-claim-btn" type="button">CLAIM UNIT</button>
         </div>
       </div>
 
@@ -211,18 +216,18 @@
             </div>
             <div class="reg-held-details">
               <span class="reg-held-title" id="reg-held-title">UNIT #0042</span>
-              <span class="reg-held-owner" id="reg-held-owner">Owner: —</span>
+              <span class="reg-held-owner" id="reg-held-owner">Identity: —</span>
               <span class="reg-held-collection">PERMISSIONLESS</span>
             </div>
           </div>
-          <div class="reg-held-msg">UNIT LOCKED TO IDENTITY.<br>THE SYSTEM REMEMBERS.</div>
+          <div class="reg-held-msg">SIMULATED UNIT LOCKED TO IDENTITY.<br>THE SYSTEM REMEMBERS.</div>
         </div>
       </div>
 
       <!-- Identity bar (persistent after link) -->
       <div class="reg-id-bar hidden" id="reg-id-bar">
         <span class="reg-id-bar-addr" id="reg-id-bar-addr">—</span>
-        <button class="reg-id-bar-disconnect" id="reg-disconnect-btn">DISCONNECT</button>
+        <button class="reg-id-bar-disconnect" id="reg-disconnect-btn" type="button">DISCONNECT</button>
       </div>
 
       <!-- Registry Footer -->
@@ -244,7 +249,7 @@
   <div id="output" class="hidden">
     <div class="out-container">
       <div class="out-header">
-        <a href="#" class="section-back" data-back="output">&#8592; BACK</a>
+        <a href="#" class="section-back" data-back="output" aria-label="Back to menu">&#8592; BACK</a>
         <span class="out-label">ZAVOD//OUTPUT</span>
       </div>
 
@@ -258,25 +263,26 @@
           <span class="out-stat-sep">·</span>
           <span class="out-stat"><span class="out-stat-val" id="out-hidden-count">9,900</span> hidden</span>
         </div>
+        <p class="out-disclaimer">Preview mode: registry states are simulated locally.</p>
       </div>
 
       <!-- Filter bar -->
-      <div class="out-filters">
-        <button class="out-filter active" data-filter="all">ALL</button>
-        <button class="out-filter" data-filter="claimed">CLAIMED</button>
-        <button class="out-filter" data-filter="visible">VISIBLE</button>
-        <button class="out-filter" data-filter="hidden">HIDDEN</button>
+      <div class="out-filters" role="group" aria-label="Output filters">
+        <button class="out-filter active" data-filter="all" type="button" aria-pressed="true">ALL</button>
+        <button class="out-filter" data-filter="claimed" type="button" aria-pressed="false">CLAIMED</button>
+        <button class="out-filter" data-filter="visible" type="button" aria-pressed="false">VISIBLE</button>
+        <button class="out-filter" data-filter="hidden" type="button" aria-pressed="false">HIDDEN</button>
       </div>
 
       <!-- Collection grid -->
-      <div class="out-grid" id="out-grid">
+      <div class="out-grid" id="out-grid" role="list" aria-label="Permissionless units preview">
         <!-- JS will populate this -->
       </div>
 
       <!-- Load more / range indicator -->
       <div class="out-range">
-        <span class="out-range-text" id="out-range-text">Showing #0001 — #0100 of 10,000</span>
-        <button class="out-range-btn" id="out-load-more">LOAD MORE</button>
+        <span class="out-range-text" id="out-range-text" aria-live="polite">Showing #0001 — #0100 of 10,000</span>
+        <button class="out-range-btn" id="out-load-more" type="button">LOAD MORE</button>
       </div>
 
       <footer class="retro-footer">
@@ -289,7 +295,7 @@
   <div id="log" class="hidden">
     <div class="log-container">
       <div class="log-header">
-        <a href="#" class="section-back" data-back="log">&#8592; BACK</a>
+        <a href="#" class="section-back" data-back="log" aria-label="Back to menu">&#8592; BACK</a>
         <span class="log-label">ZAVOD//LOG</span>
       </div>
 
@@ -310,7 +316,7 @@
   <!-- ===== HIDDEN: Old OUTPUT (Easter Eggs) ===== -->
   <div id="works" class="hidden">
     <div class="works-nav">
-      <a href="#" class="section-back" data-back="works">&#8592; BACK</a>
+      <a href="#" class="section-back" data-back="works" aria-label="Back to menu">&#8592; BACK</a>
     </div>
 
     <div class="works-grid">
@@ -485,7 +491,12 @@
         var activeIndex = 0;
 
         function setActive(idx) {
-          items.forEach(function(item, i) { item.classList.toggle('active', i === idx); });
+          items.forEach(function(item, i) {
+            var isActive = i === idx;
+            item.classList.toggle('active', isActive);
+            item.setAttribute('tabindex', isActive ? '0' : '-1');
+            item.setAttribute('aria-current', isActive ? 'true' : 'false');
+          });
           activeIndex = idx;
         }
 
@@ -513,13 +524,23 @@
         });
 
         items.forEach(function(item, i) {
+          item.addEventListener('focus', function() { setActive(i); });
           item.addEventListener('mouseenter', function() { setActive(i); });
           item.addEventListener('click', function(e) {
             e.preventDefault();
             setActive(i);
             selectItem();
           });
+          item.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setActive(i);
+              selectItem();
+            }
+          });
         });
+
+        setActive(activeIndex);
 
         if (typeof initPsychoMantis === 'function') initPsychoMantis();
       }
@@ -545,10 +566,10 @@
         { match: /dream|savanna/i, response: 'It was. And then it wasn\'t.' },
         { match: /name|real|identity/i, response: 'Names are metadata. Work is signal.' },
         { match: /output/i, response: 'Ongoing.' },
-        { match: /shop|buy|price|sell|store|merch/i, response: 'The registry is open. You know where to find it.' },
-        { match: /permissionless|collection|nft|mint|claim/i, response: 'PERMISSIONLESS. 10,000 units. The registry speaks for itself.' },
-        { match: /wallet|connect|metamask|eth/i, response: 'The registry handles that. Not me.' },
-        { match: /inventory/i, response: 'That\'s between you and the registry.' },
+        { match: /shop|buy|price|sell|store|merch/i, response: 'Registry preview is open. Simulation mode is active.' },
+        { match: /permissionless|collection|nft|mint|claim/i, response: 'PERMISSIONLESS. 10,000 units. Current registry view is simulation only.' },
+        { match: /wallet|connect|metamask|eth/i, response: 'No live wallet flow here yet. Current registry is a simulation.' },
+        { match: /inventory/i, response: 'Local simulation state only.' },
         { match: /alive|sentient|ai|bot|chat/i, response: 'I am the work. The work does not explain itself.' },
         { match: /secret|hidden|easter/i, response: 'You\'re looking. That\'s the first step.' },
         { match: /score|point|dino/i, response: 'The scoreboard was never the point.' },
@@ -610,7 +631,7 @@
           regState.linked = true;
           regState.address = generateAddress();
           updateShopUI();
-          return 'Identity linked: ' + formatAddr(regState.address) + '\nAccess granted.';
+          return 'Local identity linked (simulation): ' + formatAddr(regState.address) + '\nAccess granted.';
         }
 
         if (/^unlink$/i.test(trimmed)) {
@@ -624,7 +645,7 @@
         }
 
         if (/^status$/i.test(trimmed)) {
-          return 'PERMISSIONLESS\nSupply: 10,000 · Claimed: ' + (regState.claimed ? '1' : '0') + '\nIdentity: ' + (regState.linked ? formatAddr(regState.address) : 'NOT LINKED') + '\nRegistry: OPEN';
+          return 'PERMISSIONLESS\nSupply: 10,000 · Claimed: ' + (regState.claimed ? '1' : '0') + '\nIdentity: ' + (regState.linked ? formatAddr(regState.address) : 'NOT LINKED') + '\nRegistry: OPEN\nMode: SIMULATION';
         }
 
         if (/^claim$/i.test(trimmed)) {
@@ -633,12 +654,12 @@
           regState.claimed = true;
           regState.unitId = generateUnitId();
           updateShopUI();
-          return 'Unit #' + String(regState.unitId).padStart(4, '0') + ' assigned.\nOwner: ' + formatAddr(regState.address) + '\nThe system remembers.';
+          return 'Simulated unit #' + String(regState.unitId).padStart(4, '0') + ' assigned locally.\nIdentity: ' + formatAddr(regState.address) + '\nThe system remembers.';
         }
 
         if (/^inventory$/i.test(trimmed)) {
           if (!regState.claimed) return 'Inventory: EMPTY';
-          return 'UNIT #' + String(regState.unitId).padStart(4, '0') + ' · PERMISSIONLESS · HELD';
+          return 'SIMULATION · UNIT #' + String(regState.unitId).padStart(4, '0') + ' · PERMISSIONLESS · HELD';
         }
 
         if (/^help$/i.test(trimmed)) {
@@ -701,7 +722,7 @@
 
       var ifBootLines = [
         'ZAVOD SYSTEM v0.9.1',
-        'REGISTRY: PERMISSIONLESS · 10,000 UNITS',
+        'REGISTRY: PERMISSIONLESS · 10,000 UNITS (SIMULATION)',
         'CONNECTION: UNVERIFIED',
         '...',
       ];
@@ -757,7 +778,7 @@
           var uid = String(regState.unitId).padStart(4, '0');
           document.getElementById('reg-held-id').textContent = '#' + uid;
           document.getElementById('reg-held-title').textContent = 'UNIT #' + uid;
-          document.getElementById('reg-held-owner').textContent = 'Owner: ' + formatAddr(regState.address);
+          document.getElementById('reg-held-owner').textContent = 'Identity: ' + formatAddr(regState.address);
           document.getElementById('reg-held-state').textContent = 'HELD';
           document.getElementById('reg-id-bar-addr').textContent = formatAddr(regState.address);
           document.getElementById('reg-claimed').textContent = '1';
@@ -880,13 +901,26 @@
         return accents[(id * 7 + 3) % accents.length];
       }
 
+      function getGlobalCounts() {
+        var counts = { claimed: 0, visible: 0, hidden: 0 };
+        for (var i = 1; i <= 10000; i++) {
+          counts[getUnitState(i)]++;
+        }
+        return counts;
+      }
+
+      function toggleOutCell(cell) {
+        if (!cell) return;
+        var expanded = cell.classList.toggle('out-cell-expanded');
+        cell.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+      }
+
       function renderGrid() {
         outGrid.innerHTML = '';
-        var claimedCount = 0;
+        var globalCounts = getGlobalCounts();
 
         for (var i = 1; i <= outCurrentMax; i++) {
           var state = getUnitState(i);
-          if (state === 'claimed') claimedCount++;
 
           // Filter
           if (outFilter !== 'all' && outFilter !== state) continue;
@@ -895,6 +929,9 @@
           cell.className = 'out-cell out-cell-' + state;
           cell.setAttribute('data-id', i);
           cell.setAttribute('data-accent', getUnitAccent(i));
+          cell.setAttribute('tabindex', '0');
+          cell.setAttribute('role', 'button');
+          cell.setAttribute('aria-expanded', 'false');
 
           var idStr = String(i).padStart(4, '0');
 
@@ -902,12 +939,14 @@
             var ownerFrag = '0x' + ((i * 0x4f3a + 0x8c1) % 0xffff).toString(16).padStart(4,'0').toUpperCase() + '…';
             cell.innerHTML = '<div class="out-cell-accent" style="background:var(--punk-' + getUnitAccent(i) + ')"></div>' +
               '<span class="out-cell-id">#' + idStr + '</span>' +
-              '<span class="out-cell-owner">' + ownerFrag + '</span>' +
+              '<span class="out-cell-owner">sim:' + ownerFrag + '</span>' +
               '<span class="out-cell-state">HELD</span>';
+            cell.setAttribute('aria-label', 'Unit #' + idStr + ' held in simulation');
           } else if (state === 'visible') {
             cell.innerHTML = '<div class="out-cell-accent" style="background:var(--punk-' + getUnitAccent(i) + '); opacity:0.4"></div>' +
               '<span class="out-cell-id">#' + idStr + '</span>' +
               '<span class="out-cell-state out-cell-open">AVAILABLE</span>';
+            cell.setAttribute('aria-label', 'Unit #' + idStr + ' visible and available in simulation');
           } else {
             var partialId = ((i * 7 + 3) % 3 === 0)
               ? '#' + idStr[0] + idStr[1] + '██'
@@ -915,13 +954,16 @@
             cell.innerHTML = '<div class="out-cell-accent" style="background:#0a0a0a"></div>' +
               '<span class="out-cell-id out-cell-redacted">' + partialId + '</span>' +
               '<span class="out-cell-state out-cell-locked">LOCKED</span>';
+            cell.setAttribute('aria-label', 'Unit #' + idStr + ' hidden in simulation');
           }
 
           outGrid.appendChild(cell);
         }
 
         // Update counts
-        document.getElementById('out-claimed-count').textContent = claimedCount + (regState.claimed ? 1 : 0);
+        document.getElementById('out-total').textContent = '10,000';
+        document.getElementById('out-claimed-count').textContent = String(globalCounts.claimed);
+        document.getElementById('out-hidden-count').textContent = String(globalCounts.hidden);
         outRangeText.textContent = 'Showing #0001 — #' + String(outCurrentMax).padStart(4, '0') + ' of 10,000';
 
         if (outCurrentMax >= 500) {
@@ -932,8 +974,12 @@
       // Filter buttons
       document.querySelectorAll('.out-filter').forEach(function(btn) {
         btn.addEventListener('click', function() {
-          document.querySelectorAll('.out-filter').forEach(function(b) { b.classList.remove('active'); });
+          document.querySelectorAll('.out-filter').forEach(function(b) {
+            b.classList.remove('active');
+            b.setAttribute('aria-pressed', 'false');
+          });
           btn.classList.add('active');
+          btn.setAttribute('aria-pressed', 'true');
           outFilter = btn.getAttribute('data-filter');
           renderGrid();
         });
@@ -949,7 +995,16 @@
       outGrid.addEventListener('click', function(e) {
         var cell = e.target.closest('.out-cell');
         if (!cell) return;
-        cell.classList.toggle('out-cell-expanded');
+        toggleOutCell(cell);
+      });
+
+      outGrid.addEventListener('keydown', function(e) {
+        var cell = e.target.closest('.out-cell');
+        if (!cell) return;
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleOutCell(cell);
+        }
       });
 
       function showOutput() {
